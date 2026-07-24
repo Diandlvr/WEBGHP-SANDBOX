@@ -7,65 +7,68 @@ import '../styles/home.css';
 
 import heroImg from '../assets/images/image00003.jpeg';
 import aboutImg from '../assets/images/image00004.jpeg';
-import poolImg from '../assets/images/image00008.jpeg';
 import stdImg from '../assets/images/image00005.jpeg';
 import deluxeImg from '../assets/images/image00006.jpeg';
 import suiteImg from '../assets/images/image00007.jpeg';
-import locationImg from '../assets/images/image00009.jpeg';
+import mapImg from '../assets/images/image00009.jpeg';
 
 const lang = Astro.props.lang as Lang;
 const t = useTranslations(lang);
 const mapsUrl = 'https://maps.google.com/?q=Global+Hotel+Panama';
 
-// TODO(juan): validar nombres, tarifas y fotos de habitaciones contra la ficha de Booking (hotel 911274).
+const amenities = ['pool', 'fitness', 'dining', 'business', 'parking', 'wifi', 'transfer', 'concierge'] as const;
+// TODO(juan): validar nombres, tarifas, m² y fotos de habitaciones contra la ficha de Booking (hotel 911274).
 const rooms = [
-  { key: 'std', img: stdImg, badge: 'rooms.std.from', gold: false },
-  { key: 'deluxe', img: deluxeImg, badge: 'rooms.deluxe.from', gold: false },
-  { key: 'suite', img: suiteImg, badge: 'rooms.badge', gold: true },
+  { key: 'std', img: stdImg, gold: false },
+  { key: 'deluxe', img: deluxeImg, gold: false },
+  { key: 'suite', img: suiteImg, gold: true },
 ] as const;
+const locItems = ['loc.item1', 'loc.item3', 'loc.item4', 'loc.item5', 'loc.item6', 'loc.item7'] as const;
 ---
 <!-- HERO -->
 <section class="hero" id="hero">
   <div class="hero-bg">
     <Image src={heroImg} alt={lang === 'es' ? 'Global Hotel Panamá sobre el skyline de Obarrio' : 'Global Hotel Panama above the Obarrio skyline'} loading="eager" fetchpriority="high" widths={[768, 1280, 1920]} sizes="100vw" />
   </div>
-  <div class="hero-overlay"></div>
+  <div class="hero-scrim"></div>
   <div class="hero-content">
     <p class="hero-eyebrow">{t('hero.eyebrow')}</p>
-    <h1 class="hero-title">{t('hero.title.a')}<br /><em>{t('hero.title.b')}</em></h1>
+    <h1 class="hero-title">{t('hero.title.a')}<br /><em>{t('hero.title.b')}</em><br />{t('hero.title.c')}</h1>
     <p class="hero-desc">{t('hero.desc')}</p>
     <div class="hero-actions">
       <a class="btn btn-primary" href={BOOKING_URL} target="_blank" rel="noopener noreferrer">{t('hero.book')}</a>
       <a class="btn btn-ghost" href="#about">{t('hero.discover')}</a>
     </div>
   </div>
-  <div class="hero-scroll"><span>{t('hero.scroll')}</span><div class="line"></div></div>
+  <div class="hero-scroll">{t('hero.scroll')}</div>
 </section>
 
-<!-- STATS -->
+<!-- STATS (contadores animados — detalle de Stitch) -->
 <div class="stats-bar" id="stats">
-  <div class="stats-grid">
-    <div><div class="stat-num"><span class="num" data-count="60">60</span></div><span class="stat-label">{t('stat.rooms')}</span></div>
-    <div><div class="stat-num"><span class="num" data-count="24">24</span>h</div><span class="stat-label">{t('stat.access')}</span></div>
-    <div><div class="stat-num"><span class="num" data-count="22">22</span>km</div><span class="stat-label">{t('stat.airport')}</span></div>
-    <!-- TODO(juan): tarifa mínima unificada a $98 (rooms.txt). El sitio actual muestra $110+. Confirmar. -->
-    <div><div class="stat-num gold">$<span class="num" data-count="98">98</span></div><span class="stat-label">{t('stat.night')}</span></div>
-  </div>
+  <div class="stat-item"><div class="stat-num"><span class="num" data-count="60">60</span></div><div class="stat-label">{t('stat.rooms')}</div></div>
+  <div class="stat-item"><div class="stat-num"><span class="num" data-count="24">24</span>h</div><div class="stat-label">{t('stat.access')}</div></div>
+  <div class="stat-item"><div class="stat-num"><span class="num" data-count="22">22</span>km</div><div class="stat-label">{t('stat.airport')}</div></div>
+  <!-- TODO(juan): tarifa mínima unificada a $98 (rooms.txt). El sitio actual muestra $110+. Confirmar. -->
+  <div class="stat-item"><div class="stat-num">$<span class="num" data-count="98">98</span></div><div class="stat-label">{t('stat.night')}</div></div>
 </div>
 
 <!-- ABOUT -->
 <section class="section" id="about">
   <div class="container">
-    <div class="about-grid">
-      <div class="about-text">
+    <div class="about-inner">
+      <div class="about-image reveal">
+        <Image src={aboutImg} alt={lang === 'es' ? 'Interior del Global Hotel Panamá' : 'Global Hotel Panama interior'} loading="lazy" widths={[500, 800]} sizes="(max-width:860px) 100vw, 46vw" />
+      </div>
+      <div>
         <p class="section-eyebrow reveal">{t('about.eyebrow')}</p>
         <h2 class="section-title reveal">{t('about.title.a')}<em>{t('about.title.b')}</em></h2>
         <p class="section-desc reveal">{t('about.p1')}</p>
-        <a class="about-cta reveal" href="#rooms">{t('about.cta')} <span class="arrow" style="display:inline-flex;width:18px"><Icon name="arrow" /></span></a>
-      </div>
-      <div></div>
-      <div class="about-image reveal">
-        <Image src={aboutImg} alt={lang === 'es' ? 'Interior del Global Hotel Panamá' : 'Global Hotel Panama interior'} loading="lazy" widths={[400, 700]} sizes="(max-width:1024px) 100vw, 46vw" />
+        <p class="section-desc reveal" style="margin-top:-20px">{t('about.p2')}</p>
+        <div class="about-details reveal">
+          <div class="about-detail-item"><strong>{t('about.d1s')}</strong><span>{t('about.d1l')}</span></div>
+          <div class="about-detail-item"><strong>{t('about.d2s')}</strong><span>{t('about.d2l')}</span></div>
+          <div class="about-detail-item"><strong>{t('about.d3s')}</strong><span>{t('about.d3l')}</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -77,17 +80,13 @@ const rooms = [
     <p class="section-eyebrow reveal">{t('amen.eyebrow')}</p>
     <h2 class="section-title reveal">{t('amen.title.a')}<em>{t('amen.title.b')}</em></h2>
     <div class="amen-grid">
-      <div class="amen-card large reveal">
-        <div class="amen-bg"><Image src={poolImg} alt="" loading="lazy" widths={[400, 700]} sizes="50vw" /></div>
-        <div class="amen-shade"></div>
-        <span class="icon"><Icon name="pool" /></span>
-        <h3>{t('amen.pool')}</h3>
-        <p>{t('amen.pool.d')}</p>
-      </div>
-      <div class="amen-card small reveal"><span class="icon"><Icon name="fitness" /></span><h4>{t('amen.fitness')}</h4></div>
-      <div class="amen-card small reveal"><span class="icon"><Icon name="dining" /></span><h4>{t('amen.dining')}</h4></div>
-      <div class="amen-card small reveal"><span class="icon"><Icon name="business" /></span><h4>{t('amen.business')}</h4></div>
-      <div class="amen-card small reveal"><span class="icon"><Icon name="parking" /></span><h4>{t('amen.parking')}</h4></div>
+      {amenities.map((a, i) => (
+        <div class={`amen-card reveal reveal-d${(i % 4) + 1}`}>
+          <span class="icon"><Icon name={a} /></span>
+          <h3>{t(`amen.${a}` as any)}</h3>
+          <p>{t(`amen.${a}.d` as any)}</p>
+        </div>
+      ))}
     </div>
   </div>
 </section>
@@ -95,21 +94,25 @@ const rooms = [
 <!-- ROOMS -->
 <section class="section" id="rooms">
   <div class="container">
-    <div class="rooms-header reveal">
-      <p class="section-eyebrow">{t('rooms.eyebrow')}</p>
-      <h2 class="section-title">{t('rooms.title.a')}<em>{t('rooms.title.b')}</em></h2>
+    <div class="rooms-header">
+      <div>
+        <p class="section-eyebrow reveal">{t('rooms.eyebrow')}</p>
+        <h2 class="section-title reveal">{t('rooms.title.a')}<em>{t('rooms.title.b')}</em></h2>
+      </div>
+      <p class="section-desc reveal">{t('rooms.desc')}</p>
     </div>
     <div class="room-grid">
       {rooms.map((r, i) => (
-        <div class={`room-card reveal ${i === 1 ? 'r2' : i === 2 ? 'r3' : ''}`}>
+        <div class={`room-card reveal ${i === 1 ? 'reveal-d2' : i === 2 ? 'reveal-d3' : ''}`}>
           <div class="room-image">
-            <Image src={r.img} alt={t(`rooms.${r.key}` as any)} loading="lazy" widths={[400, 600]} sizes="(max-width:860px) 100vw, 33vw" />
-            <div class={`room-badge ${r.gold ? 'gold' : ''}`}>{t(r.badge as any)}</div>
+            <Image src={r.img} alt={t(`rooms.${r.key}` as any)} loading="lazy" widths={[400, 600]} sizes="(max-width:1024px) 50vw, 33vw" />
+            {r.gold && <div class="room-badge gold">{t('rooms.badge')}</div>}
           </div>
           <div class="room-body">
             <p class="room-cat">{t(`rooms.${r.key}.cat` as any)}</p>
             <h3>{t(`rooms.${r.key}` as any)}</h3>
-            <div class="room-meta"><span>{t(`rooms.${r.key}.f1` as any)}</span><span>{t(`rooms.${r.key}.f2` as any)}</span></div>
+            <div class="meta">{t(`rooms.${r.key}.meta` as any)}</div>
+            <div class="price"><strong>${t(`rooms.${r.key}.price` as any)}</strong><span>{t('rooms.night')}</span></div>
             <a class="btn-room" href={BOOKING_URL} target="_blank" rel="noopener noreferrer">{t('rooms.reserve')}</a>
           </div>
         </div>
@@ -123,89 +126,102 @@ const rooms = [
   <div class="container">
     <p class="section-eyebrow reveal">{t('offers.eyebrow')}</p>
     <h2 class="section-title reveal">{t('offers.title.a')}<em>{t('offers.title.b')}</em></h2>
+    <p class="section-desc reveal">{t('offers.desc')}</p>
     <div class="offer-grid">
       <div class="offer-card reveal">
-        <div class="offer-icon"><Icon name="calendar" /></div>
+        <div class="offer-tag">{t('offer.ext.tag')}</div>
         <h3>{t('offer.ext.title')}</h3><p>{t('offer.ext.desc')}</p>
-        <a class="offer-link" href={BOOKING_URL} target="_blank" rel="noopener noreferrer">{t('offer.book')}</a>
+        <a class="btn-offer" href={BOOKING_URL} target="_blank" rel="noopener noreferrer">{t('offer.book')}</a>
       </div>
-      <div class="offer-card featured reveal r2">
-        <div class="offer-badge">{t('offer.badge')}</div>
-        <div class="offer-icon"><Icon name="weekend" /></div>
+      <div class="offer-card reveal reveal-d2">
+        <div class="offer-tag">{t('offer.wknd.tag')}</div>
         <h3>{t('offer.wknd.title')}</h3><p>{t('offer.wknd.desc')}</p>
-        <a class="offer-link" href={BOOKING_URL} target="_blank" rel="noopener noreferrer">{t('offer.book')}</a>
+        <a class="btn-offer" href={BOOKING_URL} target="_blank" rel="noopener noreferrer">{t('offer.book')}</a>
       </div>
-      <div class="offer-card reveal r3">
-        <div class="offer-icon"><Icon name="corporate" /></div>
+      <div class="offer-card reveal reveal-d3">
+        <div class="offer-tag">{t('offer.corp.tag')}</div>
         <h3>{t('offer.corp.title')}</h3><p>{t('offer.corp.desc')}</p>
-        <a class="offer-link" href="#location">{t('offer.learn')}</a>
+        <a class="btn-offer" href={BOOKING_URL} target="_blank" rel="noopener noreferrer">{t('offer.book')}</a>
       </div>
     </div>
   </div>
 </section>
 
 <!-- LOCATION -->
-<section class="location" id="location">
-  <div class="location-bg"><Image src={locationImg} alt="" loading="lazy" widths={[768, 1280]} sizes="100vw" /></div>
-  <div class="location-shade"></div>
-  <div class="location-card reveal">
-    <p class="section-eyebrow">{t('loc.eyebrow')}</p>
-    <h2 class="section-title">{t('loc.title.a')}<em>{t('loc.title.b')}</em></h2>
-    <p class="section-desc">{t('loc.desc')}</p>
-    <div class="location-item"><span class="icon"><Icon name="flight" /></span><span>{t('loc.item1')}</span></div>
-    <div class="location-item"><span class="icon"><Icon name="landmark" /></span><span>{t('loc.item2')}</span></div>
-    <a class="btn-location" href={mapsUrl} target="_blank" rel="noopener noreferrer">{t('loc.btn')}</a>
+<section class="section" id="location">
+  <div class="container">
+    <div class="loc-inner">
+      <div>
+        <p class="section-eyebrow reveal">{t('loc.eyebrow')}</p>
+        <h2 class="section-title reveal">{t('loc.title.a')}<em>{t('loc.title.b')}</em></h2>
+        <p class="section-desc reveal">{t('loc.desc')}</p>
+        <ul class="loc-list reveal">
+          <li class="loc-item"><span class="icon"><Icon name="landmark" /></span><span class="loc-info">{t('loc.item2')}<small>{t('loc.item2s')}</small></span></li>
+          {locItems.map((k) => (
+            <li class="loc-item"><span class="icon"><Icon name="flight" /></span><span class="loc-info">{t(k as any)}</span></li>
+          ))}
+        </ul>
+      </div>
+      <!-- Fachada de mapa: imagen estática enlazada a Google Maps. El iframe pesado se difiere (PROMPT-UBICACION). -->
+      <a class="loc-map-wrap reveal" href={mapsUrl} target="_blank" rel="noopener noreferrer" aria-label={t('loc.map')}>
+        <Image src={mapImg} alt="" loading="lazy" widths={[500, 800]} sizes="(max-width:860px) 100vw, 46vw" />
+        <div class="loc-map-overlay">{t('loc.overlay')}</div>
+      </a>
+    </div>
   </div>
 </section>
 
-<!-- REVIEWS · números reales del sitio (§3). TODO(juan): sustituir testimonios por reseñas reales de Google. -->
-<section class="section" id="reviews">
+<!-- REVIEWS · números reales (§3). TODO(juan): confirmar citas o sustituir por reseñas reales de Google. -->
+<section class="section dark" id="reviews">
   <div class="container">
     <p class="section-eyebrow reveal">{t('rev.eyebrow')}</p>
     <h2 class="section-title reveal">{t('rev.title.a')}<em>{t('rev.title.b')}</em></h2>
-    <div class="rev-flex reveal">
-      <div class="rev-side">
-        <div class="rev-score-card">
-          <div class="rev-score-num">8.6</div>
-          <div class="rev-score-label">{t('rev.label')}</div>
-          <div class="rev-score-count">{t('rev.count')}</div>
-          <div class="rev-bar-group"><div class="rev-bar-header"><span>{t('rev.staff')}</span><strong>9.0</strong></div><div class="rev-bar"><div class="rev-bar-fill" style="width:90%"></div></div></div>
-          <div class="rev-bar-group"><div class="rev-bar-header"><span>{t('rev.clean')}</span><strong>9.2</strong></div><div class="rev-bar"><div class="rev-bar-fill" style="width:92%"></div></div></div>
-        </div>
+    <div class="rev-grid">
+      <div class="rev-card reveal">
+        <span class="rev-stars" aria-label="5/5">★★★★★</span>
+        <p class="rev-text">{t('rev.text1')}</p>
+        <div class="rev-author"><div class="rev-avatar">M</div><div><p class="rev-name">Michael R.</p><p class="rev-source">{t('rev.src1')}</p></div></div>
       </div>
-      <div class="rev-cards">
-        <div class="rev-card">
-          <div class="rev-stars"><Icon name="star" /><Icon name="star" /><Icon name="star" /><Icon name="star" /><Icon name="star" /></div>
-          <p class="rev-text">{t('rev.text1')}</p>
-          <div class="rev-author">{t('rev.author1')}</div>
-        </div>
-        <div class="rev-card">
-          <div class="rev-stars"><Icon name="star" /><Icon name="star" /><Icon name="star" /><Icon name="star" /><Icon name="star" /></div>
-          <p class="rev-text">{t('rev.text2')}</p>
-          <div class="rev-author">{t('rev.author2')}</div>
-        </div>
+      <div class="rev-card reveal reveal-d2">
+        <span class="rev-stars" aria-label="5/5">★★★★★</span>
+        <p class="rev-text">{t('rev.text2')}</p>
+        <div class="rev-author"><div class="rev-avatar">S</div><div><p class="rev-name">Sandra &amp; Klaus</p><p class="rev-source">{t('rev.src2')}</p></div></div>
       </div>
+      <div class="rev-card reveal reveal-d3">
+        <span class="rev-stars" aria-label="5/5">★★★★★</span>
+        <p class="rev-text">{t('rev.text3')}</p>
+        <div class="rev-author"><div class="rev-avatar">J</div><div><p class="rev-name">James T.</p><p class="rev-source">{t('rev.src3')}</p></div></div>
+      </div>
+    </div>
+    <div class="scores-row reveal">
+      <div class="score-item"><p class="score-num">8.6</p><p class="score-label">{t('score.overall')}</p></div>
+      <div class="score-divider"></div>
+      <div class="score-item"><p class="score-num">3.4k</p><p class="score-label">{t('score.total')}</p></div>
+      <div class="score-divider"></div>
+      <div class="score-item"><p class="score-num">9.0</p><p class="score-label">{t('score.staff')}</p></div>
+      <div class="score-divider"></div>
+      <div class="score-item"><p class="score-num">9.2</p><p class="score-label">{t('score.clean')}</p></div>
     </div>
   </div>
 </section>
 
 <!-- RESERVE · tabla de tarifas estática (sin disponibilidad simulada, brief §4) -->
-<section class="section dark" id="reserve">
+<section class="section" id="reserve">
   <div class="container">
     <div class="reserve-inner">
       <div class="reserve-cta reveal">
         <p class="section-eyebrow">{t('reserve.eyebrow')}</p>
-        <h2 class="section-title">{t('reserve.title.a')}<em>{t('reserve.title.b')}</em></h2>
-        <p style="color:rgba(255,255,255,.6)">{t('reserve.desc')}</p>
+        <h2>{t('reserve.title.a')}<em>{t('reserve.title.b')}</em></h2>
+        <p>{t('reserve.desc')}</p>
         <a class="btn btn-primary" href={BOOKING_URL} target="_blank" rel="noopener noreferrer">{t('reserve.book')}</a>
       </div>
-      <div class="reveal r2">
+      <div class="reveal reveal-d2">
         <table class="rate-table">
           <thead><tr><th>{t('reserve.tbl.room')}</th><th style="text-align:right">{t('reserve.tbl.from')}</th></tr></thead>
           <tbody>
-            <tr><td class="rate-room">{t('rooms.std')}</td><td class="rate-price">$98</td></tr>
-            <tr><td class="rate-room">{t('rooms.deluxe')}</td><td class="rate-price">$120</td></tr>
-            <tr><td class="rate-room">{t('rooms.suite')}</td><td class="rate-price">$173</td></tr>
+            <tr><td>{t('rooms.std')}</td><td class="rate-price">$98</td></tr>
+            <tr><td>{t('rooms.deluxe')}</td><td class="rate-price">$120</td></tr>
+            <tr><td>{t('rooms.suite')}</td><td class="rate-price">$173</td></tr>
           </tbody>
         </table>
       </div>
@@ -214,7 +230,6 @@ const rooms = [
 </section>
 
 <script>
-  // Revelados al scroll + contadores. Se desactivan bajo prefers-reduced-motion.
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const reveals = document.querySelectorAll('.reveal');
   if (reduce) {

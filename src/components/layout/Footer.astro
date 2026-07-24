@@ -1,5 +1,4 @@
 ---
-import Icon from '../ui/Icon.astro';
 import { useTranslations } from '../../i18n/utils';
 import type { Lang } from '../../i18n/ui';
 const lang = Astro.props.lang as Lang;
@@ -9,19 +8,25 @@ const t = useTranslations(lang);
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <div class="logo" style="color:var(--white)">Global <span>Hotel</span> Panamá</div>
+        <div class="logo">Global <span>Hotel</span> Panamá</div>
         <p>{t('footer.brand')}</p>
-        <div class="footer-social">
-          <a href="https://maps.google.com/?q=Global+Hotel+Panama" target="_blank" rel="noopener noreferrer" aria-label="Google Maps" style="color:rgba(255,255,255,.5)"><span style="display:inline-block;width:18px"><Icon name="globe" /></span></a>
-        </div>
       </div>
       <div class="footer-col">
-        <h4>{t('footer.nav')}</h4>
+        <h4>{t('footer.hotel')}</h4>
         <ul>
-          <li><a href="#about">{t('nav.about')}</a></li>
+          <li><a href="#about">{t('footer.about')}</a></li>
           <li><a href="#amenities">{t('nav.amenities')}</a></li>
           <li><a href="#rooms">{t('nav.rooms')}</a></li>
-          <li><a href="#location">{t('nav.location')}</a></li>
+          <li><a href="#offers">{t('footer.events')}</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>{t('footer.services')}</h4>
+        <ul>
+          <li><a href="#reserve">{t('footer.reservations')}</a></li>
+          <li><a href="#amenities">{t('amen.transfer')}</a></li>
+          <li><a href="#amenities">{t('amen.business')}</a></li>
+          <li><a href="#amenities">{t('footer.spa')}</a></li>
         </ul>
       </div>
       <div class="footer-col">

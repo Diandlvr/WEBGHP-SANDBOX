@@ -1,28 +1,33 @@
 /* Tokens de diseño — Global Hotel Panamá
-   Dirección visual: Stitch (estructura + paleta clara). Decisión D5 de Juan (2026-07-24).
-   Anula el tema oscuro del brief. Ver GHP-Vault/08-Decisiones-tomadas.md */
+   Base visual: preview-ghp.html (tema oscuro). Paleta: marca real del brief §6.
+   Decisión D5 (revisada 2026-07-24). Ver GHP-Vault/08-Decisiones-tomadas.md */
 :root {
-  /* Paleta (de stitch-preview.html) */
-  --dc:          #1A1A1A;   /* texto / superficies oscuras */
-  --ivory:       #F5F5F0;   /* fondo base (tema claro) */
-  --gold:        #D4AF37;
-  --gold-dim:    #B08D2B;
+  /* Marca real (sitio en producción) */
+  --gold:        #B8965A;
+  --gold-light:  #D4AF7A;
+  --gold-dim:    #9A7C46;
+  --gold-soft:   rgba(184, 150, 90, 0.12);
+  --charcoal:    #1C1C1C;   /* negro de marca */
+  --black:       #1C1C1C;   /* alias para markup del preview */
+  --ivory:       #F9F5EE;   /* crema de marca */
   --white:       #FFFFFF;
-  --muted:       #444748;
-  --surface-dim: #dadad5;
-  --border:      rgba(26, 26, 26, 0.08);
+  --mid:         #4A4A4A;
+  --soft:        #8A8A8A;
+
+  --text-dark:        #1C1C1C;
+  --text-light:       #F9F5EE;
+  --text-muted:       #8A7F70;
+  --text-muted-light: rgba(249, 245, 238, 0.5);
+  --card-border:      rgba(255, 255, 255, 0.07);
+  --divider:          rgba(184, 150, 90, 0.25);
 
   /* Tipografía */
-  --font-serif:  'EB Garamond', Georgia, serif;
-  --font-sans:   'DM Sans', system-ui, sans-serif;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body:    'DM Sans', system-ui, sans-serif;
 
   /* Sistema */
   --radius:      0;         /* esquinas rectas siempre */
   --nav-h:       80px;
-  --section-gap: 120px;     /* 80px en móvil (ver global.css) */
+  --section-gap: 100px;
   --container:   1200px;
-}
-
-@media (max-width: 768px) {
-  :root { --section-gap: 80px; }
 }
