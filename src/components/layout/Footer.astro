@@ -1,0 +1,41 @@
+---
+import Icon from '../ui/Icon.astro';
+import { useTranslations } from '../../i18n/utils';
+import type { Lang } from '../../i18n/ui';
+const lang = Astro.props.lang as Lang;
+const t = useTranslations(lang);
+---
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo" style="color:var(--white)">Global <span>Hotel</span> Panamá</div>
+        <p>{t('footer.brand')}</p>
+        <div class="footer-social">
+          <a href="https://maps.google.com/?q=Global+Hotel+Panama" target="_blank" rel="noopener noreferrer" aria-label="Google Maps" style="color:rgba(255,255,255,.5)"><span style="display:inline-block;width:18px"><Icon name="globe" /></span></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>{t('footer.nav')}</h4>
+        <ul>
+          <li><a href="#about">{t('nav.about')}</a></li>
+          <li><a href="#amenities">{t('nav.amenities')}</a></li>
+          <li><a href="#rooms">{t('nav.rooms')}</a></li>
+          <li><a href="#location">{t('nav.location')}</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>{t('footer.contact')}</h4>
+        <ul>
+          <li>Calle 54 Este & Av. Samuel Lewis</li>
+          <li>Obarrio, Ciudad de Panamá</li>
+          <li><a href="tel:+5072806400">+507 280 6400</a></li>
+          <li><a href="mailto:info@globalhotelpanama.com">info@globalhotelpanama.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>{t('footer.rights')}</span>
+    </div>
+  </div>
+</footer>

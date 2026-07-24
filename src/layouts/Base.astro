@@ -15,6 +15,27 @@ const { title = t('meta.title'), description = t('meta.description') } = Astro.p
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const altEs = new URL(getAlternatePath(Astro.url, 'es'), Astro.site).href;
 const altEn = new URL(getAlternatePath(Astro.url, 'en'), Astro.site).href;
+
+// JSON-LD Hotel con datos reales (CLAUDE.md §3 / §8).
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Hotel',
+  name: 'Global Hotel Panama',
+  description,
+  url: 'https://globalhotelpanama.com',
+  telephone: '+507 280 6400',
+  priceRange: '$$$',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Calle 54 Este & Av. Samuel Lewis, Obarrio',
+    addressLocality: 'Ciudad de Panamá',
+    addressCountry: 'PA',
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: 8.98486, longitude: -79.521279 },
+  numberOfRooms: 60,
+  checkinTime: '15:00',
+  aggregateRating: { '@type': 'AggregateRating', ratingValue: '8.6', bestRating: '10', reviewCount: 3400 },
+};
 ---
 
 <!doctype html>
@@ -48,6 +69,8 @@ const altEn = new URL(getAlternatePath(Astro.url, 'en'), Astro.site).href;
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={lang === 'es' ? 'es_PA' : 'en_US'} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
   </head>
   <body>
     <slot />

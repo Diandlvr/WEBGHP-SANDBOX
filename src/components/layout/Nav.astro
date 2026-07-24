@@ -1,0 +1,41 @@
+---
+import { useTranslations, getAlternatePath, BOOKING_URL } from '../../i18n/utils';
+import type { Lang } from '../../i18n/ui';
+const lang = Astro.props.lang as Lang;
+const t = useTranslations(lang);
+const home = `/${lang}/`;
+const altEs = getAlternatePath(Astro.url, 'es');
+const altEn = getAlternatePath(Astro.url, 'en');
+---
+<nav class="nav" id="navbar">
+  <div class="nav-inner">
+    <a href={home} class="logo">Global <span>Hotel</span> Panamá</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">{t('nav.about')}</a></li>
+      <li><a href="#amenities">{t('nav.amenities')}</a></li>
+      <li><a href="#rooms">{t('nav.rooms')}</a></li>
+      <li><a href="#location">{t('nav.location')}</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="lang-toggle">
+        <a href={altEs} class={lang === 'es' ? 'active' : ''} hreflang="es">ES</a>
+        <span class="sep">|</span>
+        <a href={altEn} class={lang === 'en' ? 'active' : ''} hreflang="en">EN</a>
+      </div>
+      <a class="btn-nav" href={BOOKING_URL} target="_blank" rel="noopener noreferrer">{t('nav.book')}</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<script>
+  const toggle = document.getElementById('menuToggle');
+  const links = document.getElementById('navLinks');
+  toggle?.addEventListener('click', () => {
+    const open = links?.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', String(!!open));
+  });
+  const nav = document.getElementById('navbar');
+  addEventListener('scroll', () => nav?.classList.toggle('scrolled', scrollY > 60), { passive: true });
+</script>
