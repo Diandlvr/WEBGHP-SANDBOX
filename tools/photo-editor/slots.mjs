@@ -6,5 +6,6 @@ export const slots = [
   { id: 'about',         label: 'Nosotros',                 section: 'Nosotros',     ratio: '4 / 3'  },
   { id: 'room-standard', label: 'Habitación · Double Queen', section: 'Habitaciones', ratio: '4 / 3'  },
   { id: 'room-deluxe',   label: 'Habitación · King Bed',    section: 'Habitaciones', ratio: '4 / 3'  },
-  { id: 'room-suite',    label: 'Suite · Ultra-Luxury',     section: 'Habitaciones', ratio: '4 / 3'  },
+  { id: 'room-exec',     label: 'Executive Superior King',  section: 'Habitaciones', ratio: '4 / 3'  },
+  { id: 'room-corner',   label: 'Corner Suite',             section: 'Habitaciones', ratio: '4 / 3'  },
 ];

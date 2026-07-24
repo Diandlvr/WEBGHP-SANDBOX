@@ -117,27 +117,63 @@
 .amen-card h3 { font-family: var(--font-display); font-size: 18px; font-weight: 500; margin: 0 0 10px; color: var(--text-light); }
 .amen-card p { font-size: 13px; color: var(--text-muted); line-height: 1.7; margin: 0; }
 
-/* ROOMS */
-.rooms-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px; margin-bottom: 48px; }
+/* ROOMS — slider */
+.rooms-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px; margin-bottom: 40px; }
 .rooms-header .section-desc { margin: 0; }
-.room-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(28, 28, 28, 0.06); }
-.room-card { background: var(--ivory); transition: background 0.35s; }
+
+.rooms-slider-wrap { position: relative; overflow: hidden; }
+.rooms-track {
+  display: flex; gap: 1px;
+  transition: transform 0.45s cubic-bezier(0.25, 0.8, 0.25, 1);
+  will-change: transform;
+}
+/* Cada tarjeta ocupa 1/3 del contenedor en desktop; 1 en móvil */
+.room-card {
+  flex: 0 0 calc((100% - 2px) / 3);
+  background: var(--ivory); transition: background 0.35s; display: flex; flex-direction: column;
+}
 .room-card:hover { background: rgba(28, 28, 28, 0.02); }
 .room-image { aspect-ratio: 4/3; overflow: hidden; background: var(--charcoal); position: relative; }
 .room-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
 .room-card:hover .room-image img { transform: scale(1.04); }
-/* Badge dorado (detalle de Stitch) */
 .room-badge { position: absolute; top: 16px; right: 16px; background: rgba(249, 245, 238, 0.92); color: var(--charcoal); font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 14px; }
 .room-badge.gold { background: var(--gold); color: var(--charcoal); }
-.room-body { padding: 28px 24px; }
+.room-body { padding: 28px 24px; flex: 1; display: flex; flex-direction: column; }
 .room-cat { font-size: 10px; text-transform: uppercase; letter-spacing: 0.16em; color: var(--gold-dim); margin: 0 0 8px; font-weight: 500; }
 .room-body h3 { font-family: var(--font-display); font-size: 22px; font-weight: 500; margin: 0 0 6px; }
-.room-body .meta { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; }
-.room-body .price { display: flex; align-items: baseline; gap: 6px; margin-bottom: 20px; }
-.room-body .price strong { font-family: var(--font-display); font-size: 30px; font-weight: 400; color: var(--gold-dim); }
-.room-body .price span { font-size: 13px; color: var(--text-muted); }
-.btn-room { display: block; width: 100%; padding: 14px; background: var(--charcoal); color: var(--text-light); font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; text-align: center; transition: background 0.3s; }
+.room-body .meta { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; }
+
+/* Precios: rack tachado + promo destacado */
+.price { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; flex-wrap: wrap; }
+.price-rack { font-size: 14px; color: var(--soft); text-decoration: line-through; font-family: var(--font-display); letter-spacing: -0.01em; }
+.price-promo { font-family: var(--font-display); font-size: 30px; font-weight: 400; color: var(--gold-dim); line-height: 1; }
+.price-night { font-size: 13px; color: var(--text-muted); }
+.price-taxes { font-size: 11px; color: var(--soft); display: block; margin-bottom: 20px; }
+
+.btn-room { display: block; width: 100%; padding: 14px; margin-top: auto; background: var(--charcoal); color: var(--text-light); font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; text-align: center; transition: background 0.3s; }
 .btn-room:hover { background: rgba(28, 28, 28, 0.8); }
+
+/* Controles del slider */
+.slider-controls { display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 28px; }
+.slider-btn { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 1px solid rgba(28,28,28,.2); background: transparent; cursor: pointer; color: var(--charcoal); transition: background .25s, color .25s, border-color .25s; }
+.slider-btn svg { width: 20px; height: 20px; }
+.slider-btn:hover { background: var(--charcoal); color: var(--ivory); border-color: var(--charcoal); }
+.slider-btn:disabled { opacity: 0.3; cursor: default; }
+.slider-dots { display: flex; gap: 8px; align-items: center; }
+.slider-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(28,28,28,.2); border: none; padding: 0; cursor: pointer; transition: background .25s, transform .25s; }
+.slider-dot.active { background: var(--gold); transform: scale(1.4); }
+
+/* Tabla de tarifas — col extra para rack */
+.rate-rack { font-family: var(--font-display); font-size: 16px; color: var(--soft); text-decoration: line-through; }
+
+@media (max-width: 860px) {
+  .room-card { flex: 0 0 calc(100% - 32px); }
+  .rooms-track { padding: 0 16px; gap: 16px; }
+  .rooms-slider-wrap { margin: 0 -28px; padding: 0; }
+}
+@media (max-width: 560px) {
+  .room-card { flex: 0 0 88vw; }
+}
 
 /* OFFERS */
 .offer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255, 255, 255, 0.04); margin-top: 48px; border: 1px solid rgba(255, 255, 255, 0.04); }

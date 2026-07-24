@@ -10,19 +10,22 @@ import '../styles/home.css';
 // Slots de imagen gestionados por el editor de fotos (npm run editor).
 import heroImg from '../assets/images/slots/hero.jpeg';
 import aboutImg from '../assets/images/slots/about.jpeg';
-import stdImg from '../assets/images/slots/room-standard.jpeg';
-import deluxeImg from '../assets/images/slots/room-deluxe.jpeg';
-import suiteImg from '../assets/images/slots/room-suite.jpeg';
+import kingImg from '../assets/images/slots/room-standard.jpeg';
+import queenImg from '../assets/images/slots/room-deluxe.jpeg';
+import execImg from '../assets/images/slots/room-exec.jpeg';
+import cornerImg from '../assets/images/slots/room-corner.jpeg';
 
 const lang = Astro.props.lang as Lang;
 const t = useTranslations(lang);
 
 const amenities = ['pool', 'fitness', 'dining', 'business', 'parking', 'wifi', 'transfer', 'concierge'] as const;
-// TODO(juan): validar nombres, tarifas, m² y fotos de habitaciones contra la ficha de Booking (hotel 911274).
+// Nombres y precios reales de habitaciones (Precios habitaciones.txt, 2026-07-24).
+// Fotos provisionales — reemplazar con el editor de fotos cuando lleguen las definitivas.
 const rooms = [
-  { key: 'std', img: stdImg, gold: false },
-  { key: 'deluxe', img: deluxeImg, gold: false },
-  { key: 'suite', img: suiteImg, gold: true },
+  { key: 'king',   img: kingImg,   badge: false },
+  { key: 'queen',  img: queenImg,  badge: false },
+  { key: 'exec',   img: execImg,   badge: false },
+  { key: 'corner', img: cornerImg, badge: true  },
 ] as const;
 ---
 <!-- HERO -->
@@ -95,7 +98,7 @@ const rooms = [
   </div>
 </section>
 
-<!-- ROOMS -->
+<!-- ROOMS — slider de 4 tarjetas con precio rack tachado y precio promo -->
 <section class="section" id="rooms">
   <div class="container">
     <div class="rooms-header">
@@ -105,22 +108,38 @@ const rooms = [
       </div>
       <p class="section-desc reveal">{t('rooms.desc')}</p>
     </div>
-    <div class="room-grid">
-      {rooms.map((r, i) => (
-        <div class={`room-card reveal ${i === 1 ? 'reveal-d2' : i === 2 ? 'reveal-d3' : ''}`}>
-          <div class="room-image">
-            <Image src={r.img} alt={t(`rooms.${r.key}` as any)} loading="lazy" widths={[400, 600]} sizes="(max-width:1024px) 50vw, 33vw" />
-            {r.gold && <div class="room-badge gold">{t('rooms.badge')}</div>}
+    <div class="rooms-slider-wrap reveal">
+      <div class="rooms-track" id="roomsTrack">
+        {rooms.map((r) => (
+          <div class="room-card">
+            <div class="room-image">
+              <Image src={r.img} alt={t(`rooms.${r.key}` as any)} loading="lazy" widths={[400, 640]} sizes="(max-width:860px) 88vw, 31vw" />
+              {r.badge && <div class="room-badge gold">{t('rooms.badge')}</div>}
+            </div>
+            <div class="room-body">
+              <p class="room-cat">{t(`rooms.${r.key}.cat` as any)}</p>
+              <h3>{t(`rooms.${r.key}` as any)}</h3>
+              <div class="meta">{t(`rooms.${r.key}.meta` as any)}</div>
+              <div class="price">
+                <span class="price-rack">${t(`rooms.${r.key}.rack` as any)}</span>
+                <strong class="price-promo">${t(`rooms.${r.key}.promo` as any)}</strong>
+                <span class="price-night">{t('rooms.night')}</span>
+              </div>
+              <span class="price-taxes">{t('rooms.taxes')}</span>
+              <a class="btn-room" href={BOOKING_URL} target="_blank" rel="noopener noreferrer">{t('rooms.reserve')}</a>
+            </div>
           </div>
-          <div class="room-body">
-            <p class="room-cat">{t(`rooms.${r.key}.cat` as any)}</p>
-            <h3>{t(`rooms.${r.key}` as any)}</h3>
-            <div class="meta">{t(`rooms.${r.key}.meta` as any)}</div>
-            <div class="price"><strong>${t(`rooms.${r.key}.price` as any)}</strong><span>{t('rooms.night')}</span></div>
-            <a class="btn-room" href={BOOKING_URL} target="_blank" rel="noopener noreferrer">{t('rooms.reserve')}</a>
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
+      <div class="slider-controls">
+        <button class="slider-btn" id="roomsPrev" aria-label="Anterior" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="slider-dots" id="roomsDots"></div>
+        <button class="slider-btn" id="roomsNext" aria-label="Siguiente" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
     </div>
   </div>
 </section>
@@ -200,17 +219,91 @@ const rooms = [
       </div>
       <div class="reveal reveal-d2">
         <table class="rate-table">
-          <thead><tr><th>{t('reserve.tbl.room')}</th><th style="text-align:right">{t('reserve.tbl.from')}</th></tr></thead>
+          <thead>
+            <tr>
+              <th>{t('reserve.tbl.room')}</th>
+              <th style="text-align:right">{t('reserve.tbl.rack')}</th>
+              <th style="text-align:right">{t('reserve.tbl.promo')}</th>
+            </tr>
+          </thead>
           <tbody>
-            <tr><td>{t('rooms.std')}</td><td class="rate-price">$98</td></tr>
-            <tr><td>{t('rooms.deluxe')}</td><td class="rate-price">$120</td></tr>
-            <tr><td>{t('rooms.suite')}</td><td class="rate-price">$173</td></tr>
+            {rooms.map((r) => (
+              <tr>
+                <td>{t(`rooms.${r.key}` as any)}</td>
+                <td style="text-align:right"><span class="rate-rack">${t(`rooms.${r.key}.rack` as any)}</span></td>
+                <td class="rate-price">${t(`rooms.${r.key}.promo` as any)}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
     </div>
   </div>
 </section>
+
+<script>
+  // ── Slider de habitaciones ──────────────────────────────────────────
+  (function () {
+    const track = document.getElementById('roomsTrack') as HTMLElement | null;
+    const dotsWrap = document.getElementById('roomsDots') as HTMLElement | null;
+    const prev = document.getElementById('roomsPrev') as HTMLButtonElement | null;
+    const next = document.getElementById('roomsNext') as HTMLButtonElement | null;
+    if (!track || !dotsWrap || !prev || !next) return;
+
+    const cards = Array.from(track.children) as HTMLElement[];
+    const total = cards.length;
+    let current = 0;
+
+    // Cuántas tarjetas caben visibles según el ancho
+    function perView() {
+      return window.innerWidth <= 860 ? 1 : 3;
+    }
+
+    // Máximo índice al que podemos llegar (sin dejar espacio vacío)
+    function maxIndex() { return Math.max(0, total - perView()); }
+
+    // Crea los dots
+    function buildDots() {
+      dotsWrap.innerHTML = '';
+      const steps = maxIndex() + 1;
+      for (let i = 0; i < steps; i++) {
+        const d = document.createElement('button');
+        d.className = 'slider-dot' + (i === 0 ? ' active' : '');
+        d.setAttribute('aria-label', `Habitación ${i + 1}`);
+        d.addEventListener('click', () => goTo(i));
+        dotsWrap.appendChild(d);
+      }
+    }
+
+    function goTo(idx: number) {
+      current = Math.max(0, Math.min(idx, maxIndex()));
+      // El ancho de una tarjeta = ancho total / perView (aprox)
+      const cardW = cards[0].offsetWidth + 1; // +1 por el gap de 1px
+      track.style.transform = `translateX(-${current * cardW}px)`;
+      // Actualizar dots
+      dotsWrap.querySelectorAll('.slider-dot').forEach((d, i) =>
+        d.classList.toggle('active', i === current)
+      );
+      prev.disabled = current === 0;
+      next.disabled = current >= maxIndex();
+    }
+
+    prev.addEventListener('click', () => goTo(current - 1));
+    next.addEventListener('click', () => goTo(current + 1));
+
+    // Touch/swipe
+    let startX = 0;
+    track.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 50) goTo(dx < 0 ? current + 1 : current - 1);
+    });
+
+    buildDots();
+    goTo(0);
+    window.addEventListener('resize', () => { buildDots(); goTo(Math.min(current, maxIndex())); });
+  })();
+</script>
 
 <script>
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;

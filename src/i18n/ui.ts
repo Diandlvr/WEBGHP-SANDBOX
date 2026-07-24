@@ -40,10 +40,15 @@ export const ui = {
     // Rooms (datos reales de rooms.txt)
     'rooms.eyebrow': 'Habitaciones y Suites', 'rooms.title.a': 'Tu Espacio ', 'rooms.title.b': 'en las Alturas',
     'rooms.desc': 'Desde acogedores refugios urbanos hasta amplias suites — cada espacio diseñado con intención y elegancia.',
-    'rooms.std': 'Double Queen Room', 'rooms.std.cat': 'Standard', 'rooms.std.meta': 'Vista Ciudad · 2 camas queen · Wi-Fi gratis', 'rooms.std.price': '98',
-    'rooms.deluxe': 'King Bed Room', 'rooms.deluxe.cat': 'Deluxe', 'rooms.deluxe.meta': 'Vista Skyline · cama king · balcón', 'rooms.deluxe.price': '120',
-    'rooms.suite': 'Ultra-Luxury Suite', 'rooms.suite.cat': 'Premium', 'rooms.suite.meta': 'Vista Bahía · suite completa', 'rooms.suite.price': '173',
-    'rooms.night': '/ noche', 'rooms.reserve': 'Reservar', 'rooms.badge': 'Elección Premium',
+    // 4 habitaciones — nombres y precios reales (Precios habitaciones.txt, 2026-07-24)
+    // Precio rack = base para descuentos (jubilado, etc.), se muestra tachado
+    // Precio promo = precio normal sin impuestos, es el precio visible principal
+    'rooms.king': 'City View King', 'rooms.king.cat': 'Superior', 'rooms.king.meta': 'Vista Ciudad · Cama king', 'rooms.king.rack': '140', 'rooms.king.promo': '113',
+    'rooms.queen': 'City View Two Queen', 'rooms.queen.cat': 'Estándar', 'rooms.queen.meta': 'Vista Ciudad · 2 camas queen', 'rooms.queen.rack': '160', 'rooms.queen.promo': '130',
+    'rooms.exec': 'Executive Superior King', 'rooms.exec.cat': 'Ejecutivo', 'rooms.exec.meta': 'Vista Skyline · Cama king', 'rooms.exec.rack': '220', 'rooms.exec.promo': '178',
+    'rooms.corner': 'Corner Suite', 'rooms.corner.cat': 'Suite', 'rooms.corner.meta': 'Vista Panorámica · Suite', 'rooms.corner.rack': '240', 'rooms.corner.promo': '194',
+    'rooms.night': '/ noche', 'rooms.reserve': 'Reservar', 'rooms.badge': 'Suite Premium',
+    'rooms.taxes': '+ impuestos', 'rooms.rack.label': 'Precio rack',
     // Offers
     'offers.eyebrow': 'Ofertas y Paquetes', 'offers.title.a': 'Estancias Exclusivas, ', 'offers.title.b': 'a Tu Medida',
     'offers.desc': 'De escapadas largas a fines de semana de indulgencia — reserva directo y accede a nuestras mejores tarifas.',
@@ -79,7 +84,7 @@ export const ui = {
     // Reserve
     'reserve.eyebrow': 'Reserva Tu Estancia', 'reserve.title.a': 'Vive Panamá ', 'reserve.title.b': 'en su Máxima Expresión',
     'reserve.desc': 'Habitaciones desde $98 por noche. Cancelación gratuita hasta 48 horas antes de la llegada. Sin depósito: solo una tarjeta como garantía. Reserva directo para la mejor tarifa.',
-    'reserve.book': 'Reservar Ahora', 'reserve.tbl.room': 'Habitación', 'reserve.tbl.from': 'Desde',
+    'reserve.book': 'Reservar Ahora', 'reserve.tbl.room': 'Habitación', 'reserve.tbl.promo': 'Precio promo', 'reserve.tbl.rack': 'Precio rack',
     // Footer
     'footer.brand': 'Un establecimiento de Twist Hotels Corp, parte del Global Companies Group. En la icónica Twist Tower, en el exclusivo distrito de Obarrio, Ciudad de Panamá.',
     'footer.hotel': 'Hotel', 'footer.about': 'Nosotros', 'footer.dining': 'Restaurante', 'footer.events': 'Eventos y Reuniones',
@@ -116,10 +121,12 @@ export const ui = {
     'amen.concierge': '24-hr Concierge', 'amen.concierge.d': 'Our dedicated concierge and front desk team are available around the clock to assist with any request or recommendation.',
     'rooms.eyebrow': 'Rooms & Suites', 'rooms.title.a': 'Your Space ', 'rooms.title.b': 'in the Sky',
     'rooms.desc': 'From cozy urban retreats to expansive suites — each space designed with intent and elegance.',
-    'rooms.std': 'Double Queen Room', 'rooms.std.cat': 'Standard', 'rooms.std.meta': 'City View · 2 Queen Beds · Free Wi-Fi', 'rooms.std.price': '98',
-    'rooms.deluxe': 'King Bed Room', 'rooms.deluxe.cat': 'Deluxe', 'rooms.deluxe.meta': 'Skyline View · King Bed · Balcony', 'rooms.deluxe.price': '120',
-    'rooms.suite': 'Ultra-Luxury Suite', 'rooms.suite.cat': 'Premium', 'rooms.suite.meta': 'Bay View · Full Suite', 'rooms.suite.price': '173',
-    'rooms.night': '/ night', 'rooms.reserve': 'Reserve', 'rooms.badge': 'Premium Choice',
+    'rooms.king': 'City View King', 'rooms.king.cat': 'Superior', 'rooms.king.meta': 'City View · King Bed', 'rooms.king.rack': '140', 'rooms.king.promo': '113',
+    'rooms.queen': 'City View Two Queen', 'rooms.queen.cat': 'Standard', 'rooms.queen.meta': 'City View · 2 Queen Beds', 'rooms.queen.rack': '160', 'rooms.queen.promo': '130',
+    'rooms.exec': 'Executive Superior King', 'rooms.exec.cat': 'Executive', 'rooms.exec.meta': 'Skyline View · King Bed', 'rooms.exec.rack': '220', 'rooms.exec.promo': '178',
+    'rooms.corner': 'Corner Suite', 'rooms.corner.cat': 'Suite', 'rooms.corner.meta': 'Panoramic View · Full Suite', 'rooms.corner.rack': '240', 'rooms.corner.promo': '194',
+    'rooms.night': '/ night', 'rooms.reserve': 'Reserve', 'rooms.badge': 'Premium Suite',
+    'rooms.taxes': '+ taxes', 'rooms.rack.label': 'Rack rate',
     'offers.eyebrow': 'Offers & Packages', 'offers.title.a': 'Exclusive Stays, ', 'offers.title.b': 'Curated for You',
     'offers.desc': 'From extended escapes to weekend indulgences — book direct and unlock our best rates.',
     'offer.ext.tag': 'Extended Stay', 'offer.ext.title': '7 Nights or More', 'offer.ext.desc': 'Enjoy 20% off when you stay a week or longer. Ideal for remote work or long visits to Panama City.',
@@ -150,7 +157,7 @@ export const ui = {
     'score.overall': 'Overall Score', 'score.total': 'Total Reviews', 'score.staff': 'Staff Score', 'score.clean': 'Cleanliness',
     'reserve.eyebrow': 'Reserve Your Stay', 'reserve.title.a': 'Experience Panama ', 'reserve.title.b': 'at Its Finest',
     'reserve.desc': 'Rooms from $98 per night. Free cancellation up to 48 hours before arrival. No deposit required — only a credit card as collateral. Book directly for the best rates.',
-    'reserve.book': 'Book Now', 'reserve.tbl.room': 'Room', 'reserve.tbl.from': 'From',
+    'reserve.book': 'Book Now', 'reserve.tbl.room': 'Room', 'reserve.tbl.promo': 'Promo rate', 'reserve.tbl.rack': 'Rack rate',
     'footer.brand': 'A Twist Hotels Corp facility and part of the Global Companies Group. Located in the iconic Twist Tower in Panama City’s exclusive Obarrio district.',
     'footer.hotel': 'Hotel', 'footer.about': 'About Us', 'footer.dining': 'Dining', 'footer.events': 'Events & Meetings',
     'footer.services': 'Services', 'footer.reservations': 'Online Reservations', 'footer.spa': 'Spa & Massage', 'footer.valet': 'Valet Parking',
