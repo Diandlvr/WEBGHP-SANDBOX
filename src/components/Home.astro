@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import Icon from './ui/Icon.astro';
 import Ubicacion from './sections/Ubicacion.astro';
+import DateBar from './booking/DateBar.astro';
 import { useTranslations, BOOKING_URL } from '../i18n/utils';
 import type { Lang } from '../i18n/ui';
 import '../styles/home.css';
@@ -41,6 +42,10 @@ const rooms = [
   </div>
   <div class="hero-scroll">{t('hero.scroll')}</div>
 </section>
+
+<!-- BARRA DE FECHAS (deep link al motor e-gds) -->
+<DateBar lang={lang} />
+<DateBar lang={lang} sticky />
 
 <!-- STATS (contadores animados — detalle de Stitch) -->
 <div class="stats-bar" id="stats">

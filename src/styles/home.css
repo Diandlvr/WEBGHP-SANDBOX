@@ -38,6 +38,33 @@
 .hero-scroll { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); font-size: 10px; text-transform: uppercase; letter-spacing: 0.22em; color: rgba(249, 245, 238, 0.35); z-index: 2; animation: fadeScroll 2.4s ease-in-out infinite; }
 @keyframes fadeScroll { 0%, 100% { opacity: 0.3; transform: translateX(-50%) translateY(0); } 50% { opacity: 0.7; transform: translateX(-50%) translateY(-6px); } }
 
+/* DATE BAR (bajo el hero) */
+.date-bar-wrap { position: relative; z-index: 2; background: var(--ivory); padding: 20px 0; border-bottom: 1px solid rgba(28, 28, 28, 0.06); }
+.date-bar-inner { max-width: var(--container); margin: 0 auto; padding: 0 28px; display: flex; gap: 20px; align-items: flex-end; flex-wrap: wrap; }
+.date-field { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 140px; }
+.date-field label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 500; color: var(--mid); }
+.date-field input, .date-field select { font-family: var(--font-body); font-size: 14px; font-weight: 400; color: var(--charcoal); border: none; background: transparent; padding: 6px 0; outline: none; border-bottom: 1px solid rgba(28, 28, 28, 0.12); }
+.btn-date { padding: 12px 32px; border: none; background: var(--gold); color: var(--charcoal); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; cursor: pointer; white-space: nowrap; transition: background 0.3s; }
+.btn-date:hover { background: var(--gold-light); }
+
+/* STICKY DATE BAR */
+.sticky-bar { position: fixed; top: var(--nav-h); left: 0; right: 0; z-index: 99; background: rgba(28, 28, 28, 0.94); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); transform: translateY(-130%); transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.sticky-bar.visible { transform: translateY(0); }
+.sticky-inner { max-width: var(--container); margin: 0 auto; padding: 10px 28px; display: flex; gap: 16px; align-items: flex-end; }
+.sticky-bar .date-field { flex: 0 1 auto; min-width: 120px; }
+.sticky-bar label { color: rgba(249, 245, 238, 0.4); }
+.sticky-bar input, .sticky-bar select { color: var(--ivory); background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); padding: 6px 12px; color-scheme: dark; }
+.btn-sticky { margin-left: auto; padding: 10px 24px; border: none; background: var(--gold); color: var(--charcoal); font-weight: 500; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; cursor: pointer; white-space: nowrap; }
+@media (max-width: 860px) {
+  .sticky-bar .date-field:nth-child(3) { display: none; }
+  .sticky-inner { gap: 10px; }
+}
+@media (max-width: 560px) {
+  .date-bar-inner { flex-direction: column; align-items: stretch; }
+  .date-field { width: 100%; }
+  .sticky-bar { display: none; }
+}
+
 /* STATS */
 .stats-bar { display: flex; justify-content: center; background: var(--charcoal); border-top: 1px solid rgba(255, 255, 255, 0.04); border-bottom: 1px solid rgba(255, 255, 255, 0.04); }
 .stat-item { text-align: center; padding: 28px 36px; flex: 1; max-width: 260px; }

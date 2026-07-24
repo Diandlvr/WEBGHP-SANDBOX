@@ -14,6 +14,10 @@ export const ui = {
     'hero.title.a': 'Sobre el', 'hero.title.b': 'Panamá', 'hero.title.c': 'Skyline',
     'hero.desc': 'En la icónica Twist Tower, en el exclusivo distrito financiero de Obarrio, Global Hotel Panamá une elegancia contemporánea y vistas panorámicas de la ciudad.',
     'hero.discover': 'Descubrir Más', 'hero.book': 'Reservar Ahora', 'hero.scroll': 'Desliza para explorar',
+    // Barra de fechas
+    'book.checkin': 'Entrada', 'book.checkout': 'Salida', 'book.guests': 'Huéspedes',
+    'book.guest1': '1 huésped', 'book.guest2': '2 huéspedes', 'book.guest3': '3 huéspedes', 'book.guest4': '4 huéspedes',
+    'book.search': 'Buscar disponibilidad', 'book.searchShort': 'Buscar',
     // Stats
     'stat.rooms': 'Habitaciones y Suites', 'stat.access': 'Concierge', 'stat.airport': 'Del Aeropuerto Tocumen', 'stat.night': 'Por Noche',
     // About
@@ -91,6 +95,9 @@ export const ui = {
     'hero.title.a': 'Above the', 'hero.title.b': 'Panama', 'hero.title.c': 'Skyline',
     'hero.desc': 'Perched within the iconic Twist Tower in Panama City’s exclusive financial district, Global Hotel Panama offers an unmatched fusion of contemporary elegance and panoramic city views.',
     'hero.discover': 'Discover More', 'hero.book': 'Book Now', 'hero.scroll': 'Scroll to explore',
+    'book.checkin': 'Check-in', 'book.checkout': 'Check-out', 'book.guests': 'Guests',
+    'book.guest1': '1 guest', 'book.guest2': '2 guests', 'book.guest3': '3 guests', 'book.guest4': '4 guests',
+    'book.search': 'Check availability', 'book.searchShort': 'Search',
     'stat.rooms': 'Rooms & Suites', 'stat.access': 'Concierge', 'stat.airport': 'From Tocumen Airport', 'stat.night': 'Per Night',
     'about.eyebrow': 'Our Story', 'about.title.a': 'A Boutique ', 'about.title.b': 'Urban Sanctuary',
     'about.p1': 'Nestled within the iconic Twist Tower — a contemporary architectural marvel known for its distinctive colors — Global Hotel Panama is part of the Global Companies Group, offering 60 beautifully appointed rooms and suites with breathtaking city skyline views.',

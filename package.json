@@ -10,6 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "editor": "node tools/photo-editor/server.mjs",
+    "test": "vitest run",
     "astro": "astro"
   },
   "dependencies": {
@@ -18,6 +19,7 @@
   },
   "devDependencies": {
     "express": "^5.2.1",
-    "multer": "^2.2.0"
+    "multer": "^2.2.0",
+    "vitest": "^4.1.10"
   }
 }
