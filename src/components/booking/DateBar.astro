@@ -1,33 +1,46 @@
 ---
 // Barra de fechas. Recoge entrada/salida/huéspedes y abre el motor e-gds con la
 // búsqueda prefijada (deep link vía buildBookingUrl). No procesa reservas aquí.
-// Se renderiza dos veces: la barra bajo el hero y una versión sticky al hacer scroll.
+// El input date nativo va oculto (sin el "yyyy/mm/dd"); mostramos la fecha con
+// formato de marca y al tocar cualquier parte del campo se abre el calendario.
 import { useTranslations } from '../../i18n/utils';
 import type { Lang } from '../../i18n/ui';
+import Icon from '../ui/Icon.astro';
 const lang = Astro.props.lang as Lang;
 const sticky = Astro.props.sticky as boolean | undefined;
 const t = useTranslations(lang);
 const wrapClass = sticky ? 'sticky-bar' : 'date-bar-wrap';
 const idPrefix = sticky ? 'sticky' : 'date';
 ---
-<div class={wrapClass} id={sticky ? 'stickyBar' : 'dateSection'} data-book-bar>
+<div class={wrapClass} id={sticky ? 'stickyBar' : 'dateSection'} data-book-bar data-lang={lang}>
   <div class={sticky ? 'sticky-inner' : 'date-bar-inner'}>
-    <div class="date-field">
-      <label for={`${idPrefix}-checkin`}>{t('book.checkin')}</label>
-      <input type="date" id={`${idPrefix}-checkin`} data-field="checkin" />
+    <div class="date-field" data-datefield>
+      <span class="df-label">{t('book.checkin')}</span>
+      <span class="df-body">
+        <span class="df-value" data-display data-placeholder={t('book.pick')}>{t('book.pick')}</span>
+        <span class="df-cal" aria-hidden="true"><Icon name="calendar" /></span>
+      </span>
+      <input type="date" class="df-native" id={`${idPrefix}-checkin`} data-field="checkin" aria-label={t('book.checkin')} />
     </div>
-    <div class="date-field">
-      <label for={`${idPrefix}-checkout`}>{t('book.checkout')}</label>
-      <input type="date" id={`${idPrefix}-checkout`} data-field="checkout" />
+    <div class="date-field" data-datefield>
+      <span class="df-label">{t('book.checkout')}</span>
+      <span class="df-body">
+        <span class="df-value" data-display data-placeholder={t('book.pick')}>{t('book.pick')}</span>
+        <span class="df-cal" aria-hidden="true"><Icon name="calendar" /></span>
+      </span>
+      <input type="date" class="df-native" id={`${idPrefix}-checkout`} data-field="checkout" aria-label={t('book.checkout')} />
     </div>
-    <div class="date-field">
-      <label for={`${idPrefix}-guests`}>{t('book.guests')}</label>
-      <select id={`${idPrefix}-guests`} data-field="guests">
-        <option value="1">{t('book.guest1')}</option>
-        <option value="2" selected>{t('book.guest2')}</option>
-        <option value="3">{t('book.guest3')}</option>
-        <option value="4">{t('book.guest4')}</option>
-      </select>
+    <div class="date-field guests-field">
+      <span class="df-label">{t('book.guests')}</span>
+      <span class="df-body">
+        <select id={`${idPrefix}-guests`} data-field="guests" aria-label={t('book.guests')}>
+          <option value="1">{t('book.guest1')}</option>
+          <option value="2" selected>{t('book.guest2')}</option>
+          <option value="3">{t('book.guest3')}</option>
+          <option value="4">{t('book.guest4')}</option>
+        </select>
+        <span class="df-cal df-chev" aria-hidden="true"><Icon name="chevron" /></span>
+      </span>
     </div>
     <button type="button" class={sticky ? 'btn-sticky' : 'btn-date'} data-book-submit>
       {sticky ? t('book.searchShort') : t('book.search')}
@@ -41,6 +54,8 @@ const idPrefix = sticky ? 'sticky' : 'date';
   const today = new Date().toISOString().slice(0, 10);
 
   document.querySelectorAll<HTMLElement>('[data-book-bar]').forEach((bar) => {
+    const lang = bar.dataset.lang === 'en' ? 'en-US' : 'es-PA';
+    const fmt = new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'short', year: 'numeric' });
     const checkin = bar.querySelector<HTMLInputElement>('[data-field=checkin]')!;
     const checkout = bar.querySelector<HTMLInputElement>('[data-field=checkout]')!;
     const guests = bar.querySelector<HTMLSelectElement>('[data-field=guests]')!;
@@ -49,6 +64,29 @@ const idPrefix = sticky ? 'sticky' : 'date';
     checkin.min = today;
     checkout.min = today;
 
+    // Muestra la fecha con formato de marca (o el placeholder si está vacía).
+    function render(input: HTMLInputElement) {
+      const field = input.closest('[data-datefield]')!;
+      const display = field.querySelector<HTMLElement>('[data-display]')!;
+      if (input.value) {
+        display.textContent = fmt.format(new Date(`${input.value}T00:00:00`));
+        display.classList.add('has-value');
+      } else {
+        display.textContent = display.dataset.placeholder || '';
+        display.classList.remove('has-value');
+      }
+    }
+
+    // Tocar cualquier parte del campo abre el calendario nativo.
+    [checkin, checkout].forEach((input) => {
+      const field = input.closest('[data-datefield]')!;
+      field.addEventListener('click', () => {
+        try { input.showPicker(); } catch { input.focus(); }
+      });
+      input.addEventListener('change', () => render(input));
+      render(input);
+    });
+
     // La salida no puede ser anterior o igual a la entrada.
     checkin.addEventListener('change', () => {
       if (!checkin.value) return;
@@ -56,7 +94,10 @@ const idPrefix = sticky ? 'sticky' : 'date';
       next.setDate(next.getDate() + 1);
       const min = next.toISOString().slice(0, 10);
       checkout.min = min;
-      if (checkout.value && checkout.value <= checkin.value) checkout.value = min;
+      if (checkout.value && checkout.value <= checkin.value) {
+        checkout.value = min;
+        render(checkout);
+      }
     });
 
     submit.addEventListener('click', () => {
@@ -65,7 +106,6 @@ const idPrefix = sticky ? 'sticky' : 'date';
         checkOut: checkout.value || undefined,
         guests: Number(guests.value) || undefined,
       });
-      // Abrir como enlace real (una pestaña). window.open con opciones lo bloquean los popup blockers.
       const a = document.createElement('a');
       a.href = url;
       a.target = '_blank';
