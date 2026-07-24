@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import { BOOKING_URL } from '../../i18n/utils';
+---
+<Base>
+  <main class="container" style="padding-block: 120px;">
+    <p style="text-transform:uppercase; letter-spacing:.15em; color:var(--gold); font-size:12px;">
+      Obarrio · Ciudad de Panamá
+    </p>
+    <h1 style="font-size:clamp(42px,6vw,80px); font-weight:400;">
+      Sobre el <span class="accent">Skyline</span> de Panamá
+    </h1>
+    <p style="max-width:60ch; color:var(--muted);">
+      Andamiaje Fase 0 — la home completa llega en la Fase 1. Esta página confirma que la ruta
+      <code>/es/</code> responde con i18n, tokens y SEO en su sitio.
+    </p>
+    <p>
+      <a class="btn btn-primary" href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
+        Reservar
+      </a>
+    </p>
+  </main>
+</Base>

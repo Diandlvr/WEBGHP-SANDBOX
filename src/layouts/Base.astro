@@ -1,0 +1,55 @@
+---
+import '../styles/global.css';
+import { getLangFromUrl, useTranslations, getAlternatePath } from '../i18n/utils';
+import { defaultLang, type Lang } from '../i18n/ui';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const lang = getLangFromUrl(Astro.url) as Lang;
+const t = useTranslations(lang);
+const { title = t('meta.title'), description = t('meta.description') } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const altEs = new URL(getAlternatePath(Astro.url, 'es'), Astro.site).href;
+const altEn = new URL(getAlternatePath(Astro.url, 'en'), Astro.site).href;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- hreflang recíproco + x-default (SEO no negociable) -->
+    <link rel="alternate" hreflang="es" href={altEs} />
+    <link rel="alternate" hreflang="en" href={altEn} />
+    <link rel="alternate" hreflang="x-default" href={new URL(getAlternatePath(Astro.url, defaultLang), Astro.site).href} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+    <!-- Fuentes: EB Garamond + DM Sans, subset latino, display swap -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap"
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={lang === 'es' ? 'es_PA' : 'en_US'} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

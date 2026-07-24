@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comparativa web · Hoteles de Ciudad de Panamá</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c1220; --bg2:#0f1728; --panel:#152136; --panel2:#1b2a44;
+    --border:#26374f; --border2:#324863;
+    --ink:#eaf1fa; --muted:#8ea3bd; --faint:#5f748f;
+    --gold:#d3b073; --gold-dim:#8f7846;
+    --cyan:#54d8cb; --cyan-dim:#2b6f6a;
+    --mine:#f0a35e;               /* Global Hotel Panamá highlight */
+    --yes:#57c58f; --partial:#e0b25c; --no:#e0736f;
+    --radius:14px;
+    --mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:
+      radial-gradient(1100px 620px at 82% -8%, rgba(211,176,115,.10), transparent 60%),
+      radial-gradient(900px 520px at 6% 4%, rgba(84,216,203,.08), transparent 55%),
+      var(--bg);
+    color:var(--ink); font-family:'Inter',system-ui,sans-serif;
+    line-height:1.55; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1120px; margin:0 auto; padding:0 22px}
+  a{color:inherit}
+
+  /* ---------- Header ---------- */
+  header{padding:64px 0 34px}
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--gold); display:flex; align-items:center; gap:12px; margin-bottom:18px;
+  }
+  .eyebrow::before{content:""; width:34px; height:1px; background:var(--gold-dim)}
+  h1{
+    font-family:'Space Grotesk',sans-serif; font-weight:700; letter-spacing:-.02em;
+    font-size:clamp(30px,5.4vw,52px); line-height:1.04; margin:0 0 16px;
+  }
+  h1 .hl{color:var(--mine)}
+  .lede{color:var(--muted); font-size:clamp(15px,1.6vw,17px); max-width:660px; margin:0}
+  .legend{display:flex; flex-wrap:wrap; gap:18px; margin-top:26px; font-size:13px; color:var(--muted)}
+  .legend span{display:inline-flex; align-items:center; gap:7px}
+  .dot{width:11px; height:11px; border-radius:50%}
+  .dot.yes{background:var(--yes)} .dot.partial{background:var(--partial)} .dot.no{background:var(--no)}
+
+  section{padding:30px 0}
+  .sec-head{display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:20px}
+  .sec-head h2{
+    font-family:'Space Grotesk',sans-serif; font-size:22px; font-weight:600; margin:0; letter-spacing:-.01em;
+  }
+  .sec-num{font-family:var(--mono); color:var(--gold); font-size:13px; margin-right:10px}
+  .sec-note{color:var(--faint); font-size:13px}
+
+  /* ---------- Ranking bars ---------- */
+  .controls{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px}
+  .chip{
+    font-family:var(--mono); font-size:12px; letter-spacing:.03em; color:var(--muted);
+    background:var(--panel); border:1px solid var(--border); padding:7px 13px; border-radius:999px;
+    cursor:pointer; transition:.16s;
+  }
+  .chip:hover{border-color:var(--border2); color:var(--ink)}
+  .chip[aria-pressed="true"]{background:var(--gold); color:#1a1305; border-color:var(--gold); font-weight:700}
+  .bars{display:flex; flex-direction:column; gap:11px}
+  .bar-row{display:grid; grid-template-columns:210px 1fr 48px; align-items:center; gap:14px}
+  .bar-name{display:flex; align-items:center; gap:9px; font-size:14px; font-weight:500; min-width:0}
+  .bar-name b{font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .tag{font-family:var(--mono); font-size:10px; padding:2px 6px; border-radius:5px; letter-spacing:.04em; white-space:nowrap}
+  .tag.mine{background:rgba(240,163,94,.16); color:var(--mine); border:1px solid rgba(240,163,94,.35)}
+  .track{height:26px; background:var(--bg2); border:1px solid var(--border); border-radius:8px; overflow:hidden}
+  .fill{height:100%; width:0; border-radius:7px 0 0 7px; transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+  .fill.other{background:linear-gradient(90deg,var(--cyan-dim),var(--cyan))}
+  .fill.mine{background:linear-gradient(90deg,#a5623a,var(--mine))}
+  .bar-score{font-family:var(--mono); font-weight:700; font-size:14px; text-align:right}
+
+  /* ---------- Cards ---------- */
+  .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+  .card{
+    background:linear-gradient(180deg,var(--panel),var(--bg2));
+    border:1px solid var(--border); border-radius:var(--radius); padding:20px; display:flex; flex-direction:column;
+    transition:.18s;
+  }
+  .card:hover{transform:translateY(-3px); border-color:var(--border2)}
+  .card.mine{border-color:rgba(240,163,94,.5); box-shadow:0 0 0 1px rgba(240,163,94,.25), 0 14px 40px -18px rgba(240,163,94,.4)}
+  .card-top{display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:14px}
+  .card h3{font-family:'Space Grotesk',sans-serif; font-size:17px; font-weight:600; margin:0; line-height:1.2}
+  .brand{font-size:12px; color:var(--faint); margin-top:3px}
+  .score-badge{font-family:var(--mono); font-weight:700; font-size:15px; padding:6px 9px; border-radius:8px; background:var(--bg); border:1px solid var(--border); white-space:nowrap}
+  .card.mine .score-badge{color:var(--mine); border-color:rgba(240,163,94,.4)}
+  .stats{display:flex; flex-direction:column; gap:7px; margin:6px 0 16px; font-size:13px}
+  .stat{display:flex; justify-content:space-between; gap:10px; color:var(--muted)}
+  .stat b{color:var(--ink); font-weight:600; font-family:var(--mono); font-size:12.5px}
+  .plat{font-size:12.5px; color:var(--muted); border-top:1px dashed var(--border); padding-top:12px; margin-bottom:16px; min-height:52px}
+  .visit{
+    margin-top:auto; display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    text-decoration:none; font-weight:600; font-size:13.5px; padding:11px 14px; border-radius:9px;
+    background:var(--panel2); border:1px solid var(--border2); color:var(--ink); transition:.16s;
+  }
+  .visit:hover{background:var(--gold); color:#1a1305; border-color:var(--gold)}
+  .card.mine .visit{background:rgba(240,163,94,.12); border-color:rgba(240,163,94,.45); color:var(--mine)}
+  .card.mine .visit:hover{background:var(--mine); color:#241202}
+
+  /* ---------- Matrix ---------- */
+  .matrix-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:var(--radius); background:var(--bg2)}
+  table{border-collapse:collapse; width:100%; min-width:760px}
+  th,td{padding:12px 10px; text-align:center; font-size:13px; border-bottom:1px solid var(--border)}
+  thead th{position:sticky; top:0; background:var(--panel); font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:12.5px; z-index:2}
+  th.feat, td.feat{text-align:left; position:sticky; left:0; background:var(--bg2); z-index:1; min-width:230px; color:var(--muted); font-weight:500}
+  thead th.feat{background:var(--panel); z-index:3}
+  th.mine, td.mine-col{background:rgba(240,163,94,.07)}
+  thead th.mine{color:var(--mine)}
+  .cat-row td{background:var(--panel); text-align:left; font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); padding:9px 10px}
+  .mark{font-weight:700; font-size:15px}
+  .mark.yes{color:var(--yes)} .mark.partial{color:var(--partial)} .mark.no{color:var(--no); opacity:.5}
+  tr.gap-hit td.feat{color:var(--mine); font-weight:600}
+  tr.gap-hit{background:rgba(240,163,94,.05)}
+  tr.dimmed{opacity:.28}
+  .col-hotel{font-size:11.5px; line-height:1.25}
+
+  /* ---------- Action plan ---------- */
+  .plan{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:8px 4px}
+  .task{display:flex; gap:14px; padding:15px 18px; border-bottom:1px solid var(--border); cursor:pointer; transition:.14s}
+  .task:last-child{border-bottom:none}
+  .task:hover{background:var(--panel2)}
+  .box{flex:0 0 22px; height:22px; border-radius:6px; border:2px solid var(--border2); margin-top:2px; display:grid; place-items:center; transition:.16s}
+  .task.done .box{background:var(--cyan); border-color:var(--cyan)}
+  .box svg{width:13px; height:13px; opacity:0; transition:.16s}
+  .task.done .box svg{opacity:1}
+  .task-body h4{margin:0 0 3px; font-size:15px; font-weight:600; font-family:'Space Grotesk',sans-serif}
+  .task.done .task-body h4{text-decoration:line-through; color:var(--muted)}
+  .task-body p{margin:0; font-size:13px; color:var(--muted)}
+  .prio{font-family:var(--mono); font-size:10px; padding:2px 7px; border-radius:5px; margin-left:8px; letter-spacing:.05em; vertical-align:middle}
+  .prio.alta{background:rgba(224,115,111,.16); color:var(--no)}
+  .prio.media{background:rgba(224,178,92,.16); color:var(--partial)}
+  .prio.asset{background:rgba(87,197,143,.16); color:var(--yes)}
+  .progress-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:14px}
+  .progress-head span{font-family:var(--mono); font-size:13px; color:var(--cyan)}
+  .pbar{height:8px; background:var(--bg2); border:1px solid var(--border); border-radius:99px; overflow:hidden; margin-bottom:22px}
+  .pfill{height:100%; width:0; background:linear-gradient(90deg,var(--cyan-dim),var(--cyan)); transition:width .4s ease}
+
+  footer{padding:44px 0 60px; color:var(--faint); font-size:12.5px; border-top:1px solid var(--border); margin-top:30px}
+  footer a{color:var(--muted)}
+
+  @media (max-width:860px){
+    .grid{grid-template-columns:1fr 1fr}
+    .bar-row{grid-template-columns:150px 1fr 42px}
+  }
+  @media (max-width:560px){
+    .grid{grid-template-columns:1fr}
+    .bar-row{grid-template-columns:120px 1fr 40px}
+    .bar-name .tag{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important}
+    .fill{transition:none !important}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Análisis competitivo · Webs de hotel · Ciudad de Panamá</div>
+    <h1>Tu web vs. la de los hoteles<br>más grandes de <span class="hl">Panamá</span></h1>
+    <p class="lede">Comparación funcional de <strong>Global Hotel Panamá</strong> contra 5 de los hoteles mejor valorados y de mayor tamaño de la ciudad. Toca cada tarjeta para abrir el sitio oficial y revisarlo tú mismo. Los datos salen de revisar cada web directamente en julio de 2026.</p>
+    <div class="legend">
+      <span><i class="dot yes"></i> Presente</span>
+      <span><i class="dot partial"></i> Parcial / limitado</span>
+      <span><i class="dot no"></i> Ausente</span>
+    </div>
+  </header>
+
+  <!-- 1. RANKING -->
+  <section id="ranking">
+    <div class="sec-head">
+      <h2><span class="sec-num">01</span>Madurez digital del sitio</h2>
+      <div class="sec-note">Puntaje = % de funciones web presentes (13 evaluadas)</div>
+    </div>
+    <div class="controls" id="sortControls">
+      <button class="chip" data-sort="score" aria-pressed="true">Ordenar por puntaje</button>
+      <button class="chip" data-sort="rooms" aria-pressed="false">Ordenar por tamaño</button>
+      <button class="chip" data-sort="name" aria-pressed="false">Alfabético</button>
+    </div>
+    <div class="bars" id="bars"></div>
+  </section>
+
+  <!-- 2. CARDS -->
+  <section id="hoteles">
+    <div class="sec-head">
+      <h2><span class="sec-num">02</span>Los sitios, uno por uno</h2>
+      <div class="sec-note">Abre cada web oficial en una pestaña nueva ↗</div>
+    </div>
+    <div class="grid" id="cards"></div>
+  </section>
+
+  <!-- 3. MATRIX -->
+  <section id="matriz">
+    <div class="sec-head">
+      <h2><span class="sec-num">03</span>Comparativa función por función</h2>
+      <div class="sec-note">Filtra por categoría o resalta solo tus brechas</div>
+    </div>
+    <div class="controls" id="catControls">
+      <button class="chip" data-cat="all" aria-pressed="true">Todas</button>
+      <button class="chip" data-cat="Reservas" aria-pressed="false">Reservas</button>
+      <button class="chip" data-cat="Contenido" aria-pressed="false">Contenido</button>
+      <button class="chip" data-cat="Fidelización" aria-pressed="false">Fidelización</button>
+      <button class="chip" data-cat="Interactividad" aria-pressed="false">Interactividad</button>
+      <button class="chip" data-gap="on" aria-pressed="false" style="margin-left:auto">◆ Resaltar mis brechas</button>
+    </div>
+    <div class="matrix-wrap">
+      <table>
+        <thead><tr id="matrixHead"></tr></thead>
+        <tbody id="matrixBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 4. ACTION PLAN -->
+  <section id="plan">
+    <div class="sec-head">
+      <h2><span class="sec-num">04</span>Plan de acción para tu web</h2>
+      <div class="sec-note">Marca lo que vayas completando</div>
+    </div>
+    <div class="progress-head">
+      <strong style="font-family:'Space Grotesk'">Avance de implementación</strong>
+      <span id="progressLabel">0 / 8</span>
+    </div>
+    <div class="pbar"><div class="pfill" id="pfill"></div></div>
+    <div class="plan" id="plan"></div>
+  </section>
+
+  <footer>
+    Comparativa preparada para Global Hotel Panamá · Datos verificados en los sitios oficiales (jul. 2026). Los puntajes reflejan funciones web, no la calidad del hotel. Links a sitios oficiales de terceros abiertos en pestaña nueva.
+  </footer>
+
+</div>
+
+<script>
+const FEATURES = [
+  {id:'engine',   cat:'Reservas',        label:'Motor de reservas integrado (sin salir del sitio)'},
+  {id:'live',     cat:'Reservas',        label:'Tarifas y disponibilidad en vivo'},
+  {id:'direct',   cat:'Reservas',        label:'Mejor precio / reserva directa garantizada'},
+  {id:'gallery',  cat:'Contenido',       label:'Galería de fotos navegable'},
+  {id:'roompg',   cat:'Contenido',       label:'Páginas por tipo de habitación'},
+  {id:'tour',     cat:'Contenido',       label:'Tour virtual 360°'},
+  {id:'lang',     cat:'Contenido',       label:'Multi-idioma (ES / EN+)'},
+  {id:'loyalty',  cat:'Fidelización',    label:'Programa de lealtad / login'},
+  {id:'offers',   cat:'Fidelización',    label:'Ofertas y paquetes'},
+  {id:'app',      cat:'Fidelización',    label:'App móvil / llave digital'},
+  {id:'chat',     cat:'Interactividad',  label:'Chatbot / asistente de reservas'},
+  {id:'reviews',  cat:'Interactividad',  label:'Reseñas dinámicas integradas'},
+  {id:'motion',   cat:'Interactividad',  label:'Micro-interacciones / animaciones'},
+];
+
+const HOTELS = [
+  { name:'Global Hotel Panamá', brand:'Twist Hotels · independiente', mine:true,
+    rooms:60, roomsTxt:'60', cat:'5★ boutique', zone:'Obarrio',
+    url:'https://globalhotelpanama.com/',
+    plat:'Landing de una página. La reserva salta a un motor GDS externo (e-gdscloud). Solo inglés.',
+    f:{engine:'no',live:'no',direct:'partial',gallery:'no',roompg:'no',tour:'no',lang:'no',loyalty:'no',offers:'no',app:'no',chat:'no',reviews:'no',motion:'partial'} },
+
+  { name:'Riu Plaza Panamá', brand:'RIU Hotels & Resorts', mine:false,
+    rooms:644, roomsTxt:'644', cat:'4-5★ urbano', zone:'Marbella',
+    url:'https://www.riu.com/en/hotel/panama/panama-city/hotel-riu-plaza-panama',
+    plat:'El más grande de la ciudad. Motor propio con precio en vivo, RIU Class (lealtad) y multi-idioma.',
+    f:{engine:'yes',live:'yes',direct:'yes',gallery:'yes',roompg:'yes',tour:'no',lang:'yes',loyalty:'yes',offers:'yes',app:'partial',chat:'partial',reviews:'partial',motion:'yes'} },
+
+  { name:'Waldorf Astoria Panamá', brand:'Hilton', mine:false,
+    rooms:150, roomsTxt:'~150', cat:'5★ lujo', zone:'Calle Uruguay',
+    url:'https://www.hilton.com/en/hotels/ptytpwa-waldorf-astoria-panama/',
+    plat:'Plataforma Hilton: tour virtual, galería, ofertas, Hilton Honors y llave digital en la app.',
+    f:{engine:'yes',live:'yes',direct:'yes',gallery:'yes',roompg:'yes',tour:'yes',lang:'yes',loyalty:'yes',offers:'yes',app:'yes',chat:'partial',reviews:'partial',motion:'yes'} },
+
+  { name:'JW Marriott Panamá', brand:'Marriott', mine:false,
+    rooms:369, roomsTxt:'~369', cat:'5★ lujo', zone:'Punta Pacífica',
+    url:'https://www.marriott.com/en-us/hotels/ptymj-jw-marriott-panama/overview/',
+    plat:'Edificio más alto de Centroamérica. Plataforma Marriott: tour 360°, Mobile Key, Bonvoy y reseñas.',
+    f:{engine:'yes',live:'yes',direct:'yes',gallery:'yes',roompg:'yes',tour:'yes',lang:'yes',loyalty:'yes',offers:'yes',app:'yes',chat:'partial',reviews:'yes',motion:'yes'} },
+
+  { name:'Sortis Hotel, Spa & Casino', brand:'Autograph Collection', mine:false,
+    rooms:391, roomsTxt:'391', cat:'5★ lujo', zone:'Obarrio',
+    url:'https://www.sortishotel.com/en/home',
+    plat:'Sitio propio + Marriott. Reserva directa, ES/EN, ofertas y lealtad Bonvoy (Autograph).',
+    f:{engine:'yes',live:'yes',direct:'yes',gallery:'yes',roompg:'yes',tour:'partial',lang:'yes',loyalty:'yes',offers:'yes',app:'yes',chat:'no',reviews:'partial',motion:'yes'} },
+
+  { name:'Sheraton Grand Panamá', brand:'Marriott', mine:false,
+    rooms:300, roomsTxt:'~300', cat:'5★', zone:'San Francisco',
+    url:'https://www.marriott.com/en-us/hotels/ptysi-sheraton-grand-panama/overview/',
+    plat:'Plataforma Marriott: galería, disponibilidad en vivo, Bonvoy, llave móvil y reseñas verificadas.',
+    f:{engine:'yes',live:'yes',direct:'yes',gallery:'yes',roompg:'yes',tour:'partial',lang:'yes',loyalty:'yes',offers:'yes',app:'yes',chat:'partial',reviews:'yes',motion:'yes'} },
+];
+
+const V = {yes:1, partial:.5, no:0};
+const score = h => Math.round(Object.values(h.f).reduce((s,v)=>s+V[v],0)/FEATURES.length*100);
+HOTELS.forEach(h=>h.score=score(h));
+
+/* ---------- Ranking bars ---------- */
+const barsEl = document.getElementById('bars');
+function renderBars(sortKey){
+  const list=[...HOTELS];
+  if(sortKey==='score') list.sort((a,b)=>b.score-a.score);
+  if(sortKey==='rooms') list.sort((a,b)=>b.rooms-a.rooms);
+  if(sortKey==='name')  list.sort((a,b)=>a.name.localeCompare(b.name));
+  barsEl.innerHTML = list.map(h=>`
+    <div class="bar-row">
+      <div class="bar-name">
+        <b>${h.name}</b>${h.mine?'<span class="tag mine">TÚ</span>':''}
+      </div>
+      <div class="track"><div class="fill ${h.mine?'mine':'other'}" data-w="${h.score}"></div></div>
+      <div class="bar-score" style="color:${h.mine?'var(--mine)':'var(--cyan)'}">${h.score}</div>
+    </div>`).join('');
+  requestAnimationFrame(()=>barsEl.querySelectorAll('.fill').forEach(f=>f.style.width=f.dataset.w+'%'));
+}
+document.getElementById('sortControls').addEventListener('click',e=>{
+  const b=e.target.closest('[data-sort]'); if(!b)return;
+  document.querySelectorAll('#sortControls .chip').forEach(c=>c.setAttribute('aria-pressed','false'));
+  b.setAttribute('aria-pressed','true'); renderBars(b.dataset.sort);
+});
+
+/* ---------- Cards ---------- */
+document.getElementById('cards').innerHTML = HOTELS.map(h=>`
+  <article class="card ${h.mine?'mine':''}">
+    <div class="card-top">
+      <div><h3>${h.name}</h3><div class="brand">${h.brand}</div></div>
+      <div class="score-badge">${h.score}<span style="opacity:.5;font-size:11px">/100</span></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><span>Habitaciones</span><b>${h.roomsTxt}</b></div>
+      <div class="stat"><span>Categoría</span><b>${h.cat}</b></div>
+      <div class="stat"><span>Zona</span><b>${h.zone}</b></div>
+    </div>
+    <div class="plat">${h.plat}</div>
+    <a class="visit" href="${h.url}" target="_blank" rel="noopener">Ver sitio oficial ↗</a>
+  </article>`).join('');
+
+/* ---------- Matrix ---------- */
+const head=document.getElementById('matrixHead'), body=document.getElementById('matrixBody');
+head.innerHTML = `<th class="feat">Función</th>` + HOTELS.map(h=>
+  `<th class="${h.mine?'mine':''}"><div class="col-hotel">${h.name.replace('Global Hotel Panamá','Global Hotel<br>Panamá').replace('Sortis Hotel, Spa & Casino','Sortis Hotel,<br>Spa & Casino')}</div></th>`).join('');
+
+const MARK={yes:'✓',partial:'◐',no:'✕'};
+let curCat='all', gapOn=false;
+
+function isGap(f){ // Global no lo tiene (no/partial) y algún competidor sí (yes)
+  const mine=HOTELS.find(h=>h.mine).f[f.id];
+  const someoneHas=HOTELS.some(h=>!h.mine && h.f[f.id]==='yes');
+  return mine!=='yes' && someoneHas;
+}
+
+function renderMatrix(){
+  const cats=[...new Set(FEATURES.map(f=>f.cat))];
+  let html='';
+  cats.forEach(cat=>{
+    const feats=FEATURES.filter(f=>f.cat===cat);
+    const catVisible = (curCat==='all'||curCat===cat);
+    html+=`<tr class="cat-row" data-cat="${cat}" ${catVisible?'':'style="display:none"'}><td colspan="${HOTELS.length+1}">${cat}</td></tr>`;
+    feats.forEach(f=>{
+      const gap=isGap(f);
+      const show = catVisible && (!gapOn || gap);
+      html+=`<tr class="${gap?'gap-hit':''} ${gapOn&&!gap?'dimmed':''}" data-cat="${cat}" ${show?'':'style="display:none"'}>
+        <td class="feat">${f.label}</td>` +
+        HOTELS.map(h=>`<td class="${h.mine?'mine-col':''}"><span class="mark ${h.f[f.id]}">${MARK[h.f[f.id]]}</span></td>`).join('') +
+      `</tr>`;
+    });
+  });
+  body.innerHTML=html;
+}
+document.getElementById('catControls').addEventListener('click',e=>{
+  const catBtn=e.target.closest('[data-cat]');
+  const gapBtn=e.target.closest('[data-gap]');
+  if(catBtn){
+    document.querySelectorAll('#catControls [data-cat]').forEach(c=>c.setAttribute('aria-pressed','false'));
+    catBtn.setAttribute('aria-pressed','true'); curCat=catBtn.dataset.cat; renderMatrix();
+  }
+  if(gapBtn){
+    gapOn=!gapOn; gapBtn.setAttribute('aria-pressed',gapOn); renderMatrix();
+  }
+});
+
+/* ---------- Action plan ---------- */
+const TASKS=[
+  {t:'Widget de fechas en el hero', p:'alta', d:'Check-in / check-out / huéspedes arriba del todo que arme la URL hacia tu motor GDS ya con las fechas. Sube conversión aunque el motor siga siendo externo.'},
+  {t:'Embeber el chat de Asksuite', p:'asset', d:'Ya lo tienes licenciado con NewHotel. Pegar el snippet del webchat te da asistente de reservas 24/7 — interactividad que las cadenas pagan aparte.'},
+  {t:'Galería + tarjetas por habitación', p:'alta', d:'Reemplaza la única foto por una galería con lightbox (GLightbox/PhotoSwipe) y una tarjeta por categoría con su CTA "Reservar".'},
+  {t:'Selector de idioma ES / EN', p:'alta', d:'Estás en Panamá y el sitio es solo inglés. Objeto JS con textos por idioma + toggle, español por defecto.'},
+  {t:'Ofertas y paquetes con CTA directo', p:'media', d:'Sección de promociones (larga estancia, escapada, corporativo) que empuje la reserva directa sin comisión de OTA.'},
+  {t:'Reseñas dinámicas', p:'media', d:'Cambia los 3 testimonios fijos por un widget de reseñas de Google que se actualiza solo y da credibilidad real.'},
+  {t:'Micro-interacciones', p:'media', d:'Scroll reveal (Intersection Observer), contadores animados en las stats y hover en las tarjetas. Bajo esfuerzo, alto impacto premium.'},
+  {t:'Disponibilidad en vivo embebida', p:'media', d:'A mediano plazo: motor de reservas embebido que muestre tarifa por fecha dentro del sitio, como Riu y las cadenas.'},
+];
+const planEl=document.getElementById('plan');
+planEl.innerHTML=TASKS.map((t,i)=>`
+  <div class="task" data-i="${i}">
+    <div class="box"><svg viewBox="0 0 24 24" fill="none" stroke="#08201d" stroke-width="3.5"><path d="M4 12l5 5L20 6"/></svg></div>
+    <div class="task-body">
+      <h4>${t.t}<span class="prio ${t.p}">${t.p==='asset'?'YA LO TIENES':t.p.toUpperCase()}</span></h4>
+      <p>${t.d}</p>
+    </div>
+  </div>`).join('');
+const pfill=document.getElementById('pfill'), plabel=document.getElementById('progressLabel');
+planEl.addEventListener('click',e=>{
+  const task=e.target.closest('.task'); if(!task)return;
+  task.classList.toggle('done');
+  const done=planEl.querySelectorAll('.task.done').length;
+  pfill.style.width=(done/TASKS.length*100)+'%';
+  plabel.textContent=`${done} / ${TASKS.length}`;
+});
+
+/* init */
+renderBars('score');
+renderMatrix();
+</script>
+</body>
+</html>

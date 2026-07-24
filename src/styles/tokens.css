@@ -1,0 +1,28 @@
+/* Tokens de diseño — Global Hotel Panamá
+   Dirección visual: Stitch (estructura + paleta clara). Decisión D5 de Juan (2026-07-24).
+   Anula el tema oscuro del brief. Ver GHP-Vault/08-Decisiones-tomadas.md */
+:root {
+  /* Paleta (de stitch-preview.html) */
+  --dc:          #1A1A1A;   /* texto / superficies oscuras */
+  --ivory:       #F5F5F0;   /* fondo base (tema claro) */
+  --gold:        #D4AF37;
+  --gold-dim:    #B08D2B;
+  --white:       #FFFFFF;
+  --muted:       #444748;
+  --surface-dim: #dadad5;
+  --border:      rgba(26, 26, 26, 0.08);
+
+  /* Tipografía */
+  --font-serif:  'EB Garamond', Georgia, serif;
+  --font-sans:   'DM Sans', system-ui, sans-serif;
+
+  /* Sistema */
+  --radius:      0;         /* esquinas rectas siempre */
+  --nav-h:       80px;
+  --section-gap: 120px;     /* 80px en móvil (ver global.css) */
+  --container:   1200px;
+}
+
+@media (max-width: 768px) {
+  :root { --section-gap: 80px; }
+}

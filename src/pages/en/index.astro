@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import { BOOKING_URL } from '../../i18n/utils';
+---
+<Base>
+  <main class="container" style="padding-block: 120px;">
+    <p style="text-transform:uppercase; letter-spacing:.15em; color:var(--gold); font-size:12px;">
+      Obarrio · Panama City
+    </p>
+    <h1 style="font-size:clamp(42px,6vw,80px); font-weight:400;">
+      Above the <span class="accent">Panama</span> Skyline
+    </h1>
+    <p style="max-width:60ch; color:var(--muted);">
+      Phase 0 scaffolding — the full home lands in Phase 1. This page confirms the
+      <code>/en/</code> route responds with i18n, tokens and SEO in place.
+    </p>
+    <p>
+      <a class="btn btn-primary" href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
+        Book Now
+      </a>
+    </p>
+  </main>
+</Base>

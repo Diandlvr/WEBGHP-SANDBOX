@@ -1,0 +1,23 @@
+---
+// Raíz: redirige según el idioma del navegador. Fallback a /es/ (defaultLocale).
+// Se resuelve en cliente para poder leer navigator.language en salida estática.
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="refresh" content="0; url=/es/" />
+    <link rel="canonical" href="https://globalhotelpanama.com/es/" />
+    <title>Global Hotel Panamá</title>
+    <script is:inline>
+      (function () {
+        var lang = (navigator.language || 'es').toLowerCase().startsWith('en') ? 'en' : 'es';
+        location.replace('/' + lang + '/');
+      })();
+    </script>
+  </head>
+  <body>
+    <p>Redirigiendo… · Redirecting… <a href="/es/">Español</a> / <a href="/en/">English</a></p>
+  </body>
+</html>

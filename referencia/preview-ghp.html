@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Hotel Panama · Above the Panama Skyline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #1a1612;
+  --ivory: #f5f0e8;
+  --gold: #c8a24b;
+  --gold-light: #dbb95c;
+  --gold-dim: #a07d35;
+  --gold-soft: rgba(200,162,75,.12);
+  --text-dark: #1a1612;
+  --text-light: #f5f0e8;
+  --text-muted: #8a7f70;
+  --text-muted-light: rgba(245,240,232,.5);
+  --card-bg: rgba(255,255,255,.035);
+  --card-border: rgba(255,255,255,.07);
+  --radius: 0;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'DM Sans', 'Segoe UI', system-ui, sans-serif;
+  --nav-h: 80px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; padding:0;
+  font-family:var(--font-body);
+  font-weight:300; color:var(--text-dark); line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  background:var(--ivory);
+}
+img{display:block; max-width:100%; height:auto}
+a{color:inherit; text-decoration:none}
+ul{margin:0; padding:0; list-style:none}
+.container{max-width:1200px; margin:0 auto; padding:0 28px}
+
+/* ─── SVG ICONS ─── */
+.icon{display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; flex-shrink:0}
+.icon svg{width:100%; height:100%; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round}
+.icon-lg{width:44px; height:44px}
+.icon-sm{width:28px; height:28px}
+
+/* ─── NAV ─── */
+nav{
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  height:var(--nav-h);
+  background:rgba(26,22,18,.85);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(255,255,255,.05);
+  transition:background .4s;
+}
+nav.scrolled{background:rgba(26,22,18,.97)}
+.nav-inner{
+  display:flex; align-items:center; justify-content:space-between;
+  max-width:1200px; margin:0 auto; padding:0 28px; height:100%;
+}
+.logo{font-family:var(--font-display); font-size:24px; font-weight:600; color:var(--text-light); letter-spacing:-.02em}
+.logo span{color:var(--gold)}
+.nav-links{display:flex; gap:36px}
+.nav-links a{font-size:13px; font-weight:400; color:rgba(245,240,232,.55); text-transform:uppercase; letter-spacing:.12em; transition:color .3s}
+.nav-links a:hover{color:var(--text-light)}
+.nav-right{display:flex; align-items:center; gap:18px}
+.lang-toggle{display:flex; gap:0; background:rgba(255,255,255,.05); border-radius:0; padding:2px}
+.lang-btn{font-family:var(--font-body); font-size:10px; font-weight:500; text-transform:uppercase; padding:6px 12px; border:none; background:transparent; color:rgba(245,240,232,.35); cursor:pointer; letter-spacing:.08em; transition:all .25s}
+.lang-btn.active{background:var(--gold); color:var(--black)}
+.btn-nav{display:inline-flex; align-items:center; padding:11px 28px; border:none; background:var(--gold); color:var(--black); font-weight:500; font-size:11px; text-transform:uppercase; letter-spacing:.14em; cursor:pointer; transition:background .3s}
+.btn-nav:hover{background:var(--gold-light)}
+.menu-toggle{display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:6px}
+.menu-toggle span{display:block; width:24px; height:1.5px; background:var(--text-light); transition:.3s}
+
+/* ─── HERO ─── */
+.hero{
+  position:relative; min-height:100vh; display:flex; align-items:center;
+  background:var(--black); overflow:hidden;
+}
+.hero-bg{
+  position:absolute; inset:0;
+  background:
+    linear-gradient(78deg, rgba(26,22,18,.82) 0%, rgba(26,22,18,.45) 40%, rgba(26,22,18,.25) 100%),
+    url('https://images.unsplash.com/photo-1575517111478-7f6afd0973db?w=1600&q=85') center/cover no-repeat;
+}
+.hero-content{position:relative; z-index:2; max-width:1200px; margin:0 auto; padding:0 28px; width:100%}
+.hero-eyebrow{font-size:11px; text-transform:uppercase; letter-spacing:.2em; color:var(--gold); margin:0 0 24px; font-weight:400}
+.hero-title{font-family:var(--font-display); font-size:clamp(48px,7.2vw,96px); font-weight:300; line-height:.92; color:var(--text-light); margin:0 0 28px; letter-spacing:-.03em}
+.hero-title em{font-style:italic; font-weight:300; color:var(--gold)}
+.hero-desc{font-size:clamp(15px,1.1vw,17px); color:rgba(245,240,232,.55); max-width:500px; line-height:1.8; margin:0 0 40px}
+.hero-actions{display:flex; gap:16px; flex-wrap:wrap}
+.btn-primary{display:inline-flex; align-items:center; padding:14px 36px; background:var(--gold); color:var(--black); font-weight:500; font-size:11px; text-transform:uppercase; letter-spacing:.16em; cursor:pointer; border:none; transition:background .3s}
+.btn-primary:hover{background:var(--gold-light)}
+.btn-ghost{display:inline-flex; align-items:center; padding:14px 36px; background:transparent; color:var(--text-light); font-weight:400; font-size:11px; text-transform:uppercase; letter-spacing:.16em; cursor:pointer; border:1px solid rgba(245,240,232,.2); transition:border .3s, color .3s}
+.btn-ghost:hover{border-color:var(--gold); color:var(--gold)}
+.hero-scroll{position:absolute; bottom:32px; left:50%; transform:translateX(-50%); font-size:10px; text-transform:uppercase; letter-spacing:.22em; color:rgba(245,240,232,.3); z-index:2; animation:fadeScroll 2.4s ease-in-out infinite}
+@keyframes fadeScroll{0%,100%{opacity:.3; transform:translateX(-50%) translateY(0)}50%{opacity:.7; transform:translateX(-50%) translateY(-6px)}}
+
+/* ─── DATE BAR (hero) ─── */
+.date-bar-wrap{position:relative; z-index:2; background:var(--ivory); padding:20px 0}
+.date-bar-inner{max-width:1200px; margin:0 auto; padding:0 28px; display:flex; gap:20px; align-items:flex-end; flex-wrap:wrap}
+.date-field{display:flex; flex-direction:column; gap:4px; flex:1; min-width:130px}
+.date-field label{font-size:9px; text-transform:uppercase; letter-spacing:.14em; font-weight:500; color:var(--text-muted)}
+.date-field input,.date-field select{font-family:var(--font-body); font-size:14px; font-weight:400; color:var(--text-dark); border:none; background:transparent; padding:6px 0; outline:none; border-bottom:1px solid rgba(26,22,18,.12)}
+.btn-date{padding:12px 32px; border:none; background:var(--gold); color:var(--black); font-weight:500; font-size:11px; text-transform:uppercase; letter-spacing:.14em; cursor:pointer; white-space:nowrap; transition:background .3s}
+.btn-date:hover{background:var(--gold-light)}
+
+/* ─── STICKY BAR ─── */
+.sticky-bar{position:fixed; top:var(--nav-h); left:0; right:0; z-index:99; display:flex; align-items:center; gap:16px; padding:10px 28px; background:rgba(26,22,18,.92); backdrop-filter:blur(12px); border-bottom:1px solid rgba(255,255,255,.04); transform:translateY(-120%); transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.sticky-bar.visible{transform:translateY(0)}
+.sticky-bar input,.sticky-bar select{font-family:var(--font-body); font-size:12px; font-weight:400; color:var(--text-light); background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.06); padding:6px 14px; outline:none}
+.sticky-bar label{font-size:9px; text-transform:uppercase; letter-spacing:.12em; color:rgba(245,240,232,.35); margin-right:6px}
+.sticky-bar .btn-sticky{margin-left:auto; padding:9px 24px; border:none; background:var(--gold); color:var(--black); font-weight:500; font-size:10px; text-transform:uppercase; letter-spacing:.12em; cursor:pointer}
+
+/* ─── STATS BAR ─── */
+.stats-bar{display:flex; justify-content:center; gap:0; background:var(--black); border-top:1px solid rgba(255,255,255,.04); border-bottom:1px solid rgba(255,255,255,.04)}
+.stat-item{text-align:center; padding:28px 36px; flex:1; max-width:260px}
+.stat-num{font-family:var(--font-display); font-size:clamp(26px,2.6vw,38px); font-weight:300; color:var(--gold); line-height:1; margin-bottom:6px}
+.stat-num .num{display:inline}
+.stat-label{font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:rgba(245,240,232,.4); font-weight:400}
+
+/* ─── SECTIONS ─── */
+section{padding:100px 0}
+.section-eyebrow{font-size:10px; text-transform:uppercase; letter-spacing:.22em; color:var(--gold-dim); margin:0 0 16px; font-weight:500}
+.section-title{font-family:var(--font-display); font-size:clamp(32px,3.8vw,52px); font-weight:300; line-height:1.05; margin:0 0 20px; letter-spacing:-.02em; color:var(--text-dark)}
+.section-title em{font-style:italic; font-weight:300}
+.section-desc{font-size:clamp(15px,1.05vw,16px); color:var(--text-muted); max-width:580px; line-height:1.8; margin:0 0 36px}
+
+/* ─── ABOUT ─── */
+.about-inner{display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center}
+.about-image{width:100%; aspect-ratio:4/3; overflow:hidden; background:var(--black)}
+.about-image img{width:100%; height:100%; object-fit:cover; transition:transform .6s}
+.about-image:hover img{transform:scale(1.03)}
+.about-details{display:flex; gap:32px; margin-top:32px; flex-wrap:wrap}
+.about-detail-item{text-align:center; min-width:100px; flex:1}
+.about-detail-item strong{display:block; font-family:var(--font-display); font-size:20px; font-weight:500; color:var(--gold-dim); margin-bottom:2px}
+.about-detail-item span{font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--text-muted)}
+
+/* ─── AMENITIES ─── */
+.amenities{background:var(--black); color:var(--text-light)}
+.amenities .section-title{color:var(--text-light)}
+.amenities .section-desc{color:var(--text-muted)}
+.amenities .section-eyebrow{color:var(--gold)}
+.amen-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:rgba(255,255,255,.04); margin-top:48px; border:1px solid rgba(255,255,255,.04)}
+.amen-card{padding:36px 28px; background:var(--black); text-align:center; transition:background .35s}
+.amen-card:hover{background:rgba(255,255,255,.035)}
+.amen-icon{display:block; font-size:28px; color:var(--gold); margin-bottom:16px; line-height:1}
+.amen-icon svg{width:32px; height:32px; stroke:var(--gold)}
+.amen-card h3{font-family:var(--font-display); font-size:18px; font-weight:500; margin:0 0 10px; letter-spacing:.01em}
+.amen-card p{font-size:13px; color:var(--text-muted); line-height:1.7; margin:0}
+
+/* ─── ROOMS ─── */
+.rooms-header{display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:20px; margin-bottom:48px}
+.rooms-header .section-desc{margin:0}
+.room-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:rgba(26,22,18,.06)}
+.room-card{background:var(--ivory); transition:all .35s}
+.room-card:hover{background:rgba(26,22,18,.02)}
+.room-image{aspect-ratio:4/3; overflow:hidden; background:var(--black); position:relative}
+.room-image img{width:100%; height:100%; object-fit:cover; transition:transform .6s}
+.room-card:hover .room-image img{transform:scale(1.04)}
+.room-gallery-btn{position:absolute; top:16px; right:16px; background:rgba(26,22,18,.6); color:var(--text-light); font-size:11px; letter-spacing:.06em; padding:8px 14px; display:flex; align-items:center; gap:8px; cursor:pointer; border:none; font-family:var(--font-body); transition:background .3s}
+.room-gallery-btn:hover{background:rgba(26,22,18,.8)}
+.room-body{padding:28px 24px}
+.room-body h3{font-family:var(--font-display); font-size:22px; font-weight:500; margin:0 0 6px}
+.room-body .meta{font-size:13px; color:var(--text-muted); margin-bottom:14px}
+.room-body .price{display:flex; align-items:baseline; gap:6px; margin-bottom:20px}
+.room-body .price strong{font-family:var(--font-display); font-size:30px; font-weight:400; color:var(--gold-dim)}
+.room-body .price span{font-size:13px; color:var(--text-muted)}
+.btn-room{display:block; width:100%; padding:14px; border:none; background:var(--black); color:var(--text-light); font-weight:400; font-size:12px; text-transform:uppercase; letter-spacing:.12em; cursor:pointer; text-align:center; transition:background .3s}
+.btn-room:hover{background:rgba(26,22,18,.8)}
+
+/* ─── OFFERS ─── */
+.offers{background:var(--black); color:var(--text-light)}
+.offers .section-title{color:var(--text-light)}
+.offers .section-desc{color:var(--text-muted)}
+.offers .section-eyebrow{color:var(--gold)}
+.offer-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:rgba(255,255,255,.04); margin-top:48px; border:1px solid rgba(255,255,255,.04)}
+.offer-card{padding:44px 32px; background:var(--black); text-align:center; transition:background .35s}
+.offer-card:hover{background:rgba(255,255,255,.03)}
+.offer-tag{display:inline-block; font-size:9px; text-transform:uppercase; letter-spacing:.18em; padding:4px 16px; background:var(--gold); color:var(--black); font-weight:500; margin-bottom:18px}
+.offer-card h3{font-family:var(--font-display); font-size:24px; font-weight:500; margin:0 0 12px}
+.offer-card p{font-size:14px; color:var(--text-muted); line-height:1.7; margin:0 0 28px}
+.btn-offer{display:inline-block; padding:12px 32px; border:1px solid var(--gold); background:transparent; color:var(--gold); font-weight:400; font-size:10px; text-transform:uppercase; letter-spacing:.14em; cursor:pointer; transition:all .3s}
+.btn-offer:hover{background:var(--gold); color:var(--black)}
+
+/* ─── LOCATION ─── */
+.loc-inner{display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:center}
+.loc-map-wrap{aspect-ratio:4/3; overflow:hidden; background:var(--black); position:relative; width:100%}
+.loc-map-wrap img{width:100%; height:100%; object-fit:cover}
+.loc-map-overlay{position:absolute; bottom:16px; left:16px; background:rgba(26,22,18,.85); padding:10px 18px; font-size:12px; color:var(--text-light); letter-spacing:.04em}
+.loc-list{display:grid; gap:0; margin-top:28px}
+.loc-item{display:flex; align-items:center; gap:14px; padding:12px 0; border-bottom:1px solid rgba(26,22,18,.04)}
+.loc-item:last-child{border-bottom:none}
+.loc-item .loc-marker{color:var(--gold-dim); font-size:16px; width:20px; text-align:center; flex-shrink:0}
+.loc-item .loc-info{font-size:14px}
+.loc-item .loc-info small{display:block; font-size:12px; color:var(--text-muted); font-weight:300}
+
+/* ─── REVIEWS ─── */
+.reviews{background:var(--black); color:var(--text-light)}
+.reviews .section-title{color:var(--text-light)}
+.reviews .section-desc{color:var(--text-muted)}
+.reviews .section-eyebrow{color:var(--gold)}
+.rev-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.04); margin-top:48px}
+.rev-card{padding:32px; background:var(--black); display:flex; flex-direction:column}
+.rev-stars{color:var(--gold); font-size:18px; letter-spacing:3px; margin-bottom:14px; display:block}
+.rev-text{font-size:14px; line-height:1.8; color:rgba(245,240,232,.75); margin:0 0 20px; flex:1}
+.rev-author{display:flex; align-items:center; gap:14px; margin-top:auto; border-top:1px solid rgba(255,255,255,.04); padding-top:18px}
+.rev-avatar{width:36px; height:36px; border-radius:50%; background:rgba(200,162,75,.15); color:var(--gold); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-size:15px; font-weight:500; flex-shrink:0}
+.rev-name{font-size:14px; font-weight:500; margin:0; color:var(--text-light)}
+.rev-source{font-size:11px; color:var(--text-muted); margin:2px 0 0}
+
+/* ─── REVIEW AGGREGATE SCORES ─── */
+.scores-row{display:flex; justify-content:center; gap:0; margin-top:48px; background:rgba(255,255,255,.02); border:1px solid rgba(255,255,255,.04)}
+.score-item{text-align:center; padding:28px 40px; flex:1; max-width:200px}
+.score-num{font-family:var(--font-display); font-size:36px; font-weight:300; color:var(--gold); margin:0 0 4px; line-height:1}
+.score-label{font-size:10px; text-transform:uppercase; letter-spacing:.12em; color:rgba(245,240,232,.4); margin:0}
+.score-divider{width:1px; background:rgba(255,255,255,.04); margin:20px 0}
+
+/* ─── RESERVE ─── */
+.reserve-inner{display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:center}
+.reserve-cta h2{font-family:var(--font-display); font-size:clamp(32px,3.2vw,42px); font-weight:300; margin:0 0 14px; line-height:1.05}
+.reserve-cta p{font-size:15px; color:var(--text-muted); line-height:1.8; margin:0 0 32px}
+.rate-table{width:100%; border-collapse:collapse; background:var(--black)}
+.rate-table th{font-size:10px; text-transform:uppercase; letter-spacing:.14em; font-weight:500; padding:16px 18px; text-align:left; color:rgba(245,240,232,.35); border-bottom:1px solid rgba(255,255,255,.04); background:rgba(255,255,255,.02)}
+.rate-table td{padding:14px 18px; font-size:14px; color:var(--text-light); border-bottom:1px solid rgba(255,255,255,.03)}
+.rate-table tr:last-child td{border-bottom:none}
+.rate-price{font-family:var(--font-display); color:var(--gold); font-weight:400; font-size:20px}
+.avail-chip{display:inline-block; font-size:10px; text-transform:uppercase; letter-spacing:.08em; padding:3px 12px; font-weight:500}
+.avail-chip.yes{background:rgba(87,197,143,.1); color:#57c58f}
+.avail-chip.limited{background:rgba(224,178,92,.12); color:#e0b25c}
+.avail-chip.no{background:rgba(224,115,111,.08); color:#e0736f}
+
+/* ─── FOOTER ─── */
+footer{background:var(--black); color:var(--text-light); padding:64px 0 0; border-top:1px solid rgba(255,255,255,.04)}
+.footer-grid{display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:44px}
+.footer-brand p{font-size:14px; color:var(--text-muted); line-height:1.8; margin:16px 0 0; max-width:340px}
+.footer-col h4{font-family:var(--font-display); font-size:17px; font-weight:500; margin:0 0 20px; letter-spacing:.01em}
+.footer-col li{font-size:13px; color:var(--text-muted); padding:5px 0; cursor:default; transition:color .3s}
+.footer-col li:hover{color:var(--gold)}
+.footer-bottom{padding:28px 0; margin-top:48px; border-top:1px solid rgba(255,255,255,.04); display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:12px; color:var(--text-muted)}
+
+/* ─── CHAT ─── */
+.chat-widget{position:fixed; bottom:28px; right:28px; z-index:200}
+.chat-bubble{width:56px; height:56px; border:none; background:var(--gold); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:opacity .3s; box-shadow:0 4px 24px rgba(200,162,75,.25)}
+.chat-bubble:hover{opacity:.85}
+.chat-bubble svg{width:24px; height:24px; stroke:var(--black); fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
+.chat-preview{position:absolute; bottom:68px; right:0; width:320px; background:var(--black); border:1px solid rgba(255,255,255,.08); display:none}
+.chat-preview.open{display:block}
+.chat-head{display:flex; align-items:center; gap:12px; padding:16px 20px; background:rgba(200,162,75,.06); border-bottom:1px solid rgba(255,255,255,.04)}
+.chat-head .avatar{width:34px; height:34px; border-radius:50%; background:rgba(200,162,75,.15); display:flex; align-items:center; justify-content:center; color:var(--gold); font-family:var(--font-display); font-size:14px; font-weight:500}
+.chat-head .name{font-size:14px; font-weight:500; color:var(--text-light)}
+.chat-head .status{font-size:10px; color:#57c58f; letter-spacing:.06em}
+.chat-body{padding:20px}
+.chat-msg{font-size:14px; color:rgba(245,240,232,.75); line-height:1.7; margin-bottom:12px; padding:12px 16px; background:rgba(255,255,255,.03)}
+.chat-input{display:flex; gap:8px; margin-top:16px}
+.chat-input input{flex:1; padding:10px 14px; border:1px solid rgba(255,255,255,.06); background:rgba(255,255,255,.03); color:var(--text-light); font-family:var(--font-body); outline:none; font-size:13px}
+.chat-input button{padding:10px 18px; border:none; background:var(--gold); color:var(--black); font-weight:500; font-size:11px; text-transform:uppercase; letter-spacing:.08em; cursor:pointer}
+
+/* ─── ANIMATIONS ─── */
+.reveal{opacity:0; transform:translateY(32px); transition:opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1)}
+.reveal.visible{opacity:1; transform:translateY(0)}
+.reveal-d1{transition-delay:.1s}
+.reveal-d2{transition-delay:.2s}
+.reveal-d3{transition-delay:.3s}
+.reveal-d4{transition-delay:.4s}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:0s !important; animation-duration:0s !important}
+  .reveal{opacity:1; transform:none}
+  .hero-scroll{animation:none; opacity:.5}
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width:1024px){
+  .amen-grid{grid-template-columns:repeat(2,1fr)}
+  .room-grid{grid-template-columns:repeat(2,1fr)}
+  .offer-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:860px){
+  .about-inner{grid-template-columns:1fr}
+  .loc-inner{grid-template-columns:1fr}
+  .reserve-inner{grid-template-columns:1fr}
+  .rev-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .nav-links.open{display:flex; flex-direction:column; position:absolute; top:var(--nav-h); left:0; right:0; background:rgba(26,22,18,.98); padding:24px 28px; gap:18px; border-bottom:1px solid rgba(255,255,255,.04)}
+  .menu-toggle{display:flex}
+  .stats-bar{flex-wrap:wrap}
+  .stat-item{padding:20px 24px; max-width:none; flex:1 1 45%}
+  .sticky-bar .field-group{display:none}
+  .sticky-bar .field-group:nth-child(1),.sticky-bar .field-group:nth-child(2){display:flex}
+  .scores-row{flex-wrap:wrap}
+  .score-item{padding:20px; max-width:none; flex:1 1 45%}
+  .score-divider{display:none}
+}
+@media (max-width:560px){
+  .amen-grid{grid-template-columns:1fr}
+  .room-grid{grid-template-columns:1fr}
+  .date-bar-inner{flex-direction:column}
+  .date-field{width:100%}
+  .footer-grid{grid-template-columns:1fr}
+  .hero-title{font-size:clamp(36px,14vw,52px)}
+  .hero-actions{flex-direction:column}
+  .about-details{flex-direction:column; gap:16px}
+  .chat-preview{width:calc(100vw - 56px)}
+}
+@media (max-width:480px){
+  .stat-item{flex:1 1 100%}
+  .score-item{flex:1 1 100%}
+  .nav-right .btn-nav{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="logo">Global <span>Hotel</span> Panama</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about" data-i18n="nav-about">About</a></li>
+      <li><a href="#amenities" data-i18n="nav-amenities">Amenities</a></li>
+      <li><a href="#rooms" data-i18n="nav-rooms">Rooms</a></li>
+      <li><a href="#location" data-i18n="nav-location">Location</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="lang-toggle">
+        <button class="lang-btn active" data-lang="es">ES</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+      <button class="btn-nav" data-i18n="nav-book">Book Now</button>
+      <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- STICKY MINI BAR -->
+<div class="sticky-bar" id="stickyBar">
+  <label data-i18n="date-checkin">Check-in</label><input type="date" value="2026-07-20">
+  <label data-i18n="date-checkout">Check-out</label><input type="date" value="2026-07-22">
+  <label data-i18n="date-guests">Guests</label>
+  <select><option>1 Adult</option><option selected>2 Adults</option><option>3 Adults</option></select>
+  <button class="btn-sticky" data-i18n="sticky-consult">Consultar</button>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow" data-i18n="hero-eyebrow">Luxury Boutique Hotel · Obarrio, Panama City</p>
+    <h1 class="hero-title" data-i18n="hero-title">Above the<br><em>Panama</em><br>Skyline</h1>
+    <p class="hero-desc" data-i18n="hero-desc">Perched within the iconic Twist Tower in Panama City's exclusive financial district, Global Hotel Panama offers an unmatched fusion of contemporary elegance and panoramic city views.</p>
+    <div class="hero-actions">
+      <a href="#about" class="btn-primary" data-i18n="hero-discover">Discover More</a>
+      <a href="#date-section" class="btn-ghost" data-i18n="hero-availability">Check Availability</a>
+    </div>
+  </div>
+  <div class="hero-scroll" data-i18n="hero-scroll">Scroll to explore</div>
+</section>
+
+<!-- DATE BAR -->
+<div class="date-bar-wrap" id="date-section">
+  <div class="date-bar-inner">
+    <div class="date-field"><label data-i18n="date-checkin">Check-in</label><input type="date" value="2026-07-20"></div>
+    <div class="date-field"><label data-i18n="date-checkout">Check-out</label><input type="date" value="2026-07-22"></div>
+    <div class="date-field"><label data-i18n="date-guests">Guests</label>
+      <select><option>1 Adult</option><option selected>2 Adults</option><option>3 Adults</option></select>
+    </div>
+    <button class="btn-date" data-i18n="date-consult">Consultar disponibilidad</button>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar" id="stats">
+  <div class="stat-item"><div class="stat-num"><span class="num" data-count="60">0</span></div><div class="stat-label" data-i18n="stat-rooms">Rooms &amp; Suites</div></div>
+  <div class="stat-item"><div class="stat-num"><span class="num" data-count="24">0</span>-hr</div><div class="stat-label" data-i18n="stat-access">access</div></div>
+  <div class="stat-item"><div class="stat-num"><span class="num" data-count="22">0</span>km</div><div class="stat-label" data-i18n="stat-airport">From Tocumen Airport</div></div>
+  <div class="stat-item"><div class="stat-num">$<span class="num" data-count="110">0</span>+</div><div class="stat-label" data-i18n="stat-night">Per Night</div></div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-inner">
+      <div class="about-image reveal">
+        <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&q=85" alt="Hotel lobby" loading="lazy">
+      </div>
+      <div>
+        <p class="section-eyebrow reveal" data-i18n="about-eyebrow">Our Story</p>
+        <h2 class="section-title reveal" data-i18n="about-title">A <em>Boutique</em><br>Urban Sanctuary</h2>
+        <p class="section-desc reveal" data-i18n="about-p1">Nestled within the iconic Twist Tower — a contemporary architectural marvel known for its distinctive colors — Global Hotel Panama is part of the Global Companies Group, offering 60 beautifully appointed rooms and suites with breathtaking city skyline views.</p>
+        <p class="section-desc reveal" style="margin-top:-20px" data-i18n="about-p2">Situated in the exclusive Obarrio district, the hotel places guests just minutes from Panama City's thriving financial center, surrounded by prestigious boutiques, restaurants, and the vibrant pulse of the capital.</p>
+        <div class="about-details reveal">
+          <div class="about-detail-item"><strong data-i18n="about-d1s">Obarrio</strong><span data-i18n="about-d1l">District, Panama City</span></div>
+          <div class="about-detail-item"><strong data-i18n="about-d2s">Est. 2011</strong><span data-i18n="about-d2l">Year Opened</span></div>
+          <div class="about-detail-item"><strong>3:00 PM</strong><span data-i18n="about-d3l">Check-in Time</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AMENITIES -->
+<section class="amenities" id="amenities">
+  <div class="container">
+    <p class="section-eyebrow reveal" data-i18n="amen-eyebrow">What We Offer</p>
+    <h2 class="section-title reveal" data-i18n="amen-title">World-Class <em>Amenities</em></h2>
+    <div class="amen-grid">
+      <div class="amen-card reveal reveal-d1">
+        <div class="amen-icon"><svg viewBox="0 0 24 24"><path d="M2 12h20v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/><path d="M6 12V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v7"/><path d="M11 5v3"/><path d="M13 5v3"/><path d="M8 16h8"/></svg></div>
+        <h3 data-i18n="amen-pool">Rooftop Pool</h3>
+        <p data-i18n="amen-pool-d">An outdoor swimming pool and whirlpool on the 12th floor with spectacular panoramic views of the Panama City skyline.</p>
+      </div>
+      <div class="amen-card reveal reveal-d2">
+        <div class="amen-icon"><svg viewBox="0 0 24 24"><path d="M6.5 6.5 17.5 17.5"/><path d="M17.5 6.5 6.5 17.5"/><path d="M12 3v2"/><path d="M12 19v2"/><path d="M10.5 9.5A3 3 0 0 1 12 9a3 3 0 0 1 1.5.5"/><path d="M10.5 14.5A3 3 0 0 0 12 15a3 3 0 0 0 1.5-.5"/></svg></div>
+        <h3 data-i18n="amen-fitness">Fitness Center</h3>
+        <p data-i18n="amen-fitness-d">A state-of-the-art health club on the 12th floor featuring modern equipment and a private massage room.</p>
+      </div>
+      <div class="amen-card reveal reveal-d3">
+        <div class="amen-icon"><svg viewBox="0 0 24 24"><path d="M3 2v20"/><path d="M21 2v20"/><path d="M3 8h18"/><path d="M3 16h18"/><path d="M6 8v8"/><path d="M18 8v8"/><path d="M8 2v2"/><path d="M16 2v2"/></svg></div>
+        <h3 data-i18n="amen-dining">Fine Dining</h3>
+        <p data-i18n="amen-dining-d">A sophisticated restaurant and wine bar at ground level offering diverse culinary experiences and elegant evening dining.</p>
+      </div>
+      <div class="amen-card reveal reveal-d4">
+        <div class="amen-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><path d="M8 21h8"/><path d="M12 17v4"/><path d="M6 7h2"/><path d="M16 7h2"/><path d="M6 11h2"/><path d="M16 11h2"/></svg></div>
+        <h3 data-i18n="amen-business">Business Center</h3>
+        <p data-i18n="amen-business-d">Four fully equipped boardrooms plus a stylish event and meeting space on the 12th floor, ideal for corporate travelers.</p>
+      </div>
+      <div class="amen-card reveal reveal-d1">
+        <div class="amen-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/><path d="M7 5v14"/><path d="M17 5v14"/><path d="M9 5v3"/><path d="M15 5v3"/></svg></div>
+        <h3 data-i18n="amen-parking">Secure Parking</h3>
+        <p data-i18n="amen-parking-d">On-site private parking available for guests, with valet service ensuring convenience throughout your stay.</p>
+      </div>
+      <div class="amen-card reveal reveal-d2">
+        <div class="amen-icon"><svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1"/></svg></div>
+        <h3 data-i18n="amen-wifi">Free Wi-Fi</h3>
+        <p data-i18n="amen-wifi-d">High-speed wireless internet access throughout all public areas and in every room, keeping you connected effortlessly.</p>
+      </div>
+      <div class="amen-card reveal reveal-d3">
+        <div class="amen-icon"><svg viewBox="0 0 24 24"><path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="m3 9 9-5 9 5"/><path d="M9 21V12h6v9"/></svg></div>
+        <h3 data-i18n="amen-transfer">Airport Transfer</h3>
+        <p data-i18n="amen-transfer-d">Convenient airport transfer service available from Tocumen International Airport, just 20 minutes from the hotel.</p>
+      </div>
+      <div class="amen-card reveal reveal-d4">
+        <div class="amen-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+        <h3 data-i18n="amen-concierge">24-hr Concierge</h3>
+        <p data-i18n="amen-concierge-d">Our dedicated concierge and front desk team are available around the clock to assist with any request or recommendation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROOMS & SUITES -->
+<section id="rooms">
+  <div class="container">
+    <div class="rooms-header">
+      <div>
+        <p class="section-eyebrow reveal" data-i18n="rooms-eyebrow">Rooms &amp; Suites</p>
+        <h2 class="section-title reveal" data-i18n="rooms-title">Your Space <em>in the Sky</em></h2>
+      </div>
+      <p class="section-desc reveal" data-i18n="rooms-desc">From cozy urban retreats to expansive penthouse suites — each space designed with intent and elegance.</p>
+    </div>
+    <div class="room-grid">
+      <div class="room-card reveal">
+        <div class="room-image">
+          <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=85" alt="Standard Room" loading="lazy">
+          <button class="room-gallery-btn"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m3 16 4-4 3 3 5-5 6 6"/></svg> <span data-i18n="room-photos">4 photos</span></button>
+        </div>
+        <div class="room-body">
+          <h3 data-i18n="room-std">Standard Room</h3>
+          <div class="meta" data-i18n="room-std-meta">25 m<sup>2</sup> · 1 King or 2 Queen · City view</div>
+          <div class="price"><strong>$110</strong><span data-i18n="room-night">/ night</span></div>
+          <button class="btn-room" data-i18n="room-reserve">Reserve</button>
+        </div>
+      </div>
+      <div class="room-card reveal reveal-d2">
+        <div class="room-image">
+          <img src="https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=600&q=85" alt="Deluxe Room" loading="lazy">
+          <button class="room-gallery-btn"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m3 16 4-4 3 3 5-5 6 6"/></svg> <span data-i18n="room-photos2">6 photos</span></button>
+        </div>
+        <div class="room-body">
+          <h3 data-i18n="room-deluxe">Deluxe Room</h3>
+          <div class="meta" data-i18n="room-deluxe-meta">35 m<sup>2</sup> · King bed · Skyline view</div>
+          <div class="price"><strong>$150</strong><span data-i18n="room-night2">/ night</span></div>
+          <button class="btn-room" data-i18n="room-reserve2">Reserve</button>
+        </div>
+      </div>
+      <div class="room-card reveal reveal-d3">
+        <div class="room-image">
+          <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600&q=85" alt="Global Panama Suite" loading="lazy">
+          <button class="room-gallery-btn"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m3 16 4-4 3 3 5-5 6 6"/></svg> <span data-i18n="room-photos3">8 photos</span></button>
+        </div>
+        <div class="room-body">
+          <h3 data-i18n="room-suite">Global Panama Suite</h3>
+          <div class="meta" data-i18n="room-suite-meta">60 m<sup>2</sup> · King bed · Panoramic corner view</div>
+          <div class="price"><strong>$280</strong><span data-i18n="room-night3">/ night</span></div>
+          <button class="btn-room" data-i18n="room-reserve3">Reserve</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFERS -->
+<section class="offers" id="offers">
+  <div class="container">
+    <p class="section-eyebrow reveal" data-i18n="offers-eyebrow">Offers &amp; Packages</p>
+    <h2 class="section-title reveal" data-i18n="offers-title">Exclusive Stays, <em>Curated for You</em></h2>
+    <p class="section-desc reveal" data-i18n="offers-desc">From extended escapes to weekend indulgences — book direct and unlock our best rates.</p>
+    <div class="offer-grid">
+      <div class="offer-card reveal">
+        <div class="offer-tag" data-i18n="offer-ext-tag">Extended Stay</div>
+        <h3 data-i18n="offer-ext-title">7 Nights or More</h3>
+        <p data-i18n="offer-ext-desc">Enjoy 20% off when you stay a week or longer. Ideal for remote work or long visits to Panama City.</p>
+        <button class="btn-offer" data-i18n="offer-reserve">Reserve Offer</button>
+      </div>
+      <div class="offer-card reveal reveal-d2">
+        <div class="offer-tag" data-i18n="offer-wknd-tag">Weekend</div>
+        <h3 data-i18n="offer-wknd-title">Weekend Escape</h3>
+        <p data-i18n="offer-wknd-desc">Includes late checkout (2 PM), welcome cocktail, and breakfast for two. From $149/night.</p>
+        <button class="btn-offer" data-i18n="offer-reserve2">Reserve Offer</button>
+      </div>
+      <div class="offer-card reveal reveal-d3">
+        <div class="offer-tag" data-i18n="offer-corp-tag">Corporate</div>
+        <h3 data-i18n="offer-corp-title">Business Traveler</h3>
+        <p data-i18n="offer-corp-desc">Preferred corporate rates, priority check-in, and complimentary airport transfer. Inquire for rates.</p>
+        <button class="btn-offer" data-i18n="offer-reserve3">Reserve Offer</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section id="location">
+  <div class="container">
+    <div class="loc-inner">
+      <div>
+        <p class="section-eyebrow reveal" data-i18n="loc-eyebrow">Find Us</p>
+        <h2 class="section-title reveal" data-i18n="loc-title">Heart of the <em>Financial District</em></h2>
+        <p class="section-desc reveal" data-i18n="loc-desc">Ideally situated in the upscale Obarrio district, Global Hotel Panama places you steps from the city's best restaurants, boutiques, and business centers — with everything Panama City has to offer within reach.</p>
+        <ul class="loc-list reveal">
+          <li class="loc-item"><span class="loc-marker">◈</span><span class="loc-info" data-i18n="loc-item1">Calle 54 Este &amp; Av. Samuel Lewis, Obarrio</span></li>
+          <li class="loc-item"><span class="loc-marker">◈</span><span class="loc-info" data-i18n="loc-item2">10 min drive to Panama Old City Center <small>Casco Viejo</small></span></li>
+          <li class="loc-item"><span class="loc-marker">◈</span><span class="loc-info" data-i18n="loc-item3">20 min drive from Tocumen International Airport</span></li>
+          <li class="loc-item"><span class="loc-marker">◈</span><span class="loc-info" data-i18n="loc-item4">2 km from Balboa Seafront Boulevard</span></li>
+          <li class="loc-item"><span class="loc-marker">◈</span><span class="loc-info" data-i18n="loc-item5">4.4 km from Metropolitan Park</span></li>
+          <li class="loc-item"><span class="loc-marker">◈</span><span class="loc-info" data-i18n="loc-item6">Walking distance to supermarkets and restaurants</span></li>
+          <li class="loc-item"><span class="loc-marker">◈</span><span class="loc-info" data-i18n="loc-item7">Near Via Argentina Metro Station</span></li>
+        </ul>
+      </div>
+      <div class="loc-map-wrap reveal">
+        <img src="https://images.unsplash.com/photo-1574484284002-952d92456975?w=800&q=85" alt="Map area" loading="lazy">
+        <div class="loc-map-overlay" data-i18n="loc-overlay">Calle 54 Este &amp; Av. Samuel Lewis, Obarrio</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews" id="reviews">
+  <div class="container">
+    <p class="section-eyebrow reveal" data-i18n="rev-eyebrow">Guest Voices</p>
+    <h2 class="section-title reveal" data-i18n="rev-title">What Our Guests <em>Say</em></h2>
+    <div class="rev-grid">
+      <div class="rev-card reveal">
+        <span class="rev-stars">★★★★★</span>
+        <p class="rev-text">"The room on the 15th floor had a stunning view — especially with the small balcony to enjoy it from. This is my go-to hotel every time I'm in Panama."</p>
+        <div class="rev-author">
+          <div class="rev-avatar">M</div>
+          <div><p class="rev-name">Michael R.</p><p class="rev-source">Booking.com · Verified Guest</p></div>
+        </div>
+      </div>
+      <div class="rev-card reveal reveal-d2">
+        <span class="rev-stars">★★★★★</span>
+        <p class="rev-text">"Super clean hotel, incredibly helpful and friendly staff who speak excellent English. The pool was perfectly adequate and often all to ourselves. Absolutely recommend."</p>
+        <div class="rev-author">
+          <div class="rev-avatar">S</div>
+          <div><p class="rev-name">Sandra &amp; Klaus</p><p class="rev-source">TripAdvisor · Verified Guest</p></div>
+        </div>
+      </div>
+      <div class="rev-card reveal reveal-d3">
+        <span class="rev-stars">★★★★★</span>
+        <p class="rev-text">"Great service, excellent food, and all the amenities you could want — pool, hot tub, a well-equipped gym, and spacious modern rooms. Highly recommend."</p>
+        <div class="rev-author">
+          <div class="rev-avatar">J</div>
+          <div><p class="rev-name">James T.</p><p class="rev-source">TripAdvisor · Verified Guest</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="scores-row reveal">
+      <div class="score-item"><p class="score-num">8.6</p><p class="score-label" data-i18n="score-overall">Overall Score</p></div>
+      <div class="score-divider"></div>
+      <div class="score-item"><p class="score-num">3.4k</p><p class="score-label" data-i18n="score-total">Total Reviews</p></div>
+      <div class="score-divider"></div>
+      <div class="score-item"><p class="score-num">9.0</p><p class="score-label" data-i18n="score-staff">Staff Score</p></div>
+      <div class="score-divider"></div>
+      <div class="score-item"><p class="score-num">9.2</p><p class="score-label" data-i18n="score-clean">Cleanliness</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- RESERVE -->
+<section id="reserve">
+  <div class="container">
+    <div class="reserve-inner">
+      <div class="reserve-cta reveal">
+        <p class="section-eyebrow" data-i18n="reserve-eyebrow">Reserve Your Stay</p>
+        <h2 data-i18n="reserve-title">Experience Panama <em style="font-style:italic">at Its Finest</em></h2>
+        <p data-i18n="reserve-desc">Rooms from $98 per night. Free cancellation up to 48 hours before arrival. No deposit required — only a credit card as collateral. Book directly for the best rates.</p>
+        <button class="btn-primary" data-i18n="reserve-book">Book Now</button>
+      </div>
+      <div class="rate-table reveal reveal-d2" style="border:1px solid rgba(255,255,255,.04)">
+        <table style="width:100%;border-collapse:collapse">
+          <thead><tr><th data-i18n="tbl-date">Date</th><th data-i18n="tbl-room">Room Type</th><th data-i18n="tbl-rate">Rate</th><th data-i18n="tbl-status">Status</th></tr></thead>
+          <tbody>
+            <tr><td>Jul 20</td><td data-i18n="room-std">Standard Room</td><td class="rate-price">$110</td><td><span class="avail-chip yes" data-i18n="chip-avail">Available</span></td></tr>
+            <tr><td>Jul 20</td><td data-i18n="room-deluxe">Deluxe Room</td><td class="rate-price">$150</td><td><span class="avail-chip limited" data-i18n="chip-left2">2 left</span></td></tr>
+            <tr><td>Jul 21</td><td data-i18n="room-std">Standard Room</td><td class="rate-price">$115</td><td><span class="avail-chip yes" data-i18n="chip-avail2">Available</span></td></tr>
+            <tr><td>Jul 21</td><td data-i18n="tbl-suite">Global Suite</td><td class="rate-price">$280</td><td><span class="avail-chip yes" data-i18n="chip-avail3">Available</span></td></tr>
+            <tr><td>Jul 22</td><td data-i18n="room-deluxe">Deluxe Room</td><td class="rate-price">$165</td><td><span class="avail-chip no" data-i18n="chip-sold">Sold out</span></td></tr>
+            <tr><td>Jul 22</td><td data-i18n="tbl-suite">Global Suite</td><td class="rate-price">$295</td><td><span class="avail-chip limited" data-i18n="chip-left">1 left</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">Global <span>Hotel</span> Panama</div>
+        <p data-i18n="footer-brand">A Twist Hotels Corp facility and part of the Global Companies Group. Located in the iconic Twist Tower in Panama City's exclusive Obarrio district.</p>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer-hotel">Hotel</h4>
+        <ul><li data-i18n="footer-about">About Us</li><li data-i18n="nav-amenities">Amenities</li><li data-i18n="footer-dining">Dining</li><li data-i18n="footer-events">Events &amp; Meetings</li></ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer-services">Services</h4>
+        <ul><li data-i18n="footer-reservations">Online Reservations</li><li data-i18n="amen-transfer">Airport Transfer</li><li data-i18n="amen-business">Business Center</li><li data-i18n="footer-spa">Spa &amp; Massage</li><li data-i18n="footer-valet">Valet Parking</li></ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer-contact">Contact</h4>
+        <ul><li>Calle 54 Este &amp; Av. Samuel Lewis</li><li>Obarrio, Panama City</li><li>+507 280 6400</li><li>globalhotelpanama.com</li><li data-i18n="footer-checkin">Check-in: 3:00 PM</li></ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span data-i18n="footer-rights">&copy; 2026 Global Hotel Panama &middot; Twist Hotels Corp &middot; All rights reserved.</span>
+      <span data-i18n="footer-location">Obarrio, Panama City, Republic of Panama</span>
+    </div>
+  </div>
+</footer>
+
+<!-- CHAT -->
+<div class="chat-widget">
+  <div class="chat-preview" id="chatPreview">
+    <div class="chat-head">
+      <div class="avatar">G</div>
+      <div><div class="name" data-i18n="chat-name">Global Assistant</div><div class="status" data-i18n="chat-status">Online</div></div>
+    </div>
+    <div class="chat-body">
+      <div class="chat-msg" data-i18n="chat-msg">Hola. Looking for dates for your stay at Global Hotel Panama? I can help you with your reservation.</div>
+      <div class="chat-input"><input type="text" data-i18n="chat-placeholder" placeholder="Type your message..." disabled><button disabled data-i18n="chat-send">Send</button></div>
+    </div>
+  </div>
+  <button class="chat-bubble" id="chatToggle" aria-label="Chat">
+    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+  </button>
+</div>
+
+<script>
+(function(){
+  const revealEls = document.querySelectorAll('.reveal');
+  const ro = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible'); ro.unobserve(e.target)}});
+  },{threshold:.12});
+  revealEls.forEach(el=>ro.observe(el));
+
+  const statsEl = document.getElementById('stats');
+  let countersDone = false;
+  const statObs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting && !countersDone){
+        countersDone = true;
+        document.querySelectorAll('.num[data-count]').forEach(el=>{
+          const target = parseInt(el.dataset.count);
+          const dur = 1800;
+          const start = performance.now();
+          function tick(now){
+            const p = Math.min(1, (now-start)/dur);
+            el.textContent = Math.round(p*target);
+            if(p<1) requestAnimationFrame(tick);
+            else el.textContent = target;
+          }
+          requestAnimationFrame(tick);
+        });
+        statObs.unobserve(e.target);
+      }
+    });
+  },{threshold:.5});
+  statObs.observe(statsEl);
+
+  const stickyBar = document.getElementById('stickyBar');
+  const hero = document.getElementById('hero');
+  let stickySentinel = false;
+  const heroObs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting && !stickySentinel){ stickyBar.classList.add('visible'); stickySentinel = true; }
+      if(e.isIntersecting){ stickyBar.classList.remove('visible'); stickySentinel = false; }
+    });
+  },{threshold:0});
+  if(hero) heroObs.observe(hero);
+
+  document.getElementById('menuToggle').addEventListener('click',()=>{
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+  document.getElementById('chatToggle').addEventListener('click',()=>{
+    document.getElementById('chatPreview').classList.toggle('open');
+  });
+
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll',()=>{
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  },{passive:true});
+
+  const langMap={
+    es:{
+      'nav-about':'Nosotros','nav-amenities':'Servicios','nav-rooms':'Habitaciones','nav-location':'Ubicación','nav-book':'Reservar',
+      'hero-eyebrow':'Hotel Boutique de Lujo · Obarrio, Ciudad de Panamá',
+      'hero-title':'Sobre el<br><em>Horizonte</em><br>de Panamá',
+      'hero-desc':'Situado en la icónica Twist Tower, en el exclusivo distrito financiero de Ciudad de Panamá, Global Hotel Panama ofrece una fusión inigualable de elegancia contemporánea y vistas panorámicas de la ciudad.',
+      'hero-discover':'Descubrir','hero-availability':'Ver Disponibilidad','hero-scroll':'Desplázate para explorar',
+      'date-checkin':'Entrada','date-checkout':'Salida','date-guests':'Huéspedes','date-consult':'Consultar disponibilidad',
+      'sticky-consult':'Consultar',
+      'stat-rooms':'Habitaciones y Suites','stat-access':'acceso','stat-airport':'Del Aeropuerto Tocumen','stat-night':'Por Noche',
+      'about-eyebrow':'Nuestra Historia',
+      'about-title':'Un <em>Santuario</em><br>Urbano Boutique',
+      'about-p1':'Enclavado en la icónica Twist Tower — una maravilla arquitectónica contemporánea conocida por sus colores distintivos — Global Hotel Panama es parte de Global Companies Group, ofreciendo 60 habitaciones y suites exquisitamente decoradas con impresionantes vistas al horizonte de la ciudad.',
+      'about-p2':'Situado en el exclusivo distrito de Obarrio, el hotel coloca a los huéspedes a minutos del vibrante centro financiero de Ciudad de Panamá, rodeado de prestigiosas boutiques, restaurantes y el pulso vibrante de la capital.',
+      'about-d1s':'Obarrio','about-d1l':'Distrito, Ciudad de Panamá','about-d2s':'Est. 2011','about-d2l':'Año de Apertura','about-d3l':'Hora de Entrada',
+      'amen-eyebrow':'Lo Que Ofrecemos','amen-title':'Servicios de <em>Clase Mundial</em>',
+      'amen-pool':'Piscina en Azotea','amen-pool-d':'Piscina al aire libre y whirlpool en el piso 12 con espectaculares vistas panorámicas del horizonte de Ciudad de Panamá.',
+      'amen-fitness':'Centro de Fitness','amen-fitness-d':'Gimnasio de última generación en el piso 12 con equipos modernos y sala de masajes privada.',
+      'amen-dining':'Restaurante','amen-dining-d':'Restaurante y bar de vinos en planta baja que ofrece experiencias culinarias diversas y cenas elegantes.',
+      'amen-business':'Centro de Negocios','amen-business-d':'Cuatro salas ejecutivas equipadas y un elegante espacio para eventos en el piso 12, ideal para viajeros corporativos.',
+      'amen-parking':'Estacionamiento','amen-parking-d':'Estacionamiento privado disponible para huéspedes con servicio de valet para su comodidad.',
+      'amen-wifi':'Wi-Fi Gratuito','amen-wifi-d':'Internet inalámbrico de alta velocidad en todas las áreas públicas y en cada habitación.',
+      'amen-transfer':'Transporte al Aeropuerto','amen-transfer-d':'Servicio de transporte disponible desde el Aeropuerto Internacional de Tocumen, a solo 20 minutos del hotel.',
+      'amen-concierge':'Conserjería 24h','amen-concierge-d':'Nuestro equipo de conserjería y recepción está disponible las 24 horas para asistir con cualquier solicitud.',
+      'rooms-eyebrow':'Habitaciones y Suites','rooms-title':'Tu Espacio <em>en el Cielo</em>','rooms-desc':'Desde acogedores retiros urbanos hasta amplias suites penthouse — cada espacio diseñado con intención y elegancia.',
+      'room-photos':'4 fotos','room-photos2':'6 fotos','room-photos3':'8 fotos',
+      'room-std':'Habitación Standard','room-std-meta':'25 m² · 1 King o 2 Queen · Vista a la ciudad',
+      'room-deluxe':'Habitación Deluxe','room-deluxe-meta':'35 m² · Cama King · Vista al horizonte',
+      'room-suite':'Suite Global Panama','room-suite-meta':'60 m² · Cama King · Vista panorámica',
+      'room-night':'/ noche','room-night2':'/ noche','room-night3':'/ noche',
+      'room-reserve':'Reservar','room-reserve2':'Reservar','room-reserve3':'Reservar',
+      'offers-eyebrow':'Ofertas y Paquetes','offers-title':'Estancias Exclusivas, <em>Seleccionadas para Ti</em>','offers-desc':'Desde escapadas extendidas hasta indulgencias de fin de semana — reserva directa y obtén nuestras mejores tarifas.',
+      'offer-ext-tag':'Larga Estancia','offer-ext-title':'7 Noches o Más','offer-ext-desc':'Disfruta de un 20% de descuento al quedarte una semana o más. Ideal para trabajo remoto o visitas largas.',
+      'offer-wknd-tag':'Fin de Semana','offer-wknd-title':'Escapada de Fin de Semana','offer-wknd-desc':'Incluye salida tardía (2 PM), cóctel de bienvenida y desayuno para dos. Desde $149/noche.',
+      'offer-corp-tag':'Corporativo','offer-corp-title':'Viajero de Negocios','offer-corp-desc':'Tarifas corporativas preferenciales, check-in prioritario y transporte al aeropuerto incluido. Consulta tarifas.',
+      'offer-reserve':'Reservar Oferta','offer-reserve2':'Reservar Oferta','offer-reserve3':'Reservar Oferta',
+      'loc-eyebrow':'Encuéntranos','loc-title':'Corazón del <em>Distrito Financiero</em>',
+      'loc-desc':'Situado en el exclusivo distrito de Obarrio, Global Hotel Panama te coloca a pasos de los mejores restaurantes, boutiques y centros de negocios de la ciudad.',
+      'loc-item1':'Calle 54 Este y Av. Samuel Lewis, Obarrio',
+      'loc-item2':'10 min en coche al Casco Viejo <small>Centro Histórico</small>',
+      'loc-item3':'20 min en coche del Aeropuerto Internacional de Tocumen',
+      'loc-item4':'2 km del Paseo Marítimo de Balboa',
+      'loc-item5':'4.4 km del Parque Metropolitano',
+      'loc-item6':'A poca distancia de supermercados y restaurantes',
+      'loc-item7':'Cerca de la Estación de Metro Vía Argentina',
+      'loc-overlay':'Calle 54 Este y Av. Samuel Lewis, Obarrio',
+      'rev-eyebrow':'Voces de Huéspedes','rev-title':'Lo Que Dicen <em>Nuestros Huéspedes</em>',
+      'score-overall':'Puntuación General','score-total':'Total de Reseñas','score-staff':'Personal','score-clean':'Limpieza',
+      'reserve-eyebrow':'Reserva tu Estancia','reserve-title':'Descubre Panamá <em style="font-style:italic">en su Máximo Esplendor</em>',
+      'reserve-desc':'Habitaciones desde $98 por noche. Cancelación gratuita hasta 48 horas antes de la llegada. Sin depósito — solo una tarjeta de crédito como garantía. Reserva directa para las mejores tarifas.',
+      'reserve-book':'Reservar Ahora',
+      'tbl-date':'Fecha','tbl-room':'Tipo de Habitación','tbl-rate':'Tarifa','tbl-status':'Estado','tbl-suite':'Suite Global',
+      'chip-avail':'Disponible','chip-avail2':'Disponible','chip-avail3':'Disponible','chip-left':'queda 1','chip-left2':'quedan 2','chip-sold':'Agotado',
+      'footer-brand':'Parte de Twist Hotels Corp y Global Companies Group. Ubicado en la icónica Twist Tower en el exclusivo distrito de Obarrio.',
+      'footer-hotel':'Hotel','footer-about':'Nosotros','footer-dining':'Restaurante','footer-events':'Eventos y Reuniones',
+      'footer-services':'Servicios','footer-reservations':'Reservas Online','footer-spa':'Spa y Masajes','footer-valet':'Estacionamiento',
+      'footer-contact':'Contacto','footer-checkin':'Check-in: 3:00 PM',
+      'footer-rights':'&copy; 2026 Global Hotel Panama &middot; Twist Hotels Corp &middot; Todos los derechos reservados.',
+      'footer-location':'Obarrio, Ciudad de Panamá, República de Panamá',
+      'chat-name':'Asistente Global','chat-status':'En línea','chat-msg':'Hola. Buscas fechas para tu estadía en Global Hotel Panama? Puedo ayudarte con tu reserva.','chat-placeholder':'Escribe tu mensaje...','chat-send':'Enviar',
+    },
+    en:{
+      'nav-about':'About','nav-amenities':'Amenities','nav-rooms':'Rooms','nav-location':'Location','nav-book':'Book Now',
+      'hero-eyebrow':'Luxury Boutique Hotel · Obarrio, Panama City',
+      'hero-title':'Above the<br><em>Panama</em><br>Skyline',
+      'hero-desc':'Perched within the iconic Twist Tower in Panama City\'s exclusive financial district, Global Hotel Panama offers an unmatched fusion of contemporary elegance and panoramic city views.',
+      'hero-discover':'Discover More','hero-availability':'Check Availability','hero-scroll':'Scroll to explore',
+      'date-checkin':'Check-in','date-checkout':'Check-out','date-guests':'Guests','date-consult':'Check Availability',
+      'sticky-consult':'Check',
+      'stat-rooms':'Rooms & Suites','stat-access':'access','stat-airport':'From Tocumen Airport','stat-night':'Per Night',
+      'about-eyebrow':'Our Story',
+      'about-title':'A <em>Boutique</em><br>Urban Sanctuary',
+      'about-p1':'Nestled within the iconic Twist Tower — a contemporary architectural marvel known for its distinctive colors — Global Hotel Panama is part of the Global Companies Group, offering 60 beautifully appointed rooms and suites with breathtaking city skyline views.',
+      'about-p2':'Situated in the exclusive Obarrio district, the hotel places guests just minutes from Panama City\'s thriving financial center, surrounded by prestigious boutiques, restaurants, and the vibrant pulse of the capital.',
+      'about-d1s':'Obarrio','about-d1l':'District, Panama City','about-d2s':'Est. 2011','about-d2l':'Year Opened','about-d3l':'Check-in Time',
+      'amen-eyebrow':'What We Offer','amen-title':'World-Class <em>Amenities</em>',
+      'amen-pool':'Rooftop Pool','amen-pool-d':'An outdoor swimming pool and whirlpool on the 12th floor with spectacular panoramic views of the Panama City skyline.',
+      'amen-fitness':'Fitness Center','amen-fitness-d':'A state-of-the-art health club on the 12th floor featuring modern equipment and a private massage room.',
+      'amen-dining':'Fine Dining','amen-dining-d':'A sophisticated restaurant and wine bar at ground level offering diverse culinary experiences and elegant evening dining.',
+      'amen-business':'Business Center','amen-business-d':'Four fully equipped boardrooms plus a stylish event and meeting space on the 12th floor, ideal for corporate travelers.',
+      'amen-parking':'Secure Parking','amen-parking-d':'On-site private parking available for guests, with valet service ensuring convenience throughout your stay.',
+      'amen-wifi':'Free Wi-Fi','amen-wifi-d':'High-speed wireless internet access throughout all public areas and in every room, keeping you connected effortlessly.',
+      'amen-transfer':'Airport Transfer','amen-transfer-d':'Convenient airport transfer service available from Tocumen International Airport, just 20 minutes from the hotel.',
+      'amen-concierge':'24-hr Concierge','amen-concierge-d':'Our dedicated concierge and front desk team are available around the clock to assist with any request or recommendation.',
+      'rooms-eyebrow':'Rooms & Suites','rooms-title':'Your Space <em>in the Sky</em>','rooms-desc':'From cozy urban retreats to expansive penthouse suites — each space designed with intent and elegance.',
+      'room-photos':'4 photos','room-photos2':'6 photos','room-photos3':'8 photos',
+      'room-std':'Standard Room','room-std-meta':'25 m\u00B2 · 1 King or 2 Queen · City view',
+      'room-deluxe':'Deluxe Room','room-deluxe-meta':'35 m\u00B2 · King bed · Skyline view',
+      'room-suite':'Global Panama Suite','room-suite-meta':'60 m\u00B2 · King bed · Panoramic corner view',
+      'room-night':'/ night','room-night2':'/ night','room-night3':'/ night',
+      'room-reserve':'Reserve','room-reserve2':'Reserve','room-reserve3':'Reserve',
+      'offers-eyebrow':'Offers & Packages','offers-title':'Exclusive Stays, <em>Curated for You</em>','offers-desc':'From extended escapes to weekend indulgences — book direct and unlock our best rates.',
+      'offer-ext-tag':'Extended Stay','offer-ext-title':'7 Nights or More','offer-ext-desc':'Enjoy 20% off when you stay a week or longer. Ideal for remote work or long visits to Panama City.',
+      'offer-wknd-tag':'Weekend','offer-wknd-title':'Weekend Escape','offer-wknd-desc':'Includes late checkout (2 PM), welcome cocktail, and breakfast for two. From $149/night.',
+      'offer-corp-tag':'Corporate','offer-corp-title':'Business Traveler','offer-corp-desc':'Preferred corporate rates, priority check-in, and complimentary airport transfer. Inquire for rates.',
+      'offer-reserve':'Reserve Offer','offer-reserve2':'Reserve Offer','offer-reserve3':'Reserve Offer',
+      'loc-eyebrow':'Find Us','loc-title':'Heart of the <em>Financial District</em>',
+      'loc-desc':'Ideally situated in the upscale Obarrio district, Global Hotel Panama places you steps from the city\'s best restaurants, boutiques, and business centers.',
+      'loc-item1':'Calle 54 Este & Av. Samuel Lewis, Obarrio',
+      'loc-item2':'10 min drive to Panama Old City Center <small>Casco Viejo</small>',
+      'loc-item3':'20 min drive from Tocumen International Airport',
+      'loc-item4':'2 km from Balboa Seafront Boulevard',
+      'loc-item5':'4.4 km from Metropolitan Park',
+      'loc-item6':'Walking distance to supermarkets and restaurants',
+      'loc-item7':'Near Via Argentina Metro Station',
+      'loc-overlay':'Calle 54 Este & Av. Samuel Lewis, Obarrio',
+      'rev-eyebrow':'Guest Voices','rev-title':'What Our Guests <em>Say</em>',
+      'score-overall':'Overall Score','score-total':'Total Reviews','score-staff':'Staff Score','score-clean':'Cleanliness',
+      'reserve-eyebrow':'Reserve Your Stay','reserve-title':'Experience Panama <em style="font-style:italic">at Its Finest</em>',
+      'reserve-desc':'Rooms from $98 per night. Free cancellation up to 48 hours before arrival. No deposit required — only a credit card as collateral. Book directly for the best rates.',
+      'reserve-book':'Book Now',
+      'tbl-date':'Date','tbl-room':'Room Type','tbl-rate':'Rate','tbl-status':'Status','tbl-suite':'Global Suite',
+      'chip-avail':'Available','chip-avail2':'Available','chip-avail3':'Available','chip-left':'1 left','chip-left2':'2 left','chip-sold':'Sold out',
+      'footer-brand':'A Twist Hotels Corp facility and part of the Global Companies Group. Located in the iconic Twist Tower in Panama City\'s exclusive Obarrio district.',
+      'footer-hotel':'Hotel','footer-about':'About Us','footer-dining':'Dining','footer-events':'Events & Meetings',
+      'footer-services':'Services','footer-reservations':'Online Reservations','footer-spa':'Spa & Massage','footer-valet':'Valet Parking',
+      'footer-contact':'Contact','footer-checkin':'Check-in: 3:00 PM',
+      'footer-rights':'&copy; 2026 Global Hotel Panama &middot; Twist Hotels Corp &middot; All rights reserved.',
+      'footer-location':'Obarrio, Panama City, Republic of Panama',
+      'chat-name':'Global Assistant','chat-status':'Online','chat-msg':'Hola. Looking for dates for your stay at Global Hotel Panama? I can help you with your reservation.','chat-placeholder':'Type your message...','chat-send':'Send',
+    }
+  };
+  let currentLang='es';
+  function switchLang(lang){
+    currentLang=lang;
+    document.querySelectorAll('[data-i18n]').forEach(el=>{
+      const key=el.dataset.i18n;
+      if(langMap[lang][key]) el.innerHTML=langMap[lang][key];
+    });
+    document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
+  }
+  document.querySelectorAll('.lang-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>switchLang(btn.dataset.lang));
+  });
+  switchLang('es');
+})();
+</script>
+</body>
+</html>

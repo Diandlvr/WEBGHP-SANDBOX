@@ -1,0 +1,101 @@
+  <!-- ─── ROOMS ─── -->
+  <section class="rooms" id="rooms">
+    <div class="rooms-header">
+      <div>
+        <p class="section-eyebrow">Accommodations</p>
+        <h2 class="section-title" style="color:var(--white)">Rooms &amp; <em style="color:var(--gold-light)">Suites</em></h2>
+      </div>
+      <a href="#" class="btn-outline" style="white-space:nowrap">View All Rooms</a>
+    </div>
+
+    <div class="rooms-grid">
+
+      <!-- Double Queen -->
+      <div class="room-card">
+        <div class="room-card-bg">❑</div>
+        <div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(30,60,80,0.5) 0%,rgba(10,20,35,0.3) 100%);"></div>
+        <div style="position:absolute;top:0;left:0;right:0;height:60%;display:flex;align-items:center;justify-content:center;">
+          <svg width="180" height="140" viewBox="0 0 180 140" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.18">
+            <rect x="10" y="60" width="160" height="70" stroke="#B8965A" stroke-width="1.5"/>
+            <rect x="20" y="70" width="65" height="50" stroke="#B8965A" stroke-width="1"/>
+            <rect x="95" y="70" width="65" height="50" stroke="#B8965A" stroke-width="1"/>
+            <path d="M10 60 L90 10 L170 60" stroke="#B8965A" stroke-width="1.5"/>
+            <line x1="40" y1="95" x2="40" y2="120" stroke="#B8965A" stroke-width="0.8"/>
+            <line x1="120" y1="95" x2="120" y2="120" stroke="#B8965A" stroke-width="0.8"/>
+          </svg>
+        </div>
+        <span class="room-price">From $98 / night</span>
+        <div class="room-card-overlay">
+          <p class="room-type">Standard</p>
+          <h3 class="room-name">Double Queen Room</h3>
+          <div class="room-features">
+            <span class="room-feat">City View</span>
+            <span class="room-feat">2 Queen Beds</span>
+            <span class="room-feat">Free Wi-Fi</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- King Bed -->
+      <div class="room-card">
+        <div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(60,40,20,0.5) 0%,rgba(35,20,8,0.3) 100%);"></div>
+        <div style="position:absolute;top:0;left:0;right:0;height:60%;display:flex;align-items:center;justify-content:center;">
+          <svg width="180" height="140" viewBox="0 0 180 140" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.18">
+            <rect x="10" y="60" width="160" height="70" stroke="#B8965A" stroke-width="1.5"/>
+            <rect x="25" y="70" width="130" height="50" stroke="#B8965A" stroke-width="1"/>
+            <path d="M10 60 L90 10 L170 60" stroke="#B8965A" stroke-width="1.5"/>
+            <circle cx="90" cy="95" r="15" stroke="#B8965A" stroke-width="0.8"/>
+            <line x1="90" y1="80" x2="90" y2="110" stroke="#B8965A" stroke-width="0.6"/>
+            <line x1="75" y1="95" x2="105" y2="95" stroke="#B8965A" stroke-width="0.6"/>
+          </svg>
+        </div>
+        <span class="room-price">From $120 / night</span>
+        <div class="room-card-overlay">
+          <p class="room-type">Deluxe</p>
+          <h3 class="room-name">King Bed Room</h3>
+          <div class="room-features">
+            <span class="room-feat">Skyline View</span>
+            <span class="room-feat">King Bed</span>
+            <span class="room-feat">Balcony</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Luxury Suite -->
+      <div class="room-card">
+        <div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(20,50,30,0.5) 0%,rgba(10,28,16,0.3) 100%);"></div>
+        <div style="position:absolute;top:0;left:0;right:0;height:60%;display:flex;align-items:center;justify-content:center;">
+          <svg width="200" height="140" viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.18">
+            <rect x="5" y="50" width="190" height="85" stroke="#B8965A" stroke-width="1.5"/>
+            <rect x="15" y="60" width="80" height="65" stroke="#B8965A" stroke-width="1"/>
+            <rect x="105" y="60" width="80" height="65" stroke="#B8965A" stroke-width="1"/>
+            <path d="M5 50 L100 5 L195 50" stroke="#B8965A" stroke-width="1.5"/>
+            <rect x="85" y="95" width="30" height="20" stroke="#B8965A" stroke-width="0.8"/>
+            <line x1="30" y1="80" x2="30" y2="110" stroke="#B8965A" stroke-width="0.7"/>
+            <line x1="155" y1="80" x2="155" y2="110" stroke="#B8965A" stroke-width="0.7"/>
+          </svg>
+        </div>
+        <span class="room-price">From $173 / night</span>
+        <div class="room-card-overlay">
+          <p class="room-type">Premium</p>
+          <h3 class="room-name">Ultra-Luxury Suite</h3>
+          <div class="room-features">
+            <span class="room-feat">Bay View</span>
+            <span class="room-feat">Full Suite</span>
+            <span class="room-feat">iPod Dock</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Room Amenities List -->
+    <div class="room-amenities-list">
+      <span>Flat-screen HD Cable TV</span>
+      <span>In-room Mini Bar & Coffee Machine</span>
+      <span>Electronic Safe & Vanity Mirror</span>
+      <span>Free High-Speed Wi-Fi in All Areas</span>
+      <span>Private Bathroom with Hairdryer & Toiletries</span>
+      <span>24-Hour Room Service & Operator</span>
+    </div>
+  </section>
