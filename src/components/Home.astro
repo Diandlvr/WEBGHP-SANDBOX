@@ -1,20 +1,20 @@
 ---
 import { Image } from 'astro:assets';
 import Icon from './ui/Icon.astro';
+import Ubicacion from './sections/Ubicacion.astro';
 import { useTranslations, BOOKING_URL } from '../i18n/utils';
 import type { Lang } from '../i18n/ui';
 import '../styles/home.css';
 
-import heroImg from '../assets/images/image00003.jpeg';
-import aboutImg from '../assets/images/image00004.jpeg';
-import stdImg from '../assets/images/image00005.jpeg';
-import deluxeImg from '../assets/images/image00006.jpeg';
-import suiteImg from '../assets/images/image00007.jpeg';
-import mapImg from '../assets/images/image00009.jpeg';
+// Slots de imagen gestionados por el editor de fotos (npm run editor).
+import heroImg from '../assets/images/slots/hero.jpeg';
+import aboutImg from '../assets/images/slots/about.jpeg';
+import stdImg from '../assets/images/slots/room-standard.jpeg';
+import deluxeImg from '../assets/images/slots/room-deluxe.jpeg';
+import suiteImg from '../assets/images/slots/room-suite.jpeg';
 
 const lang = Astro.props.lang as Lang;
 const t = useTranslations(lang);
-const mapsUrl = 'https://maps.google.com/?q=Global+Hotel+Panama';
 
 const amenities = ['pool', 'fitness', 'dining', 'business', 'parking', 'wifi', 'transfer', 'concierge'] as const;
 // TODO(juan): validar nombres, tarifas, m² y fotos de habitaciones contra la ficha de Booking (hotel 911274).
@@ -23,7 +23,6 @@ const rooms = [
   { key: 'deluxe', img: deluxeImg, gold: false },
   { key: 'suite', img: suiteImg, gold: true },
 ] as const;
-const locItems = ['loc.item1', 'loc.item3', 'loc.item4', 'loc.item5', 'loc.item6', 'loc.item7'] as const;
 ---
 <!-- HERO -->
 <section class="hero" id="hero">
@@ -147,29 +146,8 @@ const locItems = ['loc.item1', 'loc.item3', 'loc.item4', 'loc.item5', 'loc.item6
   </div>
 </section>
 
-<!-- LOCATION -->
-<section class="section" id="location">
-  <div class="container">
-    <div class="loc-inner">
-      <div>
-        <p class="section-eyebrow reveal">{t('loc.eyebrow')}</p>
-        <h2 class="section-title reveal">{t('loc.title.a')}<em>{t('loc.title.b')}</em></h2>
-        <p class="section-desc reveal">{t('loc.desc')}</p>
-        <ul class="loc-list reveal">
-          <li class="loc-item"><span class="icon"><Icon name="landmark" /></span><span class="loc-info">{t('loc.item2')}<small>{t('loc.item2s')}</small></span></li>
-          {locItems.map((k) => (
-            <li class="loc-item"><span class="icon"><Icon name="flight" /></span><span class="loc-info">{t(k as any)}</span></li>
-          ))}
-        </ul>
-      </div>
-      <!-- Fachada de mapa: imagen estática enlazada a Google Maps. El iframe pesado se difiere (PROMPT-UBICACION). -->
-      <a class="loc-map-wrap reveal" href={mapsUrl} target="_blank" rel="noopener noreferrer" aria-label={t('loc.map')}>
-        <Image src={mapImg} alt="" loading="lazy" widths={[500, 800]} sizes="(max-width:860px) 100vw, 46vw" />
-        <div class="loc-map-overlay">{t('loc.overlay')}</div>
-      </a>
-    </div>
-  </div>
-</section>
+<!-- LOCATION · sección Ubicación aprobada (dirección con acción, distancias agrupadas, mapa diferido) -->
+<Ubicacion lang={lang} />
 
 <!-- REVIEWS · números reales (§3). TODO(juan): confirmar citas o sustituir por reseñas reales de Google. -->
 <section class="section dark" id="reviews">
