@@ -65,7 +65,14 @@ const idPrefix = sticky ? 'sticky' : 'date';
         checkOut: checkout.value || undefined,
         guests: Number(guests.value) || undefined,
       });
-      window.open(url, '_blank', 'noopener,noreferrer');
+      // Abrir como enlace real (una pestaña). window.open con opciones lo bloquean los popup blockers.
+      const a = document.createElement('a');
+      a.href = url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
     });
   });
 
