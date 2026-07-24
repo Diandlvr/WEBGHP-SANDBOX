@@ -76,56 +76,45 @@ const dirUrl = 'https://www.google.com/maps/dir/?api=1&destination=Global+Hotel+
         </div>
       </div>
 
-      <!-- COLUMNA DEL MAPA -->
+      <!-- COLUMNA DEL MAPA: iframe real de Google + marcador pulsante + CTA direcciones -->
       <div class="col-mapa">
         <div class="mapa">
-          <div class="mapa-marco" id="mapaMarco">
-            <svg class="mapa-svg" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" role="img" aria-label={t('ubi.map.aria')}>
-              <rect width="400" height="500" fill="#1C1C1C"></rect>
-              <g stroke="#B8965A" stroke-width="1" opacity=".18">
-                <path d="M-20 90 L420 60 M-20 180 L420 150 M-20 270 L420 240 M-20 360 L420 330 M-20 450 L420 420"></path>
-                <path d="M60 -20 L100 520 M160 -20 L200 520 M260 -20 L300 520 M360 -20 L400 520"></path>
-              </g>
-              <path d="M-20 268 L420 238" stroke="#B8965A" stroke-width="5" opacity=".5"></path>
-              <path d="M-20 268 L420 238" stroke="#B8965A" stroke-width="1" opacity=".9" stroke-dasharray="8 10"></path>
-              <path d="M198 -20 L238 520" stroke="#B8965A" stroke-width="3.5" opacity=".42"></path>
-              <g fill="#B8965A" opacity=".07">
-                <rect x="70" y="105" width="80" height="60"></rect><rect x="250" y="95" width="90" height="55"></rect>
-                <rect x="80" y="290" width="70" height="60"></rect><rect x="265" y="280" width="85" height="65"></rect>
-                <rect x="95" y="385" width="75" height="55"></rect>
-              </g>
-              <g transform="translate(213 253)">
-                <circle class="pulso" r="14" fill="#B8965A" opacity=".5"></circle>
-                <circle r="7" fill="#B8965A"></circle><circle r="2.4" fill="#1C1C1C"></circle>
-              </g>
-              <text x="228" y="248" fill="#F9F5EE" font-family="'Cormorant Garamond',serif" font-size="17" font-style="italic">Global Hotel</text>
-            </svg>
-            <div class="mapa-velo"></div>
-            <div class="mapa-pie">
-              <p><strong>{t('ubi.map.strong')}</strong>{t('ubi.map.text')}</p>
-              <button class="mapa-cargar" id="cargarMapa" type="button">{t('ubi.map.load')}</button>
+          <div class="mapa-marco">
+            <!-- Mapa real de Google, zoom 15 = muestra el vecindario de Obarrio -->
+            <iframe
+              class="mapa-iframe"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.7!2d-79.524!3d8.9848!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8faca8fb5412501b%3A0xfcd06db566124035!2sGlobal%20Hotel%20Panama!5e0!3m2!1ses!2spa!4v1777669639564!5m2!1ses!2spa"
+              title={t('ubi.map.iframe')}
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen
+            ></iframe>
+
+            <!-- Marcador pulsante sobre el iframe (pointer-events:none = no bloquea el mapa) -->
+            <div class="mapa-marker" aria-hidden="true">
+              <svg viewBox="0 0 40 40" class="marker-svg">
+                <circle class="pulso" cx="20" cy="20" r="14" fill="#B8965A" opacity=".5"/>
+                <circle cx="20" cy="20" r="7" fill="#B8965A"/>
+                <circle cx="20" cy="20" r="2.8" fill="#1C1C1C"/>
+              </svg>
+              <span class="marker-label">Global Hotel Panamá</span>
             </div>
+
+            <!-- Degradado inferior para el CTA -->
+            <div class="mapa-velo" aria-hidden="true"></div>
+
+            <!-- CTA: abre direcciones en Google Maps -->
+            <a class="mapa-cta" href={dirUrl} target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l18-8-8 18-2-8-8-2z"/></svg>
+              {t('ubi.directions')}
+            </a>
           </div>
-          <p class="mapa-nota">{t('ubi.map.note')}</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<script define:vars={{ iframeTitle: t('ubi.map.iframe') }}>
-  document.getElementById('cargarMapa')?.addEventListener('click', function () {
-    const marco = document.getElementById('mapaMarco');
-    const iframe = document.createElement('iframe');
-    iframe.src = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d492.60772771403754!2d-79.5212794540305!3d8.984860246545207!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8faca8fb5412501b%3A0xfcd06db566124035!2sGlobal%20Hotel%20Panama!5e0!3m2!1ses!2spa!4v1777669639564!5m2!1ses!2spa';
-    iframe.title = iframeTitle;
-    iframe.loading = 'lazy';
-    iframe.referrerPolicy = 'no-referrer-when-downgrade';
-    iframe.allowFullscreen = true;
-    iframe.style.cssText = 'width:100%;height:100%;border:0;display:block';
-    if (marco) { marco.innerHTML = ''; marco.appendChild(iframe); iframe.focus(); }
-  });
-</script>
 
 <style>
   .ubicacion { padding: 100px 0; background: var(--ivory); }
@@ -153,18 +142,25 @@ const dirUrl = 'https://www.google.com/maps/dir/?api=1&destination=Global+Hotel+
   .lugar-dato.aprox { font-family: var(--font-display); font-size: 20px; font-style: italic; color: var(--mid); }
   .lugar-nombre { font-size: 15px; font-weight: 400; line-height: 1.45; margin: 0; }
   .lugar-nombre small { display: block; font-size: 13px; color: var(--soft); margin-top: 2px; }
+  /* Mapa */
   .mapa { position: sticky; top: 110px; }
-  .mapa-marco { position: relative; aspect-ratio: 4/5; background: var(--charcoal); overflow: hidden; border: 1px solid var(--charcoal); }
-  .mapa-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .mapa-velo { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(28,28,28,0) 45%, rgba(28,28,28,.92) 100%); }
-  .mapa-pie { position: absolute; left: 0; right: 0; bottom: 0; padding: 28px; display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; }
-  .mapa-pie p { color: var(--ivory); font-size: 13px; line-height: 1.5; max-width: 24ch; }
-  .mapa-pie strong { display: block; font-family: var(--font-display); font-size: 22px; font-weight: 400; color: var(--white); margin-bottom: 4px; }
-  .mapa-cargar { flex-shrink: 0; background: var(--gold); color: var(--charcoal); border: none; padding: 13px 20px; font-family: var(--font-body); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .14em; cursor: pointer; transition: background .25s; }
-  .mapa-cargar:hover { background: var(--gold-light); }
-  .mapa-nota { font-size: 11px; color: var(--soft); margin-top: 12px; line-height: 1.5; }
+  .mapa-marco { position: relative; aspect-ratio: 4/5; background: var(--charcoal); overflow: hidden; border: 1px solid rgba(28,28,28,.15); }
+  .mapa-iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+
+  /* Marcador pulsante — pointer-events none para no bloquear el mapa */
+  .mapa-marker { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -60%); pointer-events: none; display: flex; flex-direction: column; align-items: center; gap: 6px; z-index: 2; }
+  .marker-svg { width: 48px; height: 48px; filter: drop-shadow(0 2px 8px rgba(0,0,0,.45)); }
+  .marker-label { font-family: var(--font-display); font-size: 15px; font-style: italic; color: var(--white); white-space: nowrap; text-shadow: 0 1px 6px rgba(0,0,0,.7); background: rgba(28,28,28,.55); padding: 3px 10px; }
   .pulso { transform-box: fill-box; transform-origin: center; animation: pulso 2.6s ease-out infinite; }
-  @keyframes pulso { 0% { transform: scale(.65); opacity: .65; } 70% { transform: scale(2.3); opacity: 0; } 100% { transform: scale(2.3); opacity: 0; } }
+  @keyframes pulso { 0% { transform: scale(.65); opacity: .65; } 70% { transform: scale(2.5); opacity: 0; } 100% { transform: scale(2.5); opacity: 0; } }
+
+  /* Degradado inferior */
+  .mapa-velo { position: absolute; bottom: 0; left: 0; right: 0; height: 100px; background: linear-gradient(to bottom, transparent 0%, rgba(28,28,28,.75) 100%); pointer-events: none; z-index: 2; }
+
+  /* CTA Cómo llegar — siempre visible en la parte inferior */
+  .mapa-cta { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 3; display: inline-flex; align-items: center; gap: 9px; background: var(--gold); color: var(--charcoal); font-family: var(--font-body); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .14em; padding: 13px 24px; white-space: nowrap; transition: background .25s, transform .25s; }
+  .mapa-cta svg { width: 15px; height: 15px; stroke: currentColor; stroke-width: 1.5; fill: none; flex-shrink: 0; }
+  .mapa-cta:hover { background: var(--charcoal); color: var(--gold); transform: translateX(-50%) translateY(-2px); }
   @media (max-width: 1000px) {
     .ubicacion { padding: 80px 0; }
     .ubi-grid { grid-template-columns: 1fr; gap: 52px; }
