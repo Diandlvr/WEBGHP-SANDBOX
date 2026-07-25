@@ -9,7 +9,9 @@ const lang = Astro.props.lang as Lang;
 const t = useTranslations(lang);
 const dirUrl = 'https://www.google.com/maps/dir/?api=1&destination=Global+Hotel+Panama+Obarrio';
 const mapLocale = lang === 'en' ? 'en' : 'es';
-const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.7!2d-79.524!3d8.9848!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8faca8fb5412501b%3A0xfcd06db566124035!2sGlobal%20Hotel%20Panama!5e0!3m2!1s${mapLocale}!2spa!4v1777669639564!5m2!1s${mapLocale}!2spa&hl=${mapLocale}`;
+// URL por coordenadas puras (sin Place ID) → no aparece la tarjeta del lugar de Google.
+// El hotel queda indicado por el marcador pulsante superpuesto.
+const mapUrl = `https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3972.7!2d-79.524!3d8.9848!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1s${mapLocale}!2spa!4v1777669639564!5m2!1s${mapLocale}!2spa&hl=${mapLocale}`;
 ---
 <section class="ubicacion" id="location" aria-labelledby="ubicacion-titulo">
   <div class="container">
