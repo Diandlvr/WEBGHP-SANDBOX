@@ -312,15 +312,20 @@ body.booking-open { overflow: hidden; overscroll-behavior: none; }
 .score-divider { width: 1px; background: rgba(255, 255, 255, 0.04); margin: 20px 0; }
 
 /* RESERVE */
-.reserve-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
-.reserve-cta h2 { font-family: var(--font-display); font-size: clamp(32px, 3.2vw, 42px); font-weight: 300; margin: 0 0 14px; line-height: 1.05; }
-.reserve-cta h2 em { color: var(--gold-ink); }
-.reserve-cta p { font-size: 15px; color: var(--text-muted); line-height: 1.8; margin: 0 0 32px; }
-.rate-table { width: 100%; border-collapse: collapse; background: var(--charcoal); border: 1px solid rgba(255, 255, 255, 0.04); }
-.rate-table th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600; padding: 16px 18px; text-align: left; color: rgba(249, 245, 238, 0.66); border-bottom: 1px solid rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.03); }
-.rate-table td { padding: 14px 18px; font-size: 14px; color: var(--text-light); border-bottom: 1px solid rgba(255, 255, 255, 0.03); }
-.rate-table tr:last-child td { border-bottom: none; }
-.rate-price { font-family: var(--font-display); color: var(--gold); font-weight: 400; font-size: 20px; text-align: right; }
+.reserve-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.reserve-cta h2 { font-family: var(--font-display); font-size: clamp(32px, 3.2vw, 42px); font-weight: 300; margin: 0 0 14px; line-height: 1.05; color: var(--text-light); }
+.reserve-cta h2 em { font-style: italic; color: var(--gold); }
+.reserve-cta p { font-size: 15px; color: rgba(249,245,238,.6); line-height: 1.8; margin: 0 0 32px; }
+
+/* Bloque de beneficios (combinación A+C) */
+.reserve-benefits { display: flex; flex-direction: column; gap: 0; }
+.reserve-why { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .18em; color: var(--gold); margin: 0 0 20px; }
+.benefit-item { display: flex; gap: 16px; align-items: flex-start; padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
+.benefit-item:last-child { border-bottom: none; }
+.benefit-check { flex-shrink: 0; width: 28px; height: 28px; color: var(--gold); margin-top: 1px; }
+.benefit-check svg { width: 100%; height: 100%; }
+.benefit-title { display: block; font-size: 15px; font-weight: 500; color: var(--text-light); margin-bottom: 4px; }
+.benefit-desc { font-size: 13px; color: rgba(249,245,238,.5); line-height: 1.6; margin: 0; }
 
 /* FOOTER */
 .footer { background: var(--charcoal); color: var(--text-light); padding: 64px 0 0; border-top: 1px solid rgba(255, 255, 255, 0.04); }
@@ -486,14 +491,6 @@ body.booking-open { overflow: hidden; overscroll-behavior: none; }
   .footer-col h4 { margin-bottom: 12px; }
   .footer-col a { min-height: 44px; display: flex; align-items: center; padding-block: 8px; }
 
-  .rate-table, .rate-table tbody, .rate-table tr, .rate-table td { display: block; width: 100%; }
-  .rate-table thead { display: none; }
-  .rate-table tr { display: grid; grid-template-columns: 1fr 1fr; padding: 18px; border-bottom: 1px solid rgba(255,255,255,.1); }
-  .rate-table tr:last-child { border-bottom: 0; }
-  .rate-table td { padding: 7px 0; border: 0; text-align: left !important; }
-  .rate-table td:first-child { grid-column: 1 / -1; padding-top: 0; color: var(--ivory); font-family: var(--font-display); font-size: 19px; }
-  .rate-table td:not(:first-child)::before { content: attr(data-label); display: block; margin-bottom: 2px; color: rgba(249,245,238,.66); font-family: var(--font-body); font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; }
-  .rate-table td:last-child { text-align: right !important; }
   .reserve-cta .btn { width: 100%; }
 }
 
