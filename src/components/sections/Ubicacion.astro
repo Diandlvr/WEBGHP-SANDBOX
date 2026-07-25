@@ -96,12 +96,13 @@ const mapUrl = `https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3972.7!2d-7
               tabindex="0"
             ></iframe>
 
-            <!-- Overlay superior: tapa la tarjeta de atribución de Google y muestra la marca -->
+            <!-- Overlay superior con etiqueta de marca -->
             <div class="mapa-top" aria-hidden="true">
               <span class="mapa-top-label">Global Hotel Panamá · Obarrio</span>
             </div>
-            <!-- Overlay inferior: degradado para el CTA -->
+            <!-- Overlay inferior: degradado para el CTA + cuña inferior-derecha que tapa el link de Google -->
             <div class="mapa-velo" aria-hidden="true"></div>
+            <div class="mapa-corner-br" aria-hidden="true"></div>
 
             <button
               class="mapa-activar"
@@ -218,10 +219,13 @@ const mapUrl = `https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3972.7!2d-7
     box-shadow: 0 24px 54px rgba(28,28,28,.12);
   }
   .mapa-iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
-  /* Overlay superior — cubre la tarjeta de atribución de Google (esquina superior izquierda) */
-  .mapa-top { position: absolute; top: 0; left: 0; right: 0; height: 72px; background: linear-gradient(to bottom, rgba(28,28,28,.82) 0%, rgba(28,28,28,.3) 70%, transparent 100%); pointer-events: none; z-index: 3; display: flex; align-items: flex-start; padding: 14px 18px; }
-  .mapa-top-label { font-family: var(--font-display); font-size: 14px; font-style: italic; color: var(--ivory); letter-spacing: .02em; text-shadow: 0 1px 4px rgba(0,0,0,.5); }
-  .mapa-velo { position: absolute; z-index: 2; right: 0; bottom: 0; left: 0; height: 112px; background: linear-gradient(to bottom, transparent, rgba(28,28,28,.7)); pointer-events: none; }
+  /* Overlay superior con etiqueta de marca */
+  .mapa-top { position: absolute; top: 0; left: 0; right: 0; height: 56px; background: linear-gradient(to bottom, rgba(28,28,28,.7) 0%, transparent 100%); pointer-events: none; z-index: 3; display: flex; align-items: center; padding: 0 16px; }
+  .mapa-top-label { font-family: var(--font-display); font-size: 13px; font-style: italic; color: var(--gold); background: rgba(28,28,28,.82); padding: 5px 12px; letter-spacing: .03em; }
+  /* Overlay inferior: tapa el link "Abrir en Maps" de Google (esquina inferior derecha) */
+  .mapa-velo { position: absolute; z-index: 2; right: 0; bottom: 0; left: 0; height: 130px; background: linear-gradient(to bottom, transparent, rgba(28,28,28,.78)); pointer-events: none; }
+  /* Cuña sólida en la esquina inferior-derecha donde vive el link de atribución */
+  .mapa-corner-br { position: absolute; bottom: 0; right: 0; width: 180px; height: 32px; background: rgba(28,28,28,.82); z-index: 4; pointer-events: none; }
   .mapa-activar {
     position: absolute;
     z-index: 6;
