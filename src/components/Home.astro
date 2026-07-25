@@ -138,7 +138,7 @@ const rooms = [
     <p class="section-eyebrow reveal">{t('amen.eyebrow')}</p>
     <h2 class="section-title reveal">{t('amen.title.a')}<em>{t('amen.title.b')}</em></h2>
     <p class="collection-hint">{t('carousel.hint')} <span aria-hidden="true">→</span></p>
-    <ul class="amen-grid" aria-label={t('nav.amenities')} tabindex="0">
+    <ul class="amen-grid" aria-label={t('nav.amenities')}>
       {amenities.map((a, i) => (
         <li class={`amen-card reveal reveal-d${(i % 4) + 1}`}>
           <span class="icon"><Icon name={a} /></span>

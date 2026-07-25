@@ -52,6 +52,7 @@ const newTabId = sticky ? 'sticky-booking-new-tab' : 'booking-new-tab-note';
         class="df-native"
         id={`${idPrefix}-checkin`}
         data-field="checkin"
+        aria-label={t('book.checkin')}
         aria-describedby={statusId}
         required
       />
@@ -68,6 +69,7 @@ const newTabId = sticky ? 'sticky-booking-new-tab' : 'booking-new-tab-note';
         class="df-native"
         id={`${idPrefix}-checkout`}
         data-field="checkout"
+        aria-label={t('book.checkout')}
         aria-describedby={statusId}
         required
       />
@@ -76,7 +78,7 @@ const newTabId = sticky ? 'sticky-booking-new-tab' : 'booking-new-tab-note';
     <div class="date-field guests-field">
       <label class="df-label" for={`${idPrefix}-guests`}>{t('book.guests')}</label>
       <span class="df-body">
-        <select id={`${idPrefix}-guests`} data-field="guests">
+        <select id={`${idPrefix}-guests`} data-field="guests" aria-label={t('book.guests')}>
           <option value="1">{t('book.guest1')}</option>
           <option value="2" selected>{t('book.guest2')}</option>
           <option value="3">{t('book.guest3')}</option>
