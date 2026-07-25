@@ -45,6 +45,7 @@ const jsonLd = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="theme-color" content="#1C1C1C" />
     <link rel="canonical" href={canonical} />
 
     <!-- hreflang recíproco + x-default (SEO no negociable) -->
@@ -56,7 +57,7 @@ const jsonLd = {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
-    <!-- Fuentes: EB Garamond + DM Sans, subset latino, display swap -->
+    <!-- Fuentes de marca: Cormorant Garamond + DM Sans, subset latino, display swap -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -70,9 +71,11 @@ const jsonLd = {
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={lang === 'es' ? 'es_PA' : 'en_US'} />
 
+    <script is:inline>document.documentElement.classList.add('js');</script>
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
   </head>
   <body>
+    <a class="skip-link" href="#main-content">{t('a11y.skip')}</a>
     <slot />
   </body>
 </html>

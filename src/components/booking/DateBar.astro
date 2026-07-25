@@ -1,39 +1,82 @@
 ---
-// Barra de fechas. Recoge entrada/salida/huéspedes y abre el motor e-gds con la
-// búsqueda prefijada (deep link vía buildBookingUrl). No procesa reservas aquí.
-// El input date nativo va oculto (sin el "yyyy/mm/dd"); mostramos la fecha con
-// formato de marca y al tocar cualquier parte del campo se abre el calendario.
+// Formulario de estancia compartido entre la barra principal, la sticky de
+// escritorio/tablet y la bandeja inferior móvil. La disponibilidad y el cobro
+// siguen ocurriendo en e-gds; aquí solo se construye el deep link.
 import { useTranslations } from '../../i18n/utils';
 import type { Lang } from '../../i18n/ui';
 import Icon from '../ui/Icon.astro';
+
 const lang = Astro.props.lang as Lang;
 const sticky = Astro.props.sticky as boolean | undefined;
 const t = useTranslations(lang);
 const wrapClass = sticky ? 'sticky-bar' : 'date-bar-wrap';
 const idPrefix = sticky ? 'sticky' : 'date';
+const statusId = `${idPrefix}-booking-status`;
+const newTabId = sticky ? 'sticky-booking-new-tab' : 'booking-new-tab-note';
 ---
-<div class={wrapClass} id={sticky ? 'stickyBar' : 'dateSection'} data-book-bar data-lang={lang}>
+
+<form
+  class={wrapClass}
+  id={sticky ? 'stickyBar' : 'dateSection'}
+  data-book-bar
+  data-lang={lang}
+  data-sticky={sticky ? 'true' : undefined}
+  data-mobile-prompt={t('book.mobilePrompt')}
+  data-error-dates={t('book.errorDates')}
+  data-error-range={t('book.errorRange')}
+  aria-hidden={sticky ? 'true' : undefined}
+  inert={sticky ? true : undefined}
+  novalidate
+>
+  {sticky && (
+    <div class="booking-sheet-head">
+      <div>
+        <p>{t('book.mobileTitle')}</p>
+        <h2 id="bookingSheetTitle">{t('book.sheetTitle')}</h2>
+      </div>
+      <button type="button" class="booking-sheet-close" data-sheet-close aria-label={t('book.close')}>
+        <span aria-hidden="true"></span><span aria-hidden="true"></span>
+      </button>
+    </div>
+  )}
+
   <div class={sticky ? 'sticky-inner' : 'date-bar-inner'}>
     <div class="date-field" data-datefield>
-      <span class="df-label">{t('book.checkin')}</span>
-      <span class="df-body">
+      <label class="df-label" for={`${idPrefix}-checkin`}>{t('book.checkin')}</label>
+      <span class="df-body" aria-hidden="true">
         <span class="df-value" data-display data-placeholder={t('book.pick')}>{t('book.pick')}</span>
-        <span class="df-cal" aria-hidden="true"><Icon name="calendar" /></span>
+        <span class="df-cal"><Icon name="calendar" /></span>
       </span>
-      <input type="date" class="df-native" id={`${idPrefix}-checkin`} data-field="checkin" aria-label={t('book.checkin')} />
+      <input
+        type="date"
+        class="df-native"
+        id={`${idPrefix}-checkin`}
+        data-field="checkin"
+        aria-describedby={statusId}
+        required
+      />
     </div>
+
     <div class="date-field" data-datefield>
-      <span class="df-label">{t('book.checkout')}</span>
-      <span class="df-body">
+      <label class="df-label" for={`${idPrefix}-checkout`}>{t('book.checkout')}</label>
+      <span class="df-body" aria-hidden="true">
         <span class="df-value" data-display data-placeholder={t('book.pick')}>{t('book.pick')}</span>
-        <span class="df-cal" aria-hidden="true"><Icon name="calendar" /></span>
+        <span class="df-cal"><Icon name="calendar" /></span>
       </span>
-      <input type="date" class="df-native" id={`${idPrefix}-checkout`} data-field="checkout" aria-label={t('book.checkout')} />
+      <input
+        type="date"
+        class="df-native"
+        id={`${idPrefix}-checkout`}
+        data-field="checkout"
+        aria-describedby={statusId}
+        required
+      />
     </div>
+
     <div class="date-field guests-field">
-      <span class="df-label">{t('book.guests')}</span>
+      <label class="df-label" for={`${idPrefix}-guests`}>{t('book.guests')}</label>
       <span class="df-body">
-        <select id={`${idPrefix}-guests`} data-field="guests" aria-label={t('book.guests')}>
+        <select id={`${idPrefix}-guests`} data-field="guests">
           <option value="1">{t('book.guest1')}</option>
           <option value="2" selected>{t('book.guest2')}</option>
           <option value="3">{t('book.guest3')}</option>
@@ -42,88 +85,320 @@ const idPrefix = sticky ? 'sticky' : 'date';
         <span class="df-cal df-chev" aria-hidden="true"><Icon name="chevron" /></span>
       </span>
     </div>
-    <button type="button" class={sticky ? 'btn-sticky' : 'btn-date'} data-book-submit>
+
+    <button
+      type="submit"
+      class={sticky ? 'btn-sticky' : 'btn-date'}
+      data-book-submit
+      aria-describedby={`${statusId} booking-new-tab-note`}
+    >
       {sticky ? t('book.searchShort') : t('book.search')}
     </button>
   </div>
-</div>
+
+  <p class="book-status" id={statusId} data-book-status aria-live="polite"></p>
+  <p class={sticky ? 'booking-new-tab' : 'sr-only'} id={newTabId}>{t('book.newTab')}</p>
+</form>
+
+{sticky && (
+  <>
+    <div class="booking-sheet-backdrop" data-sheet-backdrop aria-hidden="true"></div>
+    <button
+      class="mobile-booking-dock"
+      type="button"
+      data-mobile-booking-open
+      aria-controls="stickyBar"
+      aria-expanded="false"
+    >
+      <span class="mobile-booking-copy">
+        <small>{t('book.mobileTitle')}</small>
+        <strong data-mobile-summary>{t('book.mobilePrompt')}</strong>
+      </span>
+      <span class="mobile-booking-action">
+        {t('book.searchShort')}
+        <Icon name="arrow" />
+      </span>
+    </button>
+  </>
+)}
 
 <script>
   import { buildBookingUrl } from './buildBookingUrl';
 
-  const today = new Date().toISOString().slice(0, 10);
+  type BookingState = {
+    checkin: string;
+    checkout: string;
+    guests: string;
+  };
 
-  document.querySelectorAll<HTMLElement>('[data-book-bar]').forEach((bar) => {
-    const lang = bar.dataset.lang === 'en' ? 'en-US' : 'es-PA';
-    const fmt = new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'short', year: 'numeric' });
-    const checkin = bar.querySelector<HTMLInputElement>('[data-field=checkin]')!;
-    const checkout = bar.querySelector<HTMLInputElement>('[data-field=checkout]')!;
-    const guests = bar.querySelector<HTMLSelectElement>('[data-field=guests]')!;
-    const submit = bar.querySelector<HTMLButtonElement>('[data-book-submit]')!;
+  const bars = [...document.querySelectorAll<HTMLFormElement>('[data-book-bar]')];
+  const bookingLinks = [...document.querySelectorAll<HTMLAnchorElement>('[data-booking-link]')];
+  const state: BookingState = { checkin: '', checkout: '', guests: '2' };
+  bookingLinks.forEach((link) => {
+    link.dataset.bookingBase = link.href;
+  });
 
-    checkin.min = today;
-    checkout.min = today;
+  function hotelToday() {
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Panama',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).formatToParts(new Date());
+    const part = (type: Intl.DateTimeFormatPartTypes) => parts.find((item) => item.type === type)?.value || '';
+    return `${part('year')}-${part('month')}-${part('day')}`;
+  }
 
-    // Muestra la fecha con formato de marca (o el placeholder si está vacía).
-    function render(input: HTMLInputElement) {
-      const field = input.closest('[data-datefield]')!;
-      const display = field.querySelector<HTMLElement>('[data-display]')!;
-      if (input.value) {
-        display.textContent = fmt.format(new Date(`${input.value}T00:00:00`));
-        display.classList.add('has-value');
-      } else {
-        display.textContent = display.dataset.placeholder || '';
-        display.classList.remove('has-value');
-      }
+  function nextDay(value: string) {
+    const date = new Date(`${value}T12:00:00`);
+    date.setDate(date.getDate() + 1);
+    return [
+      date.getFullYear(),
+      String(date.getMonth() + 1).padStart(2, '0'),
+      String(date.getDate()).padStart(2, '0'),
+    ].join('-');
+  }
+
+  const today = hotelToday();
+
+  function localeFor(bar: HTMLElement) {
+    return bar.dataset.lang === 'en' ? 'en-US' : 'es-PA';
+  }
+
+  function renderDate(input: HTMLInputElement, bar: HTMLElement) {
+    const field = input.closest<HTMLElement>('[data-datefield]');
+    const display = field?.querySelector<HTMLElement>('[data-display]');
+    if (!display) return;
+    if (!input.value) {
+      display.textContent = display.dataset.placeholder || '';
+      display.classList.remove('has-value');
+      return;
     }
+    display.textContent = new Intl.DateTimeFormat(localeFor(bar), {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    }).format(new Date(`${input.value}T12:00:00`));
+    display.classList.add('has-value');
+  }
 
-    // Tocar cualquier parte del campo abre el calendario nativo.
-    [checkin, checkout].forEach((input) => {
-      const field = input.closest('[data-datefield]')!;
-      field.addEventListener('click', () => {
-        try { input.showPicker(); } catch { input.focus(); }
-      });
-      input.addEventListener('change', () => render(input));
-      render(input);
+  function status(bar: HTMLElement, message = '', error = false) {
+    const element = bar.querySelector<HTMLElement>('[data-book-status]');
+    if (!element) return;
+    element.textContent = message;
+    element.classList.toggle('is-error', error);
+  }
+
+  function guestLabel() {
+    const select = bars[0]?.querySelector<HTMLSelectElement>('[data-field=guests]');
+    return select?.querySelector<HTMLOptionElement>(`option[value="${state.guests}"]`)?.textContent || '';
+  }
+
+  function updateMobileSummary() {
+    const summary = document.querySelector<HTMLElement>('[data-mobile-summary]');
+    if (!summary) return;
+    const prompt = bars[0]?.dataset.mobilePrompt || '';
+    if (!state.checkin || !state.checkout) {
+      summary.textContent = prompt;
+      return;
+    }
+    const format = new Intl.DateTimeFormat(localeFor(bars[0]), { day: 'numeric', month: 'short' });
+    const start = format.format(new Date(`${state.checkin}T12:00:00`));
+    const end = format.format(new Date(`${state.checkout}T12:00:00`));
+    summary.textContent = `${start} — ${end} · ${guestLabel()}`;
+  }
+
+  function selectedBookingUrl() {
+    return buildBookingUrl({
+      checkIn: state.checkin,
+      checkOut: state.checkout,
+      guests: Number(state.guests),
     });
+  }
 
-    // La salida no puede ser anterior o igual a la entrada.
+  function syncBookingLinks() {
+    const hasValidStay = Boolean(state.checkin && state.checkout && state.checkout > state.checkin);
+    bookingLinks.forEach((link) => {
+      link.href = hasValidStay ? selectedBookingUrl() : link.dataset.bookingBase || link.href;
+    });
+  }
+
+  function syncBars() {
+    bars.forEach((bar) => {
+      const checkin = bar.querySelector<HTMLInputElement>('[data-field=checkin]');
+      const checkout = bar.querySelector<HTMLInputElement>('[data-field=checkout]');
+      const guests = bar.querySelector<HTMLSelectElement>('[data-field=guests]');
+      if (!checkin || !checkout || !guests) return;
+      checkin.min = today;
+      checkin.value = state.checkin;
+      checkout.min = state.checkin ? nextDay(state.checkin) : today;
+      checkout.value = state.checkout;
+      guests.value = state.guests;
+      renderDate(checkin, bar);
+      renderDate(checkout, bar);
+    });
+    updateMobileSummary();
+    syncBookingLinks();
+  }
+
+  bars.forEach((bar) => {
+    const checkin = bar.querySelector<HTMLInputElement>('[data-field=checkin]');
+    const checkout = bar.querySelector<HTMLInputElement>('[data-field=checkout]');
+    const guests = bar.querySelector<HTMLSelectElement>('[data-field=guests]');
+    if (!checkin || !checkout || !guests) return;
+
     checkin.addEventListener('change', () => {
-      if (!checkin.value) return;
-      const next = new Date(checkin.value);
-      next.setDate(next.getDate() + 1);
-      const min = next.toISOString().slice(0, 10);
-      checkout.min = min;
-      if (checkout.value && checkout.value <= checkin.value) {
-        checkout.value = min;
-        render(checkout);
-      }
+      state.checkin = checkin.value;
+      if (state.checkout && state.checkout <= state.checkin) state.checkout = '';
+      bars.forEach((item) => status(item));
+      syncBars();
     });
 
-    submit.addEventListener('click', () => {
-      const url = buildBookingUrl({
-        checkIn: checkin.value || undefined,
-        checkOut: checkout.value || undefined,
-        guests: Number(guests.value) || undefined,
-      });
-      const a = document.createElement('a');
-      a.href = url;
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
+    checkout.addEventListener('change', () => {
+      state.checkout = checkout.value;
+      bars.forEach((item) => status(item));
+      syncBars();
+    });
+
+    guests.addEventListener('change', () => {
+      state.guests = guests.value;
+      bars.forEach((item) => status(item));
+      syncBars();
+    });
+
+    bar.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const errorDates = bar.dataset.errorDates || '';
+      const errorRange = bar.dataset.errorRange || '';
+
+      if (!state.checkin || !state.checkout) {
+        status(bar, errorDates, true);
+        const missing = state.checkin ? checkout : checkin;
+        missing.focus();
+        try { missing.showPicker(); } catch {}
+        return;
+      }
+      if (state.checkout <= state.checkin) {
+        status(bar, errorRange, true);
+        checkout.focus();
+        return;
+      }
+
+      const url = selectedBookingUrl();
+      const opened = window.open(url, '_blank', 'noopener,noreferrer');
+      if (opened) opened.opener = null;
     });
   });
 
-  // La barra sticky aparece cuando el hero sale de la vista.
-  const stickyBar = document.getElementById('stickyBar');
+  syncBars();
+
+  const stickyBar = document.getElementById('stickyBar') as HTMLFormElement | null;
   const hero = document.getElementById('hero');
-  if (stickyBar && hero) {
-    const obs = new IntersectionObserver(
-      (entries) => entries.forEach((e) => stickyBar.classList.toggle('visible', !e.isIntersecting)),
-      { threshold: 0 }
+  const mobileDock = document.querySelector<HTMLButtonElement>('[data-mobile-booking-open]');
+  const sheetClose = document.querySelector<HTMLButtonElement>('[data-sheet-close]');
+  const sheetBackdrop = document.querySelector<HTMLElement>('[data-sheet-backdrop]');
+  const mobileQuery = matchMedia('(max-width: 560px)');
+  const backgroundInertState = new Map<HTMLElement, boolean>();
+  let heroIsPast = false;
+  let sheetOpen = false;
+
+  function setBackgroundInert(inert: boolean) {
+    const background = document.querySelectorAll<HTMLElement>(
+      'body > nav, body > footer, main > :not(#stickyBar):not([data-sheet-backdrop]):not([data-mobile-booking-open])',
     );
-    obs.observe(hero);
+    background.forEach((element) => {
+      if (inert) {
+        if (!backgroundInertState.has(element)) backgroundInertState.set(element, element.inert);
+        element.inert = true;
+      } else if (backgroundInertState.has(element)) {
+        element.inert = backgroundInertState.get(element) || false;
+      }
+    });
+    if (!inert) backgroundInertState.clear();
   }
+
+  function setStickyAccessible(visible: boolean) {
+    if (!stickyBar) return;
+    stickyBar.inert = !visible;
+    stickyBar.setAttribute('aria-hidden', String(!visible));
+  }
+
+  function updateStickyMode() {
+    if (!stickyBar) return;
+    if (mobileQuery.matches) {
+      stickyBar.classList.remove('visible');
+      mobileDock?.classList.toggle('visible', heroIsPast);
+      if (!sheetOpen) setStickyAccessible(false);
+    } else {
+      sheetOpen = false;
+      setBackgroundInert(false);
+      document.body.classList.remove('booking-open');
+      stickyBar.classList.remove('sheet-open');
+      sheetBackdrop?.classList.remove('open');
+      mobileDock?.setAttribute('aria-expanded', 'false');
+      mobileDock?.classList.remove('visible');
+      stickyBar.removeAttribute('role');
+      stickyBar.removeAttribute('aria-modal');
+      stickyBar.classList.toggle('visible', heroIsPast);
+      setStickyAccessible(heroIsPast);
+    }
+  }
+
+  function setSheet(open: boolean) {
+    if (!stickyBar || !mobileQuery.matches) return;
+    sheetOpen = open;
+    stickyBar.classList.toggle('sheet-open', open);
+    sheetBackdrop?.classList.toggle('open', open);
+    mobileDock?.setAttribute('aria-expanded', String(open));
+    document.body.classList.toggle('booking-open', open);
+    stickyBar.setAttribute('role', 'dialog');
+    stickyBar.setAttribute('aria-modal', 'true');
+    stickyBar.setAttribute('aria-labelledby', 'bookingSheetTitle');
+    setStickyAccessible(open);
+    setBackgroundInert(open);
+    if (open) {
+      window.setTimeout(() => {
+        stickyBar.querySelector<HTMLInputElement>('[data-field=checkin]')?.focus({ preventScroll: true });
+      }, 220);
+    } else {
+      window.setTimeout(() => mobileDock?.focus({ preventScroll: true }), 50);
+    }
+  }
+
+  mobileDock?.addEventListener('click', () => setSheet(true));
+  sheetClose?.addEventListener('click', () => setSheet(false));
+  sheetBackdrop?.addEventListener('click', () => setSheet(false));
+
+  document.addEventListener('keydown', (event) => {
+    if (!sheetOpen || !stickyBar) return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      setSheet(false);
+      return;
+    }
+    if (event.key !== 'Tab') return;
+    const focusable = [...stickyBar.querySelectorAll<HTMLElement>('input, select, button:not([disabled])')]
+      .filter((element) => element.getClientRects().length > 0);
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last?.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first?.focus();
+    }
+  });
+
+  if (stickyBar && hero) {
+    new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        heroIsPast = !entry.isIntersecting;
+        updateStickyMode();
+      });
+    }, { threshold: 0 }).observe(hero);
+  }
+
+  mobileQuery.addEventListener('change', updateStickyMode);
+  updateStickyMode();
 </script>

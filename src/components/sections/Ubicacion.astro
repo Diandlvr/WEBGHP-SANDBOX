@@ -1,12 +1,15 @@
 ---
 // Sección Ubicación — portada de referencia/propuestas/seccion-ubicacion.html (dirección aprobada).
 // La dirección sale de la lista y lleva su propia acción. Números en columna con tabular-nums,
-// iconos que significan algo. Fachada de mapa dibujada; el iframe de Google se difiere hasta pedirlo.
+// iconos que significan algo. Google Maps permanece visible; en móvil se activa bajo demanda
+// para que el gesto de desplazamiento de la página no quede atrapado dentro del mapa.
 import { useTranslations } from '../../i18n/utils';
 import type { Lang } from '../../i18n/ui';
 const lang = Astro.props.lang as Lang;
 const t = useTranslations(lang);
 const dirUrl = 'https://www.google.com/maps/dir/?api=1&destination=Global+Hotel+Panama+Obarrio';
+const mapLocale = lang === 'en' ? 'en' : 'es';
+const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.7!2d-79.524!3d8.9848!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8faca8fb5412501b%3A0xfcd06db566124035!2sGlobal%20Hotel%20Panama!5e0!3m2!1s${mapLocale}!2spa!4v1777669639564!5m2!1s${mapLocale}!2spa&hl=${mapLocale}`;
 ---
 <section class="ubicacion" id="location" aria-labelledby="ubicacion-titulo">
   <div class="container">
@@ -76,34 +79,53 @@ const dirUrl = 'https://www.google.com/maps/dir/?api=1&destination=Global+Hotel+
         </div>
       </div>
 
-      <!-- COLUMNA DEL MAPA: iframe real de Google + marcador pulsante + CTA direcciones -->
+      <!-- COLUMNA DEL MAPA: Google visible, con interacción protegida en móvil -->
       <div class="col-mapa">
         <div class="mapa">
-          <div class="mapa-marco">
-            <!-- Mapa real de Google, zoom 15 = muestra el vecindario de Obarrio -->
+          <div class="mapa-marco" data-map-shell>
             <iframe
+              id="ubicacion-mapa-iframe"
               class="mapa-iframe"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.7!2d-79.524!3d8.9848!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8faca8fb5412501b%3A0xfcd06db566124035!2sGlobal%20Hotel%20Panama!5e0!3m2!1ses!2spa!4v1777669639564!5m2!1ses!2spa"
+              src={mapUrl}
               title={t('ubi.map.iframe')}
               loading="lazy"
               referrerpolicy="no-referrer-when-downgrade"
               allowfullscreen
+              tabindex="0"
             ></iframe>
 
-            <!-- Marcador pulsante sobre el iframe (pointer-events:none = no bloquea el mapa) -->
-            <div class="mapa-marker" aria-hidden="true">
-              <svg viewBox="0 0 40 40" class="marker-svg">
-                <circle class="pulso" cx="20" cy="20" r="14" fill="#B8965A" opacity=".5"/>
-                <circle cx="20" cy="20" r="7" fill="#B8965A"/>
-                <circle cx="20" cy="20" r="2.8" fill="#1C1C1C"/>
-              </svg>
-              <span class="marker-label">Global Hotel Panamá</span>
+            <!-- Overlay superior: tapa la tarjeta de atribución de Google y muestra la marca -->
+            <div class="mapa-top" aria-hidden="true">
+              <span class="mapa-top-label">Global Hotel Panamá · Obarrio</span>
             </div>
-
-            <!-- Degradado inferior para el CTA -->
+            <!-- Overlay inferior: degradado para el CTA -->
             <div class="mapa-velo" aria-hidden="true"></div>
 
-            <!-- CTA: abre direcciones en Google Maps -->
+            <button
+              class="mapa-activar"
+              type="button"
+              data-map-activate
+              data-activate={t('ubi.map.load')}
+              data-deactivate={t('ubi.map.deactivate')}
+              aria-controls="ubicacion-mapa-iframe"
+              aria-pressed="false"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 21s6-5.1 6-11a6 6 0 1 0-12 0c0 5.9 6 11 6 11Z"/>
+                <circle cx="12" cy="10" r="2"/>
+              </svg>
+              <span data-map-activate-label>{t('ubi.map.load')}</span>
+            </button>
+
+            <span
+              class="sr-only"
+              id="ubicacion-mapa-status"
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+              data-map-status
+            ></span>
+
             <a class="mapa-cta" href={dirUrl} target="_blank" rel="noopener noreferrer">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l18-8-8 18-2-8-8-2z"/></svg>
               {t('ubi.directions')}
@@ -114,6 +136,47 @@ const dirUrl = 'https://www.google.com/maps/dir/?api=1&destination=Global+Hotel+
     </div>
   </div>
 </section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-map-shell]').forEach((shell) => {
+    const iframe = shell.querySelector<HTMLIFrameElement>('.mapa-iframe');
+    const activateButton = shell.querySelector<HTMLButtonElement>('[data-map-activate]');
+    const activateLabel = shell.querySelector<HTMLElement>('[data-map-activate-label]');
+    const status = shell.querySelector<HTMLElement>('[data-map-status]');
+    const mobileMap = matchMedia('(max-width: 1000px)');
+    let interactive = false;
+
+    if (!iframe || !activateButton || !activateLabel || !status) return;
+
+    function renderMode() {
+      if (!mobileMap.matches) {
+        interactive = false;
+        shell.classList.remove('is-interactive');
+        activateButton.hidden = true;
+        iframe.tabIndex = 0;
+        return;
+      }
+
+      activateButton.hidden = false;
+      shell.classList.toggle('is-interactive', interactive);
+      activateButton.setAttribute('aria-pressed', String(interactive));
+      iframe.tabIndex = interactive ? 0 : -1;
+      activateLabel.textContent = interactive
+        ? activateButton.dataset.deactivate || ''
+        : activateButton.dataset.activate || '';
+    }
+
+    activateButton.addEventListener('click', (event) => {
+      interactive = !interactive;
+      renderMode();
+      status.textContent = activateLabel.textContent || '';
+      if (interactive && event.detail === 0) iframe.focus({ preventScroll: true });
+    });
+
+    mobileMap.addEventListener('change', renderMode);
+    renderMode();
+  });
+</script>
 
 
 <style>
@@ -144,23 +207,51 @@ const dirUrl = 'https://www.google.com/maps/dir/?api=1&destination=Global+Hotel+
   .lugar-nombre small { display: block; font-size: 13px; color: var(--soft); margin-top: 2px; }
   /* Mapa */
   .mapa { position: sticky; top: 110px; }
-  .mapa-marco { position: relative; aspect-ratio: 4/5; background: var(--charcoal); overflow: hidden; border: 1px solid rgba(28,28,28,.15); }
+  .mapa-marco {
+    position: relative;
+    aspect-ratio: 4/5;
+    overflow: hidden;
+    border: 1px solid rgba(28,28,28,.16);
+    background: #E7E2D9;
+    box-shadow: 0 24px 54px rgba(28,28,28,.12);
+  }
   .mapa-iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+  /* Overlay superior — cubre la tarjeta de atribución de Google (esquina superior izquierda) */
+  .mapa-top { position: absolute; top: 0; left: 0; right: 0; height: 72px; background: linear-gradient(to bottom, rgba(28,28,28,.82) 0%, rgba(28,28,28,.3) 70%, transparent 100%); pointer-events: none; z-index: 3; display: flex; align-items: flex-start; padding: 14px 18px; }
+  .mapa-top-label { font-family: var(--font-display); font-size: 14px; font-style: italic; color: var(--ivory); letter-spacing: .02em; text-shadow: 0 1px 4px rgba(0,0,0,.5); }
+  .mapa-velo { position: absolute; z-index: 2; right: 0; bottom: 0; left: 0; height: 112px; background: linear-gradient(to bottom, transparent, rgba(28,28,28,.7)); pointer-events: none; }
+  .mapa-activar {
+    position: absolute;
+    z-index: 6;
+    bottom: 82px;
+    left: 50%;
+    min-height: 48px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 12px 18px;
+    transform: translateX(-50%);
+    border: 1px solid var(--gold);
+    background: rgba(28,28,28,.94);
+    color: var(--gold-light);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    box-shadow: 0 8px 24px rgba(0,0,0,.24);
+  }
+  .mapa-activar svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.5; flex-shrink: 0; }
+  .mapa-marco.is-interactive .mapa-activar { background: var(--gold); color: var(--charcoal); }
 
-  /* Marcador pulsante — pointer-events none para no bloquear el mapa */
-  .mapa-marker { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -60%); pointer-events: none; display: flex; flex-direction: column; align-items: center; gap: 6px; z-index: 2; }
-  .marker-svg { width: 48px; height: 48px; filter: drop-shadow(0 2px 8px rgba(0,0,0,.45)); }
-  .marker-label { font-family: var(--font-display); font-size: 15px; font-style: italic; color: var(--white); white-space: nowrap; text-shadow: 0 1px 6px rgba(0,0,0,.7); background: rgba(28,28,28,.55); padding: 3px 10px; }
-  .pulso { transform-box: fill-box; transform-origin: center; animation: pulso 2.6s ease-out infinite; }
-  @keyframes pulso { 0% { transform: scale(.65); opacity: .65; } 70% { transform: scale(2.5); opacity: 0; } 100% { transform: scale(2.5); opacity: 0; } }
-
-  /* Degradado inferior */
-  .mapa-velo { position: absolute; bottom: 0; left: 0; right: 0; height: 100px; background: linear-gradient(to bottom, transparent 0%, rgba(28,28,28,.75) 100%); pointer-events: none; z-index: 2; }
-
-  /* CTA Cómo llegar — siempre visible en la parte inferior */
-  .mapa-cta { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 3; display: inline-flex; align-items: center; gap: 9px; background: var(--gold); color: var(--charcoal); font-family: var(--font-body); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .14em; padding: 13px 24px; white-space: nowrap; transition: background .25s, transform .25s; }
+  /* CTA Cómo llegar — siempre visible en la parte inferior. */
+  .mapa-cta { position: absolute; bottom: 20px; left: 50%; min-height: 48px; transform: translateX(-50%); z-index: 5; display: inline-flex; align-items: center; gap: 9px; background: var(--gold); color: var(--charcoal); font-family: var(--font-body); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .14em; padding: 13px 24px; white-space: nowrap; box-shadow: 0 8px 28px rgba(0,0,0,.25); transition: background .25s, color .25s, transform .25s; }
   .mapa-cta svg { width: 15px; height: 15px; stroke: currentColor; stroke-width: 1.5; fill: none; flex-shrink: 0; }
-  .mapa-cta:hover { background: var(--charcoal); color: var(--gold); transform: translateX(-50%) translateY(-2px); }
+  @media (hover: hover) {
+    .mapa-activar:hover { background: var(--gold); color: var(--charcoal); }
+    .mapa-cta:hover { background: var(--charcoal); color: var(--gold); transform: translateX(-50%) translateY(-2px); }
+  }
   @media (max-width: 1000px) {
     .ubicacion { padding: 80px 0; }
     .ubi-grid { grid-template-columns: 1fr; gap: 52px; }
@@ -170,5 +261,19 @@ const dirUrl = 'https://www.google.com/maps/dir/?api=1&destination=Global+Hotel+
     .lugar { grid-template-columns: 22px 72px 1fr; gap: 12px; }
     .acciones .ubi-btn { flex: 1 1 auto; justify-content: center; }
   }
-  @media (prefers-reduced-motion: reduce) { .pulso { animation: none; } }
+  @media (max-width: 1000px) {
+    .mapa-iframe { pointer-events: none; }
+    .mapa-marco.is-interactive .mapa-iframe { pointer-events: auto; }
+    .mapa-activar:not([hidden]) { display: inline-flex; }
+  }
+  @media (max-width: 560px) {
+    .mapa-marco { aspect-ratio: 1/1.06; }
+    .mapa-activar { bottom: 76px; }
+    .mapa-velo { height: 132px; }
+    .mapa-cta { bottom: 14px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mapa-activar,
+    .mapa-cta { transition: none; }
+  }
 </style>

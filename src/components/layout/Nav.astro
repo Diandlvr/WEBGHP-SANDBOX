@@ -7,35 +7,97 @@ const home = `/${lang}/`;
 const altEs = getAlternatePath(Astro.url, 'es');
 const altEn = getAlternatePath(Astro.url, 'en');
 ---
-<nav class="nav" id="navbar">
+<nav class="nav" id="navbar" aria-label={t('nav.label')}>
   <div class="nav-inner">
-    <a href={home} class="logo">Global <span>Hotel</span> Panamá</a>
+    <a href={home} class="logo" aria-label="Global Hotel Panamá">
+      Global <span class="logo-accent">Hotel</span><span class="logo-location"> Panamá</span>
+    </a>
     <ul class="nav-links" id="navLinks">
-      <li><a href="#about">{t('nav.about')}</a></li>
-      <li><a href="#amenities">{t('nav.amenities')}</a></li>
       <li><a href="#rooms">{t('nav.rooms')}</a></li>
+      <li><a href="#amenities">{t('nav.amenities')}</a></li>
+      <li><a href="#about">{t('nav.about')}</a></li>
       <li><a href="#location">{t('nav.location')}</a></li>
+      <li class="mobile-menu-cta">
+        <a class="mobile-book-link" href={BOOKING_URL} data-booking-link aria-describedby="booking-new-tab-note" target="_blank" rel="noopener noreferrer">{t('nav.book')}</a>
+        <a class="mobile-call-link" href="tel:+5072806400">{t('nav.call')} · +507 280 6400</a>
+      </li>
     </ul>
     <div class="nav-right">
-      <div class="lang-toggle">
-        <a href={altEs} class={lang === 'es' ? 'active' : ''} hreflang="es">ES</a>
-        <span class="sep">|</span>
-        <a href={altEn} class={lang === 'en' ? 'active' : ''} hreflang="en">EN</a>
+      <div class="lang-toggle" aria-label={lang === 'es' ? 'Idioma' : 'Language'}>
+        <a href={altEs} class={lang === 'es' ? 'active' : ''} hreflang="es" lang="es" aria-current={lang === 'es' ? 'page' : undefined}>ES</a>
+        <a href={altEn} class={lang === 'en' ? 'active' : ''} hreflang="en" lang="en" aria-current={lang === 'en' ? 'page' : undefined}>EN</a>
       </div>
-      <a class="btn-nav" href={BOOKING_URL} target="_blank" rel="noopener noreferrer">{t('nav.book')}</a>
-      <button class="menu-toggle" id="menuToggle" aria-label="Menu" aria-expanded="false">
+      <a class="btn-nav" href={BOOKING_URL} data-booking-link aria-describedby="booking-new-tab-note" target="_blank" rel="noopener noreferrer">{t('nav.book')}</a>
+      <button
+        class="menu-toggle"
+        id="menuToggle"
+        type="button"
+        aria-label={t('nav.menu')}
+        aria-expanded="false"
+        aria-controls="navLinks"
+        data-label-open={t('nav.menu')}
+        data-label-close={t('nav.close')}
+      >
         <span></span><span></span><span></span>
       </button>
     </div>
   </div>
+  <div class="nav-backdrop" id="navBackdrop" aria-hidden="true"></div>
 </nav>
 <script>
-  const toggle = document.getElementById('menuToggle');
+  const toggle = document.getElementById('menuToggle') as HTMLButtonElement | null;
   const links = document.getElementById('navLinks');
-  toggle?.addEventListener('click', () => {
-    const open = links?.classList.toggle('open');
-    toggle.setAttribute('aria-expanded', String(!!open));
-  });
   const nav = document.getElementById('navbar');
+  const backdrop = document.getElementById('navBackdrop');
+  const pageMain = document.querySelector('main');
+  const pageFooter = document.querySelector('footer');
+  const menuQuery = matchMedia('(max-width: 1000px)');
+
+  function setMenu(open: boolean, restoreFocus = true) {
+    if (!toggle || !links || !nav) return;
+    links.classList.toggle('open', open);
+    nav.classList.toggle('menu-open', open);
+    backdrop?.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? toggle.dataset.labelClose || '' : toggle.dataset.labelOpen || '');
+    document.body.classList.toggle('nav-open', open);
+    pageMain?.toggleAttribute('inert', open);
+    pageFooter?.toggleAttribute('inert', open);
+
+    if (open) {
+      window.setTimeout(() => links.querySelector<HTMLAnchorElement>('a')?.focus({ preventScroll: true }), 220);
+    } else if (restoreFocus) {
+      toggle.focus();
+    }
+  }
+
+  toggle?.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
+  backdrop?.addEventListener('click', () => setMenu(false));
+  links?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setMenu(false)));
+  menuQuery.addEventListener('change', (event) => {
+    if (!event.matches && nav?.classList.contains('menu-open')) setMenu(false, false);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (!nav?.classList.contains('menu-open')) return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      setMenu(false);
+      return;
+    }
+    if (event.key !== 'Tab') return;
+    const focusable = [...nav.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')]
+      .filter((element) => element.getClientRects().length > 0);
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last?.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first?.focus();
+    }
+  });
+
   addEventListener('scroll', () => nav?.classList.toggle('scrolled', scrollY > 60), { passive: true });
 </script>
