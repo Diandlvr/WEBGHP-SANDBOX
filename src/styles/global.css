@@ -6,14 +6,23 @@ html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--nav-h) + 96px);
+  scrollbar-color: var(--gold) var(--charcoal);
+}
+
+html::-webkit-scrollbar { width: 10px; }
+html::-webkit-scrollbar-track { background: var(--charcoal); }
+html::-webkit-scrollbar-thumb {
+  background: var(--gold);
+  border: 3px solid var(--charcoal);
 }
 
 body {
   margin: 0;
   font-family: var(--font-body);
   font-weight: 400;
+  font-size: var(--text-base);
   color: var(--text-dark);
-  background: var(--ivory);
+  background: var(--surface);
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
 }
@@ -27,7 +36,7 @@ button, input, select, textarea { font: inherit; }
 
 .container { width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: var(--page-gutter); }
 
-/* Botones base — esquinas a 90° */
+/* Botones base — esquinas suaves (var(--radius)) */
 .btn { display: inline-flex; min-height: var(--touch-target); align-items: center; justify-content: center; gap: 10px; padding: 14px 36px; border: none; border-radius: var(--radius); font-family: var(--font-body); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; cursor: pointer; transition: background 0.3s, color 0.3s, border-color 0.3s; }
 .btn-primary { background: var(--gold); color: var(--charcoal); }
 .btn-primary:hover { background: var(--gold-light); }
@@ -37,9 +46,16 @@ button, input, select, textarea { font: inherit; }
 .accent { color: var(--gold); font-style: italic; }
 
 :where(a, button, input, select, textarea, [tabindex]):focus-visible {
-  outline: 3px solid var(--charcoal);
+  outline: 3px solid var(--text-dark);
   outline-offset: 2px;
-  box-shadow: 0 0 0 8px var(--ivory);
+  box-shadow: 0 0 0 8px var(--surface);
+}
+
+/* Sobre fondo oscuro (secciones .dark, nav, footer) el anillo se invierte:
+   outline negro sobre charcoal es invisible. */
+:where(.section.dark, .nav, .footer) :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline-color: var(--ivory);
+  box-shadow: 0 0 0 8px var(--charcoal);
 }
 
 .skip-link {

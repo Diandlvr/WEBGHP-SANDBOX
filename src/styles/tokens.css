@@ -24,15 +24,32 @@
   --card-border:      rgba(255, 255, 255, 0.07);
   --divider:          rgba(184, 150, 90, 0.25);
 
+  /* Superficie clara (fondo de secciones/tarjetas claras). Es el único token
+     que cambia de significado entre esquemas; se invierte en modo oscuro.
+     Las secciones ya oscuras (charcoal) y el texto claro (--ivory) no cambian. */
+  --surface:          var(--ivory);
+  --surface-line:     rgba(28, 28, 28, 0.1);
+
   /* Tipografía */
   --font-display: 'Cormorant Garamond', Georgia, serif;
   --font-body:    'DM Sans', system-ui, sans-serif;
 
   /* Sistema */
-  --radius:      0;         /* esquinas rectas siempre */
+  --radius:      8px;        /* botones, badges, inputs contenidos */
+  --radius-lg:   18px;       /* tarjetas y modales */
   --nav-h:        80px;
   --section-gap:  clamp(72px, 8vw, 104px);
   --container:    1200px;
   --page-gutter:  clamp(18px, 4vw, 28px);
   --touch-target: 48px;
+  --text-base:    17px;    /* cuerpo base; sube en pantallas grandes */
+}
+
+/* Pantallas grandes: contenedor más ancho, más aire y tipografía mayor */
+@media (min-width: 1600px) {
+  :root {
+    --container:   1360px;
+    --section-gap: clamp(104px, 7vw, 132px);
+    --text-base:   19px;
+  }
 }

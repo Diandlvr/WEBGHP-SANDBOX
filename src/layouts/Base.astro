@@ -15,6 +15,7 @@ const { title = t('meta.title'), description = t('meta.description') } = Astro.p
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const altEs = new URL(getAlternatePath(Astro.url, 'es'), Astro.site).href;
 const altEn = new URL(getAlternatePath(Astro.url, 'en'), Astro.site).href;
+const ogImage = new URL('/og/hero.jpg', Astro.site).href;
 
 // JSON-LD Hotel con datos reales (CLAUDE.md §3 / §8).
 const jsonLd = {
@@ -53,9 +54,10 @@ const jsonLd = {
     <link rel="alternate" hreflang="en" href={altEn} />
     <link rel="alternate" hreflang="x-default" href={new URL(getAlternatePath(Astro.url, defaultLang), Astro.site).href} />
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Favicon original del sitio en producción + iconos generados desde el logo -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
 
     <!-- Fuentes de marca: Cormorant Garamond + DM Sans, subset latino, display swap -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -70,6 +72,13 @@ const jsonLd = {
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={lang === 'es' ? 'es_PA' : 'en_US'} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
 
     <script is:inline>document.documentElement.classList.add('js');</script>
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />

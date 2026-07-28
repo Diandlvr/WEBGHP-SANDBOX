@@ -1,6 +1,8 @@
 ---
 import { useTranslations, getAlternatePath, BOOKING_URL } from '../../i18n/utils';
 import type { Lang } from '../../i18n/ui';
+import { Image } from 'astro:assets';
+import logoSrc from '../../assets/images/logo.png';
 const lang = Astro.props.lang as Lang;
 const t = useTranslations(lang);
 const home = `/${lang}/`;
@@ -10,7 +12,7 @@ const altEn = getAlternatePath(Astro.url, 'en');
 <nav class="nav" id="navbar" aria-label={t('nav.label')}>
   <div class="nav-inner">
     <a href={home} class="logo" aria-label="Global Hotel Panamá">
-      Global <span class="logo-accent">Hotel</span><span class="logo-location"> Panamá</span>
+      <Image src={logoSrc} alt="Global Hotel Panamá" width={200} height={65} loading="eager" />
     </a>
     <ul class="nav-links" id="navLinks">
       <li><a href="#rooms">{t('nav.rooms')}</a></li>

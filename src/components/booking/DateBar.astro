@@ -99,7 +99,7 @@ const newTabId = sticky ? 'sticky-booking-new-tab' : 'booking-new-tab-note';
   </div>
 
   <p class="book-status" id={statusId} data-book-status aria-live="polite"></p>
-  <p class={sticky ? 'booking-new-tab' : 'sr-only'} id={newTabId}>{t('book.newTab')}</p>
+  <p class={sticky ? 'booking-new-tab' : 'booking-new-tab-note'} id={newTabId}>{t('book.newTab')}</p>
 </form>
 
 {sticky && (

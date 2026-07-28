@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import Icon from './ui/Icon.astro';
 import Ubicacion from './sections/Ubicacion.astro';
+import Promotions from './sections/Promotions.astro';
 import DateBar from './booking/DateBar.astro';
 import { useTranslations, BOOKING_URL } from '../i18n/utils';
 import type { Lang } from '../i18n/ui';
@@ -15,19 +16,39 @@ import queenImg from '../assets/images/slots/room-deluxe.jpeg';
 import execImg from '../assets/images/slots/room-exec.jpeg';
 import cornerImg from '../assets/images/slots/room-corner.jpeg';
 
+// Galerías de habitaciones — fotos reales por tipo
+import king1 from '../assets/images/rooms/king/1.jpg';
+import king2 from '../assets/images/rooms/king/2.jpg';
+import king3 from '../assets/images/rooms/king/3.jpg';
+import king4 from '../assets/images/rooms/king/4.jpg';
+import queen1 from '../assets/images/rooms/queen/1.jpg';
+import queen2 from '../assets/images/rooms/queen/2.jpg';
+import queen3 from '../assets/images/rooms/queen/3.jpg';
+import queen4 from '../assets/images/rooms/queen/4.jpg';
+import exec1 from '../assets/images/rooms/exec/1.jpg';
+import exec2 from '../assets/images/rooms/exec/2.jpg';
+import exec3 from '../assets/images/rooms/exec/3.jpg';
+import corner1 from '../assets/images/rooms/corner/1.jpg';
+import corner2 from '../assets/images/rooms/corner/2.jpg';
+import corner3 from '../assets/images/rooms/corner/3.jpg';
+import corner4 from '../assets/images/rooms/corner/4.jpg';
+
 const lang = Astro.props.lang as Lang;
 const t = useTranslations(lang);
 
 const amenities = ['pool', 'fitness', 'dining', 'business', 'parking', 'wifi', 'transfer', 'concierge'] as const;
-// Nombres y precios reales de habitaciones (Precios habitaciones.txt, 2026-07-24).
-// Fotos provisionales — reemplazar con el editor de fotos cuando lleguen las definitivas.
 const rooms = [
-  { key: 'king',   img: kingImg,   badge: false },
-  { key: 'queen',  img: queenImg,  badge: false },
-  { key: 'exec',   img: execImg,   badge: false },
-  { key: 'corner', img: cornerImg, badge: true  },
-] as const;
+  { key: 'king',   img: king1,   badge: false, gallery: [king1, king2, king3, king4] },
+  { key: 'queen',  img: queen1,  badge: false, gallery: [queen1, queen2, queen3, queen4] },
+  { key: 'exec',   img: exec1,   badge: false, gallery: [exec1, exec2, exec3] },
+  { key: 'corner', img: corner1, badge: true,  gallery: [corner1, corner2, corner3, corner4] },
+];
+// Comodidades comunes a todas las habitaciones (CLAUDE.md §3)
+const roomFeatures = ['tv', 'minibar', 'safe', 'wifi', 'bath', 'service'] as const;
 ---
+<!-- PROMOCIONES — primera pieza visible bajo el encabezado -->
+<Promotions lang={lang} />
+
 <!-- HERO -->
 <section class="hero" id="hero">
   <div class="hero-bg">
@@ -54,6 +75,7 @@ const rooms = [
       <a class="btn btn-primary" href={BOOKING_URL} data-booking-link aria-describedby="booking-new-tab-note" target="_blank" rel="noopener noreferrer">{t('hero.book')}</a>
       <a class="btn btn-ghost" href="#about">{t('hero.discover')}</a>
     </div>
+    <p class="cta-call-prompt">{t('cta.callPrompt')} <a href="tel:+5072806400">+507 280 6400</a></p>
   </div>
   <div class="hero-scroll">{t('hero.scroll')}</div>
 </section>
@@ -113,7 +135,8 @@ const rooms = [
                 <span class="price-night">{t('rooms.night')}</span>
               </div>
               <span class="price-taxes">{t('rooms.taxes')}</span>
-              <a class="btn-room" href={BOOKING_URL} data-booking-link aria-describedby="booking-new-tab-note" target="_blank" rel="noopener noreferrer">{t('rooms.reserve')}</a>
+              <p class="price-cancel">{t('rooms.freeCancel')}</p>
+              <button class="btn-room" type="button" data-room-open={r.key} aria-haspopup="dialog" aria-controls={`room-${r.key}`}>{t('rooms.details')}</button>
             </div>
           </article>
         ))}
@@ -131,6 +154,71 @@ const rooms = [
     </div>
   </div>
 </section>
+
+<!-- FICHAS DE HABITACIÓN — overlay <dialog> nativo (foco, Escape y backdrop de serie) -->
+{rooms.map((r) => (
+  <dialog class="room-modal" id={`room-${r.key}`} aria-labelledby={`room-${r.key}-title`}>
+    <div class="room-modal-inner">
+      <button class="room-modal-close" type="button" data-room-close aria-label={t('rooms.close')}>
+        <span aria-hidden="true"></span><span aria-hidden="true"></span>
+      </button>
+
+      <div class="room-modal-gallery" data-gallery>
+        <div class="room-modal-viewport" data-gallery-track>
+          {r.gallery.map((img, gi) => (
+            <figure class="room-modal-slide" data-gallery-slide aria-hidden={gi === 0 ? undefined : 'true'}>
+              <Image src={img} alt={t('rooms.photoAlt')} loading="lazy" width={960} widths={[480, 720, 960]} sizes="(max-width:719px) 100vw, 52vw" quality={72} />
+            </figure>
+          ))}
+        </div>
+        {r.badge && <div class="room-badge gold">{t('rooms.badge')}</div>}
+        {r.gallery.length > 1 && (
+          <>
+            <button class="gallery-btn gallery-btn--prev" type="button" data-gallery-prev aria-label={t('rooms.galPrev')}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <button class="gallery-btn gallery-btn--next" type="button" data-gallery-next aria-label={t('rooms.galNext')}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+            <div class="gallery-dots" data-gallery-dots></div>
+          </>
+        )}
+      </div>
+
+      <div class="room-modal-body">
+        <p class="room-cat">{t(`rooms.${r.key}.cat` as any)}</p>
+        <h3 id={`room-${r.key}-title`}>{t(`rooms.${r.key}` as any)}</h3>
+
+        <ul class="room-specs">
+          <li><span>{t('rooms.spec.view')}</span><strong>{t(`rooms.${r.key}.view` as any)}</strong></li>
+          <li><span>{t('rooms.spec.bed')}</span><strong>{t(`rooms.${r.key}.bed` as any)}</strong></li>
+          <li><span>{t('rooms.spec.guests')}</span><strong>{t(`rooms.${r.key}.guests` as any)}</strong></li>
+        </ul>
+
+        <p class="room-modal-desc">{t(`rooms.${r.key}.desc` as any)}</p>
+
+        <details class="room-acc" open>
+          <summary>{t('rooms.amenTitle')}</summary>
+          <ul class="room-feat-list">
+            {roomFeatures.map((f) => <li>{t(`rooms.feat.${f}` as any)}</li>)}
+          </ul>
+        </details>
+
+        <div class="room-modal-foot">
+          <div>
+            <div class="price">
+              <span class="price-rack">${t(`rooms.${r.key}.rack` as any)}</span>
+              <strong class="price-promo">${t(`rooms.${r.key}.promo` as any)}</strong>
+              <span class="price-night">{t('rooms.night')}</span>
+            </div>
+            <p class="price-cancel">{t('rooms.freeCancel')}</p>
+          </div>
+          <a class="btn-room" href={BOOKING_URL} data-booking-link aria-describedby="booking-new-tab-note" target="_blank" rel="noopener noreferrer">{t('rooms.reserve')}</a>
+        </div>
+      </div>
+    </div>
+  </dialog>
+))}
 
 <!-- AMENITIES -->
 <section class="section dark" id="amenities">
@@ -236,6 +324,7 @@ const rooms = [
         <h2>{t('reserve.title.a')}<em>{t('reserve.title.b')}</em></h2>
         <p>{t('reserve.desc')}</p>
         <a class="btn btn-primary" href={BOOKING_URL} data-booking-link aria-describedby="booking-new-tab-note" target="_blank" rel="noopener noreferrer">{t('reserve.book')}</a>
+        <p class="cta-call-prompt">{t('cta.callPrompt')} <a href="tel:+5072806400">+507 280 6400</a></p>
       </div>
       <div class="reserve-benefits reveal reveal-d2">
         <p class="reserve-why">{t('reserve.why')}</p>
@@ -357,6 +446,124 @@ const rooms = [
       buildDots();
       goTo(Math.min(current, maxIndex()), 'auto');
     });
+  })();
+
+  // ── Fichas de habitación (overlay) ──────────────────────────────────
+  (function () {
+    const modals = [...document.querySelectorAll<HTMLDialogElement>('.room-modal')];
+    if (!modals.length) return;
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let lastTrigger: HTMLElement | null = null;
+
+    function openModal(key: string, trigger: HTMLElement) {
+      const dialog = document.getElementById(`room-${key}`) as HTMLDialogElement | null;
+      if (!dialog || typeof dialog.showModal !== 'function') return;
+      lastTrigger = trigger;
+      dialog.showModal();
+      document.body.classList.add('booking-open');
+    }
+
+    function closeModal(dialog: HTMLDialogElement) {
+      dialog.close();
+    }
+
+    document.querySelectorAll<HTMLElement>('[data-room-open]').forEach((btn) => {
+      btn.addEventListener('click', () => openModal(btn.dataset.roomOpen || '', btn));
+    });
+
+    modals.forEach((dialog) => {
+      dialog.querySelector<HTMLButtonElement>('[data-room-close]')?.addEventListener('click', () => closeModal(dialog));
+      // clic en el backdrop (fuera del contenido) cierra
+      dialog.addEventListener('click', (event) => {
+        if (event.target === dialog) closeModal(dialog);
+      });
+      dialog.addEventListener('close', () => {
+        if (!document.querySelector<HTMLDialogElement>('.room-modal[open]')) {
+          document.body.classList.remove('booking-open');
+        }
+        lastTrigger?.focus({ preventScroll: true });
+        lastTrigger = null;
+      });
+
+      // Galería interna
+      const track = dialog.querySelector<HTMLElement>('[data-gallery-track]');
+      const slides = [...dialog.querySelectorAll<HTMLElement>('[data-gallery-slide]')];
+      if (!track || slides.length <= 1) return;
+      let index = 0;
+      const dotsWrap = dialog.querySelector<HTMLElement>('[data-gallery-dots]');
+      // Crear dots
+      slides.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'gallery-dot';
+        dot.setAttribute('aria-label', `Foto ${i + 1}`);
+        dot.addEventListener('click', () => show(i));
+        dotsWrap?.appendChild(dot);
+      });
+      const dots = [...(dotsWrap?.querySelectorAll<HTMLButtonElement>('.gallery-dot') ?? [])];
+      const show = (next: number) => {
+        index = (next + slides.length) % slides.length;
+        track.style.transform = `translateX(-${index * 100}%)`;
+        slides.forEach((slide, i) => slide.setAttribute('aria-hidden', i === index ? 'false' : 'true'));
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+      };
+      track.style.transition = reduceMotion ? 'none' : 'transform .45s cubic-bezier(.4,0,.2,1)';
+      show(0);
+      dialog.querySelector<HTMLButtonElement>('[data-gallery-prev]')?.addEventListener('click', () => show(index - 1));
+      dialog.querySelector<HTMLButtonElement>('[data-gallery-next]')?.addEventListener('click', () => show(index + 1));
+    });
+  })();
+
+  // ── Slider de promociones (cerca del hero) ──────────────────────────
+  (function () {
+    const band = document.querySelector<HTMLElement>('[data-promo]');
+    const track = band?.querySelector<HTMLElement>('[data-promo-track]');
+    const dotsWrap = band?.querySelector<HTMLElement>('[data-promo-dots]');
+    if (!band || !track || !dotsWrap) return;
+    const slides = [...track.querySelectorAll<HTMLElement>('[data-promo-slide]')];
+    if (slides.length <= 1) return;
+    const english = document.documentElement.lang === 'en';
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let index = 0;
+    let timer = 0;
+
+    track.style.transition = reduceMotion ? 'none' : 'transform .5s ease';
+    slides.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'promo-dot';
+      dot.setAttribute('aria-label', english ? `Show offer ${i + 1}` : `Mostrar oferta ${i + 1}`);
+      dot.setAttribute('aria-controls', 'promos');
+      dot.addEventListener('click', () => { go(i); restart(); });
+      dotsWrap.appendChild(dot);
+    });
+    const dots = [...dotsWrap.querySelectorAll<HTMLButtonElement>('.promo-dot')];
+
+    function go(next: number) {
+      index = (next + slides.length) % slides.length;
+      track.style.transform = `translateX(-${index * 100}%)`;
+      slides.forEach((slide, i) => { slide.inert = i !== index; });
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+        dot.setAttribute('aria-current', i === index ? 'true' : 'false');
+      });
+    }
+
+    function stop() { if (timer) { clearInterval(timer); timer = 0; } }
+    function restart() {
+      // Rota salvo bajo "reducir movimiento"; se pausa con el cursor o el foco.
+      stop();
+      if (reduceMotion) return;
+      timer = window.setInterval(() => go(index + 1), 7000);
+    }
+
+    band.addEventListener('mouseenter', stop);
+    band.addEventListener('mouseleave', restart);
+    band.addEventListener('focusin', stop);
+    band.addEventListener('focusout', restart);
+
+    go(0);
+    restart();
   })();
 </script>
 

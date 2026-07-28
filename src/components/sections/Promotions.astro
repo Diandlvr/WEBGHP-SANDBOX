@@ -1,0 +1,67 @@
+---
+import { Image } from 'astro:assets';
+import promoMenuImg from '../../assets/images/promo-menu.jpg';
+import promoVenueImg from '../../assets/images/promo-venue-editorial.png';
+import { useTranslations } from '../../i18n/utils';
+import type { Lang } from '../../i18n/ui';
+
+const lang = Astro.props.lang as Lang;
+const t = useTranslations(lang);
+---
+
+<section class="promo-band" id="promos" aria-roledescription={lang === 'es' ? 'carrusel' : 'carousel'} aria-label={t('promo.carousel')} data-promo>
+  <div class="promo-container">
+    <div class="promo-viewport">
+      <div class="promo-track" data-promo-track>
+        <article class="promo-slide" data-promo-slide role="group" aria-roledescription={lang === 'es' ? 'diapositiva' : 'slide'} aria-label="1 / 2">
+          <div class="promo-flyer promo-flyer--menu">
+            <Image src={promoMenuImg} alt="" class="promo-flyer__photo" aria-hidden="true" width={1600} height={620} quality={68} />
+            <div class="promo-flyer__scrim"></div>
+            <div class="promo-flyer__copy">
+              <p class="promo-flyer__kicker">Restaurante 54 East · Global Hotel Panamá</p>
+              <h2>{lang === 'es' ? <>Menú <em>Ejecutivo</em></> : <>Executive <em>Menu</em></>}</h2>
+              <p class="promo-flyer__lead">{lang === 'es' ? 'Una pausa de mediodía con el sello de 54 East.' : 'A midday pause with the signature of 54 East.'}</p>
+              <div class="promo-flyer__meta">
+                <span>{lang === 'es' ? 'Lunes · Miércoles · Viernes' : 'Monday · Wednesday · Friday'}</span>
+                <span>12:00 — 3:00 P.M.</span>
+              </div>
+              <a class="promo-flyer__cta" href="tel:+5072806400">{lang === 'es' ? 'Consultar menú · 280-6400' : 'Ask for today’s menu · 280-6400'}</a>
+            </div>
+            <aside class="promo-flyer__card">
+              <span class="promo-flyer__card-label">{lang === 'es' ? 'Por persona' : 'Per person'}</span>
+              <strong>B/. 9.99</strong>
+              <small>+ {lang === 'es' ? 'impuestos' : 'taxes'}</small>
+              <span class="promo-flyer__rule"></span>
+              <p>{lang === 'es' ? 'Entrada · plato fuerte · postre · bebida de la casa' : 'Starter · main course · dessert · house drink'}</p>
+            </aside>
+          </div>
+        </article>
+
+        <article class="promo-slide" data-promo-slide role="group" aria-roledescription={lang === 'es' ? 'diapositiva' : 'slide'} aria-label="2 / 2" inert>
+          <div class="promo-flyer promo-flyer--events">
+            <Image src={promoVenueImg} alt="" class="promo-flyer__photo" aria-hidden="true" width={1600} height={620} quality={72} />
+            <div class="promo-flyer__scrim"></div>
+            <div class="promo-flyer__copy">
+              <p class="promo-flyer__kicker">{lang === 'es' ? 'Reuniones · Celebraciones · Catering' : 'Meetings · Celebrations · Catering'}</p>
+              <h2>{lang === 'es' ? <>Tu evento, <em>en las alturas</em></> : <>Your event, <em>above the city</em></>}</h2>
+              <p class="promo-flyer__lead">{lang === 'es' ? 'Espacios con carácter para encuentros sociales y corporativos en Obarrio.' : 'Distinctive spaces for social and corporate gatherings in Obarrio.'}</p>
+              <div class="promo-flyer__meta">
+                <span>Evolution</span><span>Golden Point / Regalía</span><span>Twist</span>
+              </div>
+              <a class="promo-flyer__cta" href="mailto:catering@globalhotelpanama.com">{lang === 'es' ? 'Planificar mi evento' : 'Plan my event'}</a>
+            </div>
+            <aside class="promo-flyer__card promo-flyer__card--contact">
+              <span class="promo-flyer__card-label">{lang === 'es' ? 'Información y reservas' : 'Information & bookings'}</span>
+              <strong>+507<br/>280-6400</strong>
+              <span class="promo-flyer__rule"></span>
+              <p>catering@<br/>globalhotelpanama.com</p>
+            </aside>
+          </div>
+        </article>
+      </div>
+    </div>
+    <div class="promo-controls">
+      <div class="promo-dots" data-promo-dots></div>
+    </div>
+  </div>
+</section>

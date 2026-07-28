@@ -100,9 +100,8 @@ const mapUrl = `https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3972.7!2d-7
             <div class="mapa-top" aria-hidden="true">
               <span class="mapa-top-label">Global Hotel Panamá · Obarrio</span>
             </div>
-            <!-- Overlay inferior: degradado para el CTA + cuña inferior-derecha que tapa el link de Google -->
+            <!-- Overlay inferior: degradado de contraste para el CTA (no tapa la atribución de Google) -->
             <div class="mapa-velo" aria-hidden="true"></div>
-            <div class="mapa-corner-br" aria-hidden="true"></div>
 
             <button
               class="mapa-activar"
@@ -191,7 +190,7 @@ const mapUrl = `https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3972.7!2d-7
   .direccion address { font-style: normal; font-family: var(--font-display); font-size: 25px; font-weight: 400; line-height: 1.35; margin-bottom: 22px; }
   .direccion address span { display: block; color: var(--mid); font-size: 19px; }
   .acciones { display: flex; gap: 12px; flex-wrap: wrap; }
-  .ubi-btn { display: inline-flex; align-items: center; gap: 9px; font-family: var(--font-body); font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: .14em; padding: 15px 26px; border: 1px solid transparent; transition: background .25s, color .25s, border-color .25s; }
+  .ubi-btn { display: inline-flex; align-items: center; gap: 9px; font-family: var(--font-body); font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: .14em; padding: 15px 26px; border: 1px solid transparent; border-radius: var(--radius); transition: background .25s, color .25s, border-color .25s; }
   .ubi-btn svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 1.4; fill: none; flex-shrink: 0; }
   .ubi-btn-solido { background: var(--gold); color: var(--charcoal); }
   .ubi-btn-solido:hover { background: var(--charcoal); color: var(--gold); }
@@ -215,17 +214,17 @@ const mapUrl = `https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3972.7!2d-7
     aspect-ratio: 4/5;
     overflow: hidden;
     border: 1px solid rgba(28,28,28,.16);
+    border-radius: var(--radius-lg);
     background: #E7E2D9;
     box-shadow: 0 24px 54px rgba(28,28,28,.12);
   }
   .mapa-iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
   /* Overlay superior con etiqueta de marca */
   .mapa-top { position: absolute; top: 0; left: 0; right: 0; height: 56px; background: linear-gradient(to bottom, rgba(28,28,28,.7) 0%, transparent 100%); pointer-events: none; z-index: 3; display: flex; align-items: center; padding: 0 16px; }
-  .mapa-top-label { font-family: var(--font-display); font-size: 13px; font-style: italic; color: var(--gold); background: rgba(28,28,28,.82); padding: 5px 12px; letter-spacing: .03em; }
-  /* Overlay inferior: tapa el link "Abrir en Maps" de Google (esquina inferior derecha) */
+  .mapa-top-label { font-family: var(--font-display); font-size: 13px; font-style: italic; color: var(--gold); background: rgba(28,28,28,.82); padding: 5px 12px; border-radius: var(--radius); letter-spacing: .03em; }
+  /* Degradado de contraste para el CTA "Cómo llegar". No cubre la atribución
+     de Google (esquina inferior derecha) — sus Términos de Servicio la exigen visible. */
   .mapa-velo { position: absolute; z-index: 2; right: 0; bottom: 0; left: 0; height: 130px; background: linear-gradient(to bottom, transparent, rgba(28,28,28,.78)); pointer-events: none; }
-  /* Cuña sólida en la esquina inferior-derecha donde vive el link de atribución */
-  .mapa-corner-br { position: absolute; bottom: 0; right: 0; width: 180px; height: 32px; background: rgba(28,28,28,.82); z-index: 4; pointer-events: none; }
   .mapa-activar {
     position: absolute;
     z-index: 6;
@@ -239,6 +238,7 @@ const mapUrl = `https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3972.7!2d-7
     padding: 12px 18px;
     transform: translateX(-50%);
     border: 1px solid var(--gold);
+    border-radius: var(--radius);
     background: rgba(28,28,28,.94);
     color: var(--gold-light);
     font-size: 11px;
@@ -252,7 +252,7 @@ const mapUrl = `https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3972.7!2d-7
   .mapa-marco.is-interactive .mapa-activar { background: var(--gold); color: var(--charcoal); }
 
   /* CTA Cómo llegar — siempre visible en la parte inferior. */
-  .mapa-cta { position: absolute; bottom: 20px; left: 50%; min-height: 48px; transform: translateX(-50%); z-index: 5; display: inline-flex; align-items: center; gap: 9px; background: var(--gold); color: var(--charcoal); font-family: var(--font-body); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .14em; padding: 13px 24px; white-space: nowrap; box-shadow: 0 8px 28px rgba(0,0,0,.25); transition: background .25s, color .25s, transform .25s; }
+  .mapa-cta { position: absolute; bottom: 20px; left: 50%; min-height: 48px; transform: translateX(-50%); z-index: 5; display: inline-flex; align-items: center; gap: 9px; background: var(--gold); color: var(--charcoal); font-family: var(--font-body); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .14em; padding: 13px 24px; border-radius: var(--radius); white-space: nowrap; box-shadow: 0 8px 28px rgba(0,0,0,.25); transition: background .25s, color .25s, transform .25s; }
   .mapa-cta svg { width: 15px; height: 15px; stroke: currentColor; stroke-width: 1.5; fill: none; flex-shrink: 0; }
   @media (hover: hover) {
     .mapa-activar:hover { background: var(--gold); color: var(--charcoal); }
