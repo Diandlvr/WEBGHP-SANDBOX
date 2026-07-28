@@ -121,6 +121,8 @@ export const ui = {
     'footer.hotel': 'Hotel', 'footer.about': 'Nosotros', 'footer.dining': 'Restaurante', 'footer.events': 'Eventos y Reuniones',
     'footer.services': 'Servicios', 'footer.reservations': 'Reservas en Línea', 'footer.spa': 'Spa y Masajes', 'footer.valet': 'Valet Parking',
     'footer.contact': 'Contacto', 'footer.rights': '© 2026 Global Hotel Panamá. Todos los derechos reservados.',
+    // WhatsApp flotante
+    'whatsapp.aria': 'Chatear por WhatsApp',
   },
   en: {
     'a11y.skip': 'Skip to main content',
@@ -224,6 +226,8 @@ export const ui = {
     'footer.hotel': 'Hotel', 'footer.about': 'About Us', 'footer.dining': 'Dining', 'footer.events': 'Events & Meetings',
     'footer.services': 'Services', 'footer.reservations': 'Online Reservations', 'footer.spa': 'Spa & Massage', 'footer.valet': 'Valet Parking',
     'footer.contact': 'Contact', 'footer.rights': '© 2026 Global Hotel Panama. All rights reserved.',
+    // Floating WhatsApp
+    'whatsapp.aria': 'Chat on WhatsApp',
   },
 } as const;
 

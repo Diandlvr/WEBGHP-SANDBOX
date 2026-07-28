@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { getLangFromUrl, useTranslations, getAlternatePath } from '../i18n/utils';
 import { defaultLang, type Lang } from '../i18n/ui';
+import WhatsAppButton from '../components/ui/WhatsAppButton.astro';
 
 interface Props {
   title?: string;
@@ -82,9 +83,14 @@ const jsonLd = {
 
     <script is:inline>document.documentElement.classList.add('js');</script>
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+
+    <!-- INICIO DEL CÓDIGO ASKSUITE -->
+    <script id="script-infochat" src="https://cdn.asksuite.com/infochat.js?dataConfig=https://control.asksuite.com/api/companies/global-hotel-panama" is:inline></script>
+    <!-- FIN DEL CÓDIGO ASKSUITE -->
   </head>
   <body>
     <a class="skip-link" href="#main-content">{t('a11y.skip')}</a>
     <slot />
+    <WhatsAppButton lang={lang} />
   </body>
 </html>

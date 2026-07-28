@@ -1,0 +1,162 @@
+---
+import { useTranslations } from '../../i18n/utils';
+import type { Lang } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// Enlace oficial provisto por Asksuite/hotel — no modificar el mensaje precargado.
+const whatsappUrl =
+  'https://api.whatsapp.com/send/?phone=50763490169&text=Hola%2C+quisiera+recibir+m%C3%A1s+informaci%C3%B3n&type=phone_number&app_absent=0';
+---
+
+<a
+  class="whatsapp-fab"
+  href={whatsappUrl}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label={t('whatsapp.aria')}
+>
+  <span class="whatsapp-fab__ring" aria-hidden="true"></span>
+  <svg class="whatsapp-fab__icon" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true">
+    <path
+      d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm5.8 14.03c-.24.68-1.4 1.3-1.93 1.35-.5.05-1.02.24-3.44-.72-2.9-1.15-4.76-4.1-4.9-4.29-.14-.19-1.17-1.55-1.17-2.97 0-1.41.74-2.1 1-2.39.26-.28.57-.35.76-.35.19 0 .38 0 .55.01.18.01.42-.07.65.5.24.58.83 2 .9 2.14.07.15.12.32.02.51-.1.19-.15.31-.3.48-.15.17-.31.38-.44.5-.15.15-.3.31-.13.6.17.3.77 1.27 1.65 2.06 1.14 1.02 2.1 1.33 2.4 1.48.3.15.47.13.65-.08.18-.2.75-.87.95-1.17.2-.3.4-.25.66-.15.27.1 1.7.8 1.99.95.29.15.48.22.55.34.07.13.07.72-.17 1.4Z"
+    ></path>
+  </svg>
+  <span class="whatsapp-fab__tooltip" aria-hidden="true">{t('whatsapp.aria')}</span>
+</a>
+
+<style>
+  .whatsapp-fab {
+    position: fixed;
+    left: max(1rem, env(safe-area-inset-left));
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    z-index: 160;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    background: var(--charcoal);
+    color: var(--gold-light);
+    border: 1px solid var(--gold);
+    border-radius: var(--radius);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.28);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.25s ease, color 0.25s ease;
+  }
+
+  .whatsapp-fab__icon {
+    position: relative;
+    z-index: 1;
+  }
+
+  .whatsapp-fab__ring {
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    opacity: 0.35;
+    animation: whatsapp-pulse 2.6s ease-out infinite;
+  }
+
+  .whatsapp-fab__tooltip {
+    position: absolute;
+    left: calc(100% + 0.75rem);
+    top: 50%;
+    transform: translateY(-50%) translateX(-6px);
+    white-space: nowrap;
+    background: var(--charcoal);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.5rem 0.9rem;
+    border: 1px solid var(--divider);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .whatsapp-fab__tooltip::after {
+    content: '';
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 5px solid transparent;
+    border-right-color: var(--charcoal);
+  }
+
+  .whatsapp-fab:hover,
+  .whatsapp-fab:focus-visible {
+    background: #25d366;
+    color: var(--charcoal);
+    border-color: #25d366;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.3);
+  }
+
+  .whatsapp-fab:hover .whatsapp-fab__tooltip,
+  .whatsapp-fab:focus-visible .whatsapp-fab__tooltip {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+
+  .whatsapp-fab:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+  }
+
+  @media (min-width: 640px) {
+    .whatsapp-fab {
+      left: 1.5rem;
+      bottom: 1.5rem;
+      width: 56px;
+      height: 56px;
+    }
+  }
+
+  /* En móvil: sin tooltip (no hay hover real) y por encima del dock de reserva fijo (72px + safe-area, ver .mobile-booking-dock en home.css). */
+  @media (max-width: 639px) {
+    .whatsapp-fab {
+      bottom: calc(72px + env(safe-area-inset-bottom, 0px) + 0.85rem);
+    }
+    .whatsapp-fab__tooltip {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .whatsapp-fab {
+      transition: none;
+    }
+    .whatsapp-fab:hover,
+    .whatsapp-fab:focus-visible {
+      transform: none;
+    }
+    .whatsapp-fab__ring {
+      animation: none;
+      opacity: 0;
+    }
+  }
+
+  @keyframes whatsapp-pulse {
+    0% {
+      transform: scale(1);
+      opacity: 0.35;
+    }
+    70% {
+      transform: scale(1.9);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1.9);
+      opacity: 0;
+    }
+  }
+</style>
