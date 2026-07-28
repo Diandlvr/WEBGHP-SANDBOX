@@ -25,3 +25,9 @@ pnpm-debug.log*
 
 # referencia pesada (fotos originales sin optimizar)
 referencia/fotos/
+
+# contexto de agentes / asistentes de IA — no publicar en el repo
+CLAUDE.md
+AGENTS.md
+.claude/
+.agents/
